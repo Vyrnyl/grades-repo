@@ -1,0 +1,82 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String @unique
+  password String
+  sex String
+  role String
+  studentId String?
+  yearLevel Int
+  programId Int
+  program Program @relation(fields: [programId], references: [id])
+  bsaStudentRecord BsaStudentRecord[]
+  bsbaStudentRecord BsbaStudentRecord[]
+  bsmaStudentRecord BsmaStudentRecord[]
+}
+
+model Program {
+  id Int @id @default(autoincrement())
+  programCode String
+  programName String
+  users User[]
+}
+
+
+model BsaCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  bsaStudentRecord BsaStudentRecord[]
+}
+model BsbaCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  bsbaStudentRecord BsbaStudentRecord[]
+}
+model BsmaCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  bsmaStudentRecord BsmaStudentRecord[]
+}
+
+
+
+model BsaStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Int?
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsaCurriculum BsaCurriculum @relation(fields: [courseId], references: [id])
+}
+model BsbaStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Int?
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsbaCurriculum BsbaCurriculum @relation(fields: [courseId], references: [id])
+}
+model BsmaStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Int?
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsmaCurriculum BsmaCurriculum @relation(fields: [courseId], references: [id])
+}
