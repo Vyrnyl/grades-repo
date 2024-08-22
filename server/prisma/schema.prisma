@@ -19,9 +19,9 @@ model User {
   sex String
   role String
   studentId String?
-  yearLevel Int
-  programId Int
-  program Program @relation(fields: [programId], references: [id])
+  yearLevel Int?
+  programId Int?
+  program Program? @relation(fields: [programId], references: [id])
   bsaStudentRecord BsaStudentRecord[]
   bsbaStudentRecord BsbaStudentRecord[]
   bsmaStudentRecord BsmaStudentRecord[]

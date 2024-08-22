@@ -29,17 +29,28 @@ const signupSchema = joi_1.default.object({
     sex: joi_1.default.string().required().messages({
         'string.empty': 'Sex cannot be empty'
     }),
-    role: joi_1.default.string().required().messages({
+    role: joi_1.default.string().valid('student', 'professor', 'admin').required().messages({
         'string.empty': 'Role cannot be empty'
     }),
-    studentId: joi_1.default.string().required().messages({
-        'string.empty': 'Student ID cannot be empty'
+    studentId: joi_1.default.string().when('role', {
+        is: 'student',
+        then: joi_1.default.required().messages({
+            'string.empty': 'Student ID cannot be empty'
+        }),
+        otherwise: joi_1.default.forbidden()
     }),
-    yearLevel: joi_1.default.number().integer().required().messages({
-        'number.empty': 'Year Level cannot be empty'
+    yearLevel: joi_1.default.number().integer().when('role', {
+        is: 'student',
+        then: joi_1.default.required().messages({
+            'any.required': 'Year Level cannot be empty',
+        }),
+        otherwise: joi_1.default.forbidden()
     }),
-    programId: joi_1.default.number().integer().required().messages({
-        'number.empty': 'Program ID cannot be empty'
+    programId: joi_1.default.number().integer().when('role', {
+        is: 'student',
+        then: joi_1.default.required().messages({
+            'any.required': 'Program ID cannot be empty'
+        })
     })
 });
 const loginSchema = joi_1.default.object({

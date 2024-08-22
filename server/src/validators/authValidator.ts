@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { ValidationResult} from 'joi';
 import { SignupPayload, LoginPayload } from '../types/types';
 
 const signupSchema = Joi.object({
@@ -25,17 +25,28 @@ const signupSchema = Joi.object({
     sex: Joi.string().required().messages({
         'string.empty': 'Sex cannot be empty'
     }),
-    role: Joi.string().required().messages({
+    role: Joi.string().valid('student', 'professor', 'admin').required().messages({
         'string.empty': 'Role cannot be empty'
     }),
-    studentId: Joi.string().required().messages({
-        'string.empty': 'Student ID cannot be empty'
+    studentId: Joi.string().when('role', {
+        is: 'student',
+        then: Joi.required().messages({
+            'string.empty': 'Student ID cannot be empty'
+        }),
+        otherwise: Joi.forbidden()
     }),
-    yearLevel: Joi.number().integer().required().messages({
-        'number.empty': 'Year Level cannot be empty'
+    yearLevel: Joi.number().integer().when('role', {
+        is: 'student',
+        then: Joi.required().messages({
+            'any.required': 'Year Level cannot be empty',
+        }),
+        otherwise: Joi.forbidden()
     }),
-    programId: Joi.number().integer().required().messages({
-        'number.empty': 'Program ID cannot be empty'
+    programId: Joi.number().integer().when('role', {
+        is: 'student',
+        then: Joi.required().messages({
+            'any.required': 'Program ID cannot be empty'
+        })
     })
 });
 
