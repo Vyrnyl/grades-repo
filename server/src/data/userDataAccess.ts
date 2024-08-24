@@ -52,16 +52,4 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
 
 
 
-const storeRefreshToken = async (token: string, userId: number): Promise<StoreRefreshTokenResponse> => {
-    try {
-        const refreshToken = await prisma.refreshToken.create({
-            data: { token, userId }
-        });
-        return { refreshToken };
-    } catch(error) {
-        console.log(`Storing refresh token error: ${error}`);
-        return { error: 'An error occurred while processing your request' };
-    }
-}
-
-export { createUser, storeRefreshToken };
+export { createUser };

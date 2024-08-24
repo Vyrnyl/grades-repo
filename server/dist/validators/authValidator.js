@@ -54,7 +54,7 @@ const signupSchema = joi_1.default.object({
     })
 });
 const loginSchema = joi_1.default.object({
-    email: joi_1.default.string().required().messages({
+    email: joi_1.default.string().required().email({ tlds: { allow: false } }).messages({
         'string.empty': 'Email cannot be empty',
         'string.email': 'Please enter a valid email'
     }),

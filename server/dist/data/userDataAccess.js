@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.storeRefreshToken = exports.createUser = void 0;
+exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
@@ -47,16 +47,3 @@ const createUser = async (value) => {
     }
 };
 exports.createUser = createUser;
-const storeRefreshToken = async (token, userId) => {
-    try {
-        const refreshToken = await prisma.refreshToken.create({
-            data: { token, userId }
-        });
-        return { refreshToken };
-    }
-    catch (error) {
-        console.log(`Storing refresh token error: ${error}`);
-        return { error: 'An error occurred while processing your request' };
-    }
-};
-exports.storeRefreshToken = storeRefreshToken;

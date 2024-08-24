@@ -27,7 +27,6 @@ model User {
   bsaStudentRecord BsaStudentRecord[]
   bsbaStudentRecord BsbaStudentRecord[]
   bsmaStudentRecord BsmaStudentRecord[]
-  refreshToken RefreshToken[]
 }
 
 model Program {
@@ -87,7 +86,5 @@ model BsmaStudentRecord {
 
 model RefreshToken {
   id Int @id @default(autoincrement())
-  token String @unique
-  userId Int
-  user User @relation(fields: [userId], references: [id])
+  token String @unique @db.VarChar(2048)
 }

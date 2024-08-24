@@ -51,7 +51,7 @@ const signupSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-    email: Joi.string().required().messages({
+    email: Joi.string().required().email({ tlds: { allow: false }}).messages({
         'string.empty': 'Email cannot be empty',
         'string.email': 'Please enter a valid email'
     }),

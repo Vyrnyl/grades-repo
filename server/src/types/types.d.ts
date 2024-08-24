@@ -40,7 +40,6 @@ export type StoreRefreshTokenResponse = {
     refreshToken?: {
         id: number;
         token: string;
-        userId: number;
     };
 }
 
