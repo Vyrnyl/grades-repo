@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NewUserData } from "../types/types";
+import { NewUserData, StoreRefreshTokenResponse } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -50,4 +50,18 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
     }
 }
 
-export { createUser };
+
+
+const storeRefreshToken = async (token: string, userId: number): Promise<StoreRefreshTokenResponse> => {
+    try {
+        const refreshToken = await prisma.refreshToken.create({
+            data: { token, userId }
+        });
+        return { refreshToken };
+    } catch(error) {
+        console.log(`Storing refresh token error: ${error}`);
+        return { error: 'An error occurred while processing your request' };
+    }
+}
+
+export { createUser, storeRefreshToken };

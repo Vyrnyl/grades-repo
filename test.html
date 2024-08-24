@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>TEST</h1>
+
+    <button id="signup">SignUp</button>
+    <button id="test">Test</button>
+    <button id="test2">Test2</button>
+    <script>
+
+        let atoken, rtoken;
+
+        const signUp = async () => {
+            const res = await fetch('http://localhost:8000/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName: "John",
+                    lastName: "Doe",
+                    email: "john.doe@example.com",
+                    password: "john15",
+                    confirmPassword: "john15",  
+                    sex: "Male",
+                    role: "student",
+                    studentId: "2022-0001",
+                    yearLevel: 1,
+                    programId: 2
+                })
+            });
+            const data = await res.json();
+
+            atoken = res.headers.get('Authorization');
+            rtoken = res.headers.get('Refresh-Token');
+
+            console.log(data);
+        }
+
+        const test = async () => {
+            const res = await fetch('http://localhost:8000/auth/test', {
+                method: 'GET',
+                headers: {
+                    'Authorization': atoken
+                }
+            });
+            const data = await res.json();
+            console.log(data);
+            // console.log(atoken);
+        }
+        const test2 = async () => {
+            const res = await fetch('http://localhost:8000/auth/test2', {
+                method: 'GET',
+                headers: {
+                    'Authorization': atoken
+                }
+            });
+            const data = await res.json();
+            console.log(data);
+            // console.log(atoken);
+        }
+
+        document.querySelector('#signup').addEventListener('click', () => signUp());
+        document.querySelector('#test').addEventListener('click', () => test());
+        document.querySelector('#test2').addEventListener('click', () => test2());
+    </script>
+</body>
+</html>

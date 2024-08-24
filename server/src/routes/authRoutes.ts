@@ -4,10 +4,10 @@ import { validateSignup } from '../validators/authValidator';
 import { checkEmail } from '../data/userUtils';
 import validationError from '../utils/validationError';
 import bcrypt from 'bcrypt';
-import { createUser } from '../data/userDataAccess';
-import jwt from 'jsonwebtoken';
-
+import { createUser, storeRefreshToken } from '../data/userDataAccess';
+import { generateAccessToken, generateRefreshToken } from '../services/tokenService';
 import dotenv from 'dotenv';
+import userAuth from '../middleware/userAuth';
 dotenv.config();
 
 const router = Router();
@@ -19,7 +19,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 router.post('/signup', async (req: Request, res: Response) => {
 
     const { error, value } = validateSignup(req.body);
-
+    
     if(error) {
         const err = validationError(error);
         return res.status(422).json(err)
@@ -47,10 +47,35 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     //TOKEN
-    
+    const payload = {
+        userId: newUser.id,
+        firstName: newUser.firstName,
+        role: newUser.role
+    };
 
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    //Store refresh token
+    const store = await storeRefreshToken(refreshToken, newUser.id);
+    
+    if(store.error) {
+        return res.status(500).json({ error: 'Storing refresh token error' });
+    }
+    
+    res.set({
+        'Authorization': `Bearer ${accessToken}`,
+        'Refresh-Token': refreshToken
+    });
     res.status(200).json({ message: 'Registration successful' });
 });
 
+
+
+router.get('/test', userAuth, (req, res) =>{
+    
+    console.log(req.user);
+    res.json({ message: 'Protected'});
+});
 
 export default router;

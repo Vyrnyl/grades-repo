@@ -8,8 +8,10 @@ CREATE TABLE `User` (
     `sex` VARCHAR(191) NOT NULL,
     `role` VARCHAR(191) NOT NULL,
     `studentId` VARCHAR(191) NULL,
-    `yearLevel` INTEGER NOT NULL,
-    `programId` INTEGER NOT NULL,
+    `yearLevel` INTEGER NULL,
+    `programId` INTEGER NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -81,8 +83,18 @@ CREATE TABLE `BsmaStudentRecord` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `RefreshToken` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `token` VARCHAR(191) NOT NULL,
+    `userId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `RefreshToken_token_key`(`token`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
-ALTER TABLE `User` ADD CONSTRAINT `User_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `User` ADD CONSTRAINT `User_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BsaStudentRecord` ADD CONSTRAINT `BsaStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -101,3 +113,6 @@ ALTER TABLE `BsmaStudentRecord` ADD CONSTRAINT `BsmaStudentRecord_userId_fkey` F
 
 -- AddForeignKey
 ALTER TABLE `BsmaStudentRecord` ADD CONSTRAINT `BsmaStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsmaCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `RefreshToken` ADD CONSTRAINT `RefreshToken_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

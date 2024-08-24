@@ -21,10 +21,13 @@ model User {
   studentId String?
   yearLevel Int?
   programId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   program Program? @relation(fields: [programId], references: [id])
   bsaStudentRecord BsaStudentRecord[]
   bsbaStudentRecord BsbaStudentRecord[]
   bsmaStudentRecord BsmaStudentRecord[]
+  refreshToken RefreshToken[]
 }
 
 model Program {
@@ -79,4 +82,12 @@ model BsmaStudentRecord {
   grade Int?
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   bsmaCurriculum BsmaCurriculum @relation(fields: [courseId], references: [id])
+}
+
+
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  token String @unique
+  userId Int
+  user User @relation(fields: [userId], references: [id])
 }

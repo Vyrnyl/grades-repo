@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 
 //Validator Types
 export type SignupPayload = {
@@ -22,6 +23,7 @@ export type LoginPayload = {
 
 //Data Access Layer Types
 export type NewUserData = {
+    id: number
     firstName: string,
     lastName: string,
     email: string,
@@ -33,5 +35,29 @@ export type NewUserData = {
     programId: number | null
 }
 
+export type StoreRefreshTokenResponse = {
+    error?: string,
+    refreshToken?: {
+        id: number;
+        token: string;
+        userId: number;
+    };
+}
+
  
+
+//TOKEN
+export type TokenPayload = {
+    userId: number,
+    firstName: string,
+    role: string
+}
+
+export type DecodedToken = { 
+    userId: number, 
+    firstName: string, 
+    role: string, 
+    iat: number, 
+    exp: number
+}
 

@@ -20,11 +20,6 @@ use graderepo;
 --     foreign key (programId) references programs(id)
 -- );
 
--- insert into programs(programName, programCode) values
--- ('Bachelor of Science in Accountancy', 'BSA'),
--- ('Bachelor of Science in Business Administration', 'BSBA'),
--- ('Bachelor of Science in Management Accounting', 'BSMA');
-
 
 
 -- insert into users(firstName, lastName, email, password, role, yearLevel, programId)values 
@@ -39,6 +34,26 @@ use graderepo;
 --     courseTitle varchar(50)
 -- );
 
+
+-- create table bsbaCurriculum(
+-- 	id int primary key auto_increment,
+--     courseCode varchar(50),
+--     courseTitle varchar(50)
+-- );
+
+
+
+-- create table bsmaCurriculum(
+-- 	id int primary key auto_increment,
+--     courseCode varchar(50),
+--     courseTitle varchar(50)
+-- );
+
+
+-- insert into programs(programName, programCode) values
+-- ('Bachelor of Science in Accountancy', 'BSA'),
+-- ('Bachelor of Science in Business Administration', 'BSBA'),
+-- ('Bachelor of Science in Management Accounting', 'BSMA');
 
 -- INSERT INTO bsaCurriculum (courseCode, courseTitle) VALUES
 --     ('ACCT 101', 'Financial Accounting and Reporting'),
@@ -83,12 +98,6 @@ use graderepo;
 --     ('OB 101', 'Organizational Behavior');
 
 
--- create table bsbaCurriculum(
--- 	id int primary key auto_increment,
---     courseCode varchar(50),
---     courseTitle varchar(50)
--- );
-
 -- INSERT INTO bsbaCurriculum (courseCode, courseTitle) VALUES
 --     ('ACCT 101', 'Financial Accounting and Reporting'),
 --     ('FIN 101', 'Financial Management'),
@@ -130,14 +139,6 @@ use graderepo;
 --     ('ACCT 201', 'Advanced Financial Accounting'),
 --     ('ACCT 202', 'Auditing and Assurance Services'),
 --     ('ACCT 203', 'Cost Accounting');
-
-
--- create table bsmaCurriculum(
--- 	id int primary key auto_increment,
---     courseCode varchar(50),
---     courseTitle varchar(50)
--- );
-
 
 -- INSERT INTO bsmaCurriculum (courseCode, courseTitle) VALUES
 --     ('ACCT 101', 'Financial Accounting and Reporting'),

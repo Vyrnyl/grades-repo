@@ -10,7 +10,9 @@ const userUtils_1 = require("../data/userUtils");
 const validationError_1 = __importDefault(require("../utils/validationError"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDataAccess_1 = require("../data/userDataAccess");
+const tokenService_1 = require("../services/tokenService");
 const dotenv_1 = __importDefault(require("dotenv"));
+const userAuth_1 = __importDefault(require("../middleware/userAuth"));
 dotenv_1.default.config();
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
@@ -37,6 +39,26 @@ router.post('/signup', async (req, res) => {
         return res.status(500).json(newUser);
     }
     //TOKEN
+    const payload = {
+        userId: newUser.id,
+        firstName: newUser.firstName,
+        role: newUser.role
+    };
+    const accessToken = (0, tokenService_1.generateAccessToken)(payload);
+    const refreshToken = (0, tokenService_1.generateRefreshToken)(payload);
+    //Store refresh token
+    const store = await (0, userDataAccess_1.storeRefreshToken)(refreshToken, newUser.id);
+    if (store.error) {
+        return res.status(500).json({ error: 'Storing refresh token error' });
+    }
+    res.set({
+        'Authorization': `Bearer ${accessToken}`,
+        'Refresh-Token': refreshToken
+    });
     res.status(200).json({ message: 'Registration successful' });
+});
+router.get('/test', userAuth_1.default, (req, res) => {
+    console.log(req.user);
+    res.json({ message: 'Protected' });
 });
 exports.default = router;
