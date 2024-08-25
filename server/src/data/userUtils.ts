@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { StoreRefreshTokenResponse } from '../types/types';
+import { refreshToken } from '../controllers/authController';
 
 const prisma = new PrismaClient();
 
@@ -26,5 +27,32 @@ const storeRefreshToken = async (token: string): Promise<StoreRefreshTokenRespon
     }
 }
 
+const deleteRefreshToken = async (refreshToken: string) => {
+    try {
+        await prisma.refreshToken.delete({
+            where: {
+                token: refreshToken
+            }
+        });
+        return true;
+    } catch(error) {
+        console.log('Deletion error');
+        return undefined;
+    }
+}
 
-export { checkEmail, storeRefreshToken };
+const getProgramName = async (programId: number) => {
+    try {
+        const program = await prisma.program.findUnique({
+            where: {
+                id: programId
+            }
+        });
+        return program;
+    } catch(error) {
+        console.log(`Retrieve error ${error}`);
+        return undefined;
+    }
+}
+
+export { checkEmail, storeRefreshToken, deleteRefreshToken, getProgramName };

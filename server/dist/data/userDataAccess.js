@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = void 0;
+exports.getUserById = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
@@ -47,3 +47,18 @@ const createUser = async (value) => {
     }
 };
 exports.createUser = createUser;
+const getUserById = async (userId) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        });
+        return user;
+    }
+    catch (error) {
+        console.log(`Retrieve error ${error}`);
+        return undefined;
+    }
+};
+exports.getUserById = getUserById;

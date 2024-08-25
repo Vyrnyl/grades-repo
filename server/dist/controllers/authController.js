@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.refreshToken = exports.login = exports.signup = void 0;
+exports.test = exports.refreshToken = exports.logout = exports.login = exports.signup = void 0;
 const authValidator_1 = require("../validators/authValidator");
 const validationError_1 = __importDefault(require("../utils/validationError"));
 const userUtils_1 = require("../data/userUtils");
@@ -87,6 +87,18 @@ const login = async (req, res) => {
     res.status(200).json({ message: 'Login successful' });
 };
 exports.login = login;
+const logout = async (req, res) => {
+    const refreshToken = req.headers['refresh-token'];
+    if (!refreshToken) {
+        return res.status(400).json({ error: 'Refresh token is required' });
+    }
+    const deleteToken = await (0, userUtils_1.deleteRefreshToken)(refreshToken);
+    if (!deleteToken) {
+        return res.status(404).json({ error: 'Already logged out or token not found' });
+    }
+    res.status(200).json({ message: 'Logout successful' });
+};
+exports.logout = logout;
 const refreshToken = async (req, res) => {
     const receivedRefreshToken = req.header('refresh-token');
     if (!receivedRefreshToken) {

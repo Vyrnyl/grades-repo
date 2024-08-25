@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateLogin, validateSignup } from "../validators/authValidator";
 import validationError from "../utils/validationError";
-import { checkEmail, storeRefreshToken } from "../data/userUtils";
+import { checkEmail, deleteRefreshToken, storeRefreshToken } from "../data/userUtils";
 import bcrypt from 'bcrypt';
 import { createUser } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
@@ -93,7 +93,7 @@ const login = async (req: Request, res: Response) => {
 
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
-
+    
     //Store refresh token
     const storeResult = await storeRefreshToken(refreshToken);
     
@@ -107,7 +107,24 @@ const login = async (req: Request, res: Response) => {
     });
 
     res.status(200).json({ message: 'Login successful' });
-} 
+}
+
+const logout = async (req: Request, res: Response) => {
+
+    const refreshToken = req.headers['refresh-token'] as string;
+    
+    if(!refreshToken) {
+        return res.status(400).json({ error: 'Refresh token is required' });
+    }
+    
+    const deleteToken = await deleteRefreshToken(refreshToken);
+    
+    if(!deleteToken) {
+        return res.status(404).json({ error: 'Already logged out or token not found' });
+    }
+
+   res.status(200).json({ message: 'Logout successful' });
+}   
 
 
 const refreshToken = async (req: Request, res: Response) => {
@@ -142,4 +159,4 @@ const test = (req: Request, res: Response) =>{
 }
 
 
-export { signup, login, refreshToken, test };
+export { signup, login, logout, refreshToken, test };

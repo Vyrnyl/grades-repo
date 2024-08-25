@@ -51,5 +51,19 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
 }
 
 
+const getUserById = async (userId: number) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        });
+        return user;
+    } catch(error) {
+        console.log(`Retrieve error ${error}`);
+        return undefined;
+    }
+}
 
-export { createUser };
+
+export { createUser, getUserById };
