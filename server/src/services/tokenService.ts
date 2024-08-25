@@ -1,5 +1,5 @@
 
-import jwt, { Jwt, JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 import { DecodedToken, TokenPayload } from '../types/types';
 
@@ -29,13 +29,28 @@ const verifyAccessToken = (token: string) => {
     }
 };
 
-const verifyRefreshToken = async (refreshToken: string) => {
-    const token = await prisma.refreshToken.findUnique({
-        where: {
-            token: refreshToken
+const verifyRefreshToken = async (refreshToken: string): Promise<DecodedToken | undefined> => {
+    try {
+        const tokenResult = await prisma.refreshToken.findUnique({
+            where: {
+                token: refreshToken
+            }
+        });
+
+        if(!tokenResult) {
+            return undefined;
         }
-    });
-    return token;
+
+        const rtoken = jwt.verify(tokenResult.token, REFRESH_TOKEN_SECRET) as DecodedToken;
+
+        if(!rtoken) {
+            return undefined;
+        }
+        return rtoken;
+
+    } catch(error) {
+        return undefined;
+    }
 }
 
 export { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken };

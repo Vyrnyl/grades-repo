@@ -32,11 +32,23 @@ const verifyAccessToken = (token) => {
 };
 exports.verifyAccessToken = verifyAccessToken;
 const verifyRefreshToken = async (refreshToken) => {
-    const token = await prisma.refreshToken.findUnique({
-        where: {
-            token: refreshToken
+    try {
+        const tokenResult = await prisma.refreshToken.findUnique({
+            where: {
+                token: refreshToken
+            }
+        });
+        if (!tokenResult) {
+            return undefined;
         }
-    });
-    return token;
+        const rtoken = jsonwebtoken_1.default.verify(tokenResult.token, REFRESH_TOKEN_SECRET);
+        if (!rtoken) {
+            return undefined;
+        }
+        return rtoken;
+    }
+    catch (error) {
+        return undefined;
+    }
 };
 exports.verifyRefreshToken = verifyRefreshToken;

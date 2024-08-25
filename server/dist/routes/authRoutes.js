@@ -13,5 +13,6 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 router.post('/signup', authController_1.signup);
 router.post('/login', authController_1.login);
+router.post('/refresh-token', authController_1.refreshToken);
 router.get('/test', userAuth_1.default, authController_1.test);
 exports.default = router;

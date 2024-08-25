@@ -4,7 +4,7 @@ import validationError from "../utils/validationError";
 import { checkEmail, storeRefreshToken } from "../data/userUtils";
 import bcrypt from 'bcrypt';
 import { createUser } from "../data/userDataAccess";
-import { generateAccessToken, generateRefreshToken } from "../services/tokenService";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 
 
 //SIGNUP
@@ -110,6 +110,30 @@ const login = async (req: Request, res: Response) => {
 } 
 
 
+const refreshToken = async (req: Request, res: Response) => {
+
+    const receivedRefreshToken = req.header('refresh-token');
+
+    if(!receivedRefreshToken) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const validateTokenResult = await verifyRefreshToken(receivedRefreshToken);
+
+    if(!validateTokenResult) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+
+    console.log(validateTokenResult);
+
+    const { userId, firstName, role } = validateTokenResult;
+
+    const accessToken = generateAccessToken({ userId, firstName, role });
+
+    res.set({ 'Authorization': `Bearer ${accessToken}` });
+    res.status(200).json({ message: 'Refresh Token successful'});
+}
+
 
 //TEST ROUTE
 const test = (req: Request, res: Response) =>{
@@ -118,4 +142,4 @@ const test = (req: Request, res: Response) =>{
 }
 
 
-export { signup, login, test };
+export { signup, login, refreshToken, test };

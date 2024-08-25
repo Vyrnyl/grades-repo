@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.login = exports.signup = void 0;
+exports.test = exports.refreshToken = exports.login = exports.signup = void 0;
 const authValidator_1 = require("../validators/authValidator");
 const validationError_1 = __importDefault(require("../utils/validationError"));
 const userUtils_1 = require("../data/userUtils");
@@ -87,6 +87,22 @@ const login = async (req, res) => {
     res.status(200).json({ message: 'Login successful' });
 };
 exports.login = login;
+const refreshToken = async (req, res) => {
+    const receivedRefreshToken = req.header('refresh-token');
+    if (!receivedRefreshToken) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const validateTokenResult = await (0, tokenService_1.verifyRefreshToken)(receivedRefreshToken);
+    if (!validateTokenResult) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+    console.log(validateTokenResult);
+    const { userId, firstName, role } = validateTokenResult;
+    const accessToken = (0, tokenService_1.generateAccessToken)({ userId, firstName, role });
+    res.set({ 'Authorization': `Bearer ${accessToken}` });
+    res.status(200).json({ message: 'Refresh Token successful' });
+};
+exports.refreshToken = refreshToken;
 //TEST ROUTE
 const test = (req, res) => {
     console.log(req.user);

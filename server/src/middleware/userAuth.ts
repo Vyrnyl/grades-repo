@@ -5,7 +5,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
 
     const authToken = req.header('authorization');
     const token = authToken && authToken.split(' ')[1];
-
+    
     if(!token) {
         return res.status(403).json({ error: 'Access Denied' });
     }
