@@ -6,7 +6,6 @@ import cors from 'cors';
 import 'dotenv/config';
 import userAuth from './middleware/userAuth';
 
-
 const app = express();
 const prisma = new PrismaClient();
 

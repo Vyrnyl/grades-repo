@@ -9,13 +9,13 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
 
 const generateAccessToken = (payload: TokenPayload): string => {
     return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
-        expiresIn: '20s'
+        expiresIn: '10m'
     });
 }
 
 const generateRefreshToken = (payload: TokenPayload): string => {
     return jwt.sign(payload, REFRESH_TOKEN_SECRET, {
-        expiresIn: '5m'
+        expiresIn: '1h'
     });
 }
 

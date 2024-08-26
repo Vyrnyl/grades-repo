@@ -5,16 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.refreshToken = exports.logout = exports.login = exports.signup = void 0;
 const authValidator_1 = require("../validators/authValidator");
-const validationError_1 = __importDefault(require("../utils/validationError"));
 const userUtils_1 = require("../data/userUtils");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDataAccess_1 = require("../data/userDataAccess");
 const tokenService_1 = require("../services/tokenService");
+const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 //SIGNUP
 const signup = async (req, res) => {
     const { error, value } = (0, authValidator_1.validateSignup)(req.body);
     if (error) {
-        const err = (0, validationError_1.default)(error);
+        const err = (0, validationErrorHandler_1.default)(error);
         return res.status(422).json(err);
     }
     //CHECK EMAIL
@@ -24,7 +24,6 @@ const signup = async (req, res) => {
     }
     //PASSWORD HASHING
     value.password = await bcrypt_1.default.hash(value.password, 10);
-    ;
     delete value.confirmPassword;
     //DB STORE
     const newUserResult = await (0, userDataAccess_1.createUser)(value);
@@ -55,7 +54,7 @@ exports.signup = signup;
 const login = async (req, res) => {
     const { error, value } = (0, authValidator_1.validateLogin)(req.body);
     if (error) {
-        const err = (0, validationError_1.default)(error);
+        const err = (0, validationErrorHandler_1.default)(error);
         return res.status(422).json(err);
     }
     //CHECK USER

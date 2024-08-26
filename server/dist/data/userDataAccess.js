@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = exports.createUser = void 0;
+exports.updateUserData = exports.getUserData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
@@ -47,7 +47,7 @@ const createUser = async (value) => {
     }
 };
 exports.createUser = createUser;
-const getUserById = async (userId) => {
+const getUserData = async (userId) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -61,4 +61,20 @@ const getUserById = async (userId) => {
         return undefined;
     }
 };
-exports.getUserById = getUserById;
+exports.getUserData = getUserData;
+const updateUserData = async (userId, value) => {
+    try {
+        const userUpdateDetails = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: value
+        });
+        return userUpdateDetails;
+    }
+    catch (error) {
+        console.log(`Update error ${error}`);
+        return undefined;
+    }
+};
+exports.updateUserData = updateUserData;

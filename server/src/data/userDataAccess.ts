@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NewUserData, StoreRefreshTokenResponse } from "../types/types";
+import { NewUserData, StoreRefreshTokenResponse, UserUpdatePayload } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -51,7 +51,7 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
 }
 
 
-const getUserById = async (userId: number) => {
+const getUserData = async (userId: number) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -65,5 +65,20 @@ const getUserById = async (userId: number) => {
     }
 }
 
+const updateUserData = async (userId: number, value: UserUpdatePayload) => {
+    try {
+        const userUpdateDetails = await prisma.user.update({
+            where:{
+                id: userId
+            },
+            data: value
+        });
+        return userUpdateDetails;
+    } catch(error) {
+        console.log(`Update error ${error}`);
+        return undefined;
+    }
+}
 
-export { createUser, getUserById };
+
+export { createUser, getUserData, updateUserData };

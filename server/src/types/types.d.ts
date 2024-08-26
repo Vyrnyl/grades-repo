@@ -19,6 +19,17 @@ export type LoginPayload = {
     password: string
 };
 
+export type UserUpdatePayload = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    sex: string
+    studentId: string;
+    yearLevel: number;
+};
+
 
 
 //Data Access Layer Types
