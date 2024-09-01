@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { validateLogin, validateSignup } from "../validators/authValidator";
-import validationError from "../utils/validationErrorHandler";
 import { checkEmail, deleteRefreshToken, storeRefreshToken } from "../data/userUtils";
-import bcrypt from 'bcrypt';
 import { createUser } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
+import { hashPassword, comparePassword } from "../utils/passwordUtils";
 
 
 //SIGNUP
@@ -27,7 +26,7 @@ const signup = async (req: Request, res: Response) => {
 
     
     //PASSWORD HASHING
-    value.password = await bcrypt.hash(value.password, 10);
+    value.password = await hashPassword(value.password);
     delete value.confirmPassword;
 
 
@@ -80,7 +79,7 @@ const login = async (req: Request, res: Response) => {
     }
 
     //COMPARE PASSWORD
-    const isPasswordMatch = await bcrypt.compare(value.password, user.password);
+    const isPasswordMatch = await comparePassword(value.password, user.password);
     
     if(!isPasswordMatch) {
         return res.status(404).json({ error: 'Invalid email or password' });

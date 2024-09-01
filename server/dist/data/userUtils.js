@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgramName = exports.deleteRefreshToken = exports.storeRefreshToken = exports.checkEmail = void 0;
+exports.getProgram = exports.deleteRefreshToken = exports.storeRefreshToken = exports.checkEmail = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Check email in the Database
@@ -43,7 +43,7 @@ const deleteRefreshToken = async (refreshToken) => {
     }
 };
 exports.deleteRefreshToken = deleteRefreshToken;
-const getProgramName = async (programId) => {
+const getProgram = async (programId) => {
     try {
         const program = await prisma.program.findUnique({
             where: {
@@ -57,4 +57,4 @@ const getProgramName = async (programId) => {
         return undefined;
     }
 };
-exports.getProgramName = getProgramName;
+exports.getProgram = getProgram;

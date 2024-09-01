@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { StoreRefreshTokenResponse } from '../types/types';
-import { refreshToken } from '../controllers/authController';
 
 const prisma = new PrismaClient();
 
@@ -41,7 +40,7 @@ const deleteRefreshToken = async (refreshToken: string) => {
     }
 }
 
-const getProgramName = async (programId: number) => {
+const getProgram = async (programId: number) => {
     try {
         const program = await prisma.program.findUnique({
             where: {
@@ -55,4 +54,4 @@ const getProgramName = async (programId: number) => {
     }
 }
 
-export { checkEmail, storeRefreshToken, deleteRefreshToken, getProgramName };
+export { checkEmail, storeRefreshToken, deleteRefreshToken, getProgram };

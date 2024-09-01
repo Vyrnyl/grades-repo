@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NewUserData, StoreRefreshTokenResponse, UserUpdatePayload } from "../types/types";
+import { getProgram } from "./userUtils";
 
 const prisma = new PrismaClient();
 
@@ -50,17 +51,33 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
     }
 }
 
+const getUsersData = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+                program: true
+            }
+        });
+        return users;
+    } catch(error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+}
 
 const getUserData = async (userId: number) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
                 id: userId
+            },
+            include: {
+                program: true
             }
         });
         return user;
     } catch(error) {
-        console.log(`Retrieve error ${error}`);
+        console.log(`Retrieval error: ${error}`);
         return undefined;
     }
 }
@@ -75,10 +92,25 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
         });
         return userUpdateDetails;
     } catch(error) {
-        console.log(`Update error ${error}`);
+        console.log(`Update error: ${error}`);
         return undefined;
     }
 }
 
+const deleteUserData = async (userId: number) => {
 
-export { createUser, getUserData, updateUserData };
+    try {
+        const deletedUser = await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+        return deletedUser;
+    } catch(error) {
+        console.log(`Delete error: ${error}`);
+        return undefined;
+    }
+
+}
+
+export { createUser, getUsersData, getUserData, updateUserData, deleteUserData };

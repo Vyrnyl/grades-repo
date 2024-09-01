@@ -2,12 +2,12 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
+import gradeRoutes from './routes/gradeRoutes';
 import cors from 'cors';
 import 'dotenv/config';
 import userAuth from './middleware/userAuth';
 
 const app = express();
-const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cors({
@@ -30,7 +30,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes );
-
+app.use('/grades', gradeRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server Running on PORT: ${PORT}`));

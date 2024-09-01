@@ -62,7 +62,7 @@ model BsaStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
-  grade Int?
+  grade Decimal?
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   bsaCurriculum BsaCurriculum @relation(fields: [courseId], references: [id])
 }
@@ -70,7 +70,7 @@ model BsbaStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
-  grade Int?
+  grade Decimal?
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   bsbaCurriculum BsbaCurriculum @relation(fields: [courseId], references: [id])
 }
@@ -78,7 +78,7 @@ model BsmaStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
-  grade Int?
+  grade Decimal?
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   bsmaCurriculum BsmaCurriculum @relation(fields: [courseId], references: [id])
 }

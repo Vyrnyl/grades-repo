@@ -11,7 +11,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const generateAccessToken = (payload) => {
     return jsonwebtoken_1.default.sign(payload, ACCESS_TOKEN_SECRET, {
-        expiresIn: '10m'
+        expiresIn: '10h'
     });
 };
 exports.generateAccessToken = generateAccessToken;

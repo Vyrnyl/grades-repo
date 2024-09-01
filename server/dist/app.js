@@ -4,14 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const client_1 = require("@prisma/client");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const gradeRoutes_1 = __importDefault(require("./routes/gradeRoutes"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const userAuth_1 = __importDefault(require("./middleware/userAuth"));
 const app = (0, express_1.default)();
-const prisma = new client_1.PrismaClient();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
     exposedHeaders: ['Authorization', 'Refresh-Token']
@@ -29,5 +28,6 @@ app.get('/', (req, res) => {
 });
 app.use('/auth', authRoutes_1.default);
 app.use('/users', userRoutes_1.default);
+app.use('/grades', gradeRoutes_1.default);
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server Running on PORT: ${PORT}`));

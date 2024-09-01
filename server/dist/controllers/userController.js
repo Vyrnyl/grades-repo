@@ -3,39 +3,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.getUser = void 0;
-const client_1 = require("@prisma/client");
+exports.deleteUser = exports.updateUser = exports.getUser = exports.getUsers = void 0;
 const userDataAccess_1 = require("../data/userDataAccess");
-const userUtils_1 = require("../data/userUtils");
-const authValidator_1 = require("../validators/authValidator");
+const userValidator_1 = require("../validators/userValidator");
 const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const prisma = new client_1.PrismaClient();
+const getUsers = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'User is not authenticated' });
+    }
+    const id = +req.params.id;
+    const users = await (0, userDataAccess_1.getUsersData)();
+    if (!users) {
+        return res.status(404).json({ error: 'Users not found' });
+    }
+    res.status(200).json(users);
+};
+exports.getUsers = getUsers;
 const getUser = async (req, res) => {
     if (!req.user) {
-        return res.status(400).json({ message: 'User is not authenticated' });
+        return res.status(401).json({ message: 'User is not authenticated' });
     }
-    const { userId } = req.body;
+    const { userId } = req.user;
     const userDetails = await (0, userDataAccess_1.getUserData)(userId);
     if (!userDetails) {
         return res.status(404).json({ error: 'User not found' });
     }
-    const { programId } = userDetails;
-    if (!programId) {
-        return res.json({ error: 'Program ID not found in user details' });
-    }
-    const programDetails = await (0, userUtils_1.getProgramName)(programId);
-    if (!programDetails) {
-        return res.status(404).json({ error: 'Program not found' });
-    }
-    res.status(200).json({ userDetails, programDetails });
+    res.status(200).json(userDetails);
 };
 exports.getUser = getUser;
 const updateUser = async (req, res) => {
     if (!req.user) {
-        return res.status(400).json({ message: 'User is not authenticated' });
+        return res.status(401).json({ error: 'User is not authenticated' });
     }
-    const { error, value } = (0, authValidator_1.validateUserUpdate)(req.body);
+    const { error, value } = (0, userValidator_1.validateUserUpdate)(req.body);
     if (error) {
         const err = (0, validationErrorHandler_1.default)(error);
         return res.status(422).json(err);
@@ -45,8 +46,27 @@ const updateUser = async (req, res) => {
     delete value.confirmPassword;
     const userUpdateDetails = await (0, userDataAccess_1.updateUserData)(userId, value);
     if (!userUpdateDetails) {
-        return res.status(400).json({ error: 'Updating user error' });
+        return res.status(500).json({ error: 'Failed to update user details' });
     }
     res.status(200).json(userUpdateDetails);
 };
 exports.updateUser = updateUser;
+const deleteUser = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ error: 'User is not authenticated' });
+    }
+    if (!req.body.userId) {
+        return res.status(400).json({ error: 'Missing necessary data' });
+    }
+    const { error, value } = (0, userValidator_1.validateUserId)(req.body);
+    if (error) {
+        const err = (0, validationErrorHandler_1.default)(error);
+        return res.status(422).json(err);
+    }
+    const deletedUser = await (0, userDataAccess_1.deleteUserData)(value.userId);
+    if (!deletedUser) {
+        return res.status(400).json({ error: 'Deletion error' });
+    }
+    res.status(200).json({ message: 'Deletion successful' });
+};
+exports.deleteUser = deleteUser;

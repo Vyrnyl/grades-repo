@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.refreshToken = exports.logout = exports.login = exports.signup = void 0;
 const authValidator_1 = require("../validators/authValidator");
 const userUtils_1 = require("../data/userUtils");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDataAccess_1 = require("../data/userDataAccess");
 const tokenService_1 = require("../services/tokenService");
 const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
+const passwordUtils_1 = require("../utils/passwordUtils");
 //SIGNUP
 const signup = async (req, res) => {
     const { error, value } = (0, authValidator_1.validateSignup)(req.body);
@@ -23,7 +23,7 @@ const signup = async (req, res) => {
         return res.status(409).json({ error: 'Email already registered' });
     }
     //PASSWORD HASHING
-    value.password = await bcrypt_1.default.hash(value.password, 10);
+    value.password = await (0, passwordUtils_1.hashPassword)(value.password);
     delete value.confirmPassword;
     //DB STORE
     const newUserResult = await (0, userDataAccess_1.createUser)(value);
@@ -63,7 +63,7 @@ const login = async (req, res) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     //COMPARE PASSWORD
-    const isPasswordMatch = await bcrypt_1.default.compare(value.password, user.password);
+    const isPasswordMatch = await (0, passwordUtils_1.comparePassword)(value.password, user.password);
     if (!isPasswordMatch) {
         return res.status(404).json({ error: 'Invalid email or password' });
     }

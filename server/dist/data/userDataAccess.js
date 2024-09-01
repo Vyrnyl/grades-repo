@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserData = exports.getUserData = exports.createUser = void 0;
+exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
@@ -47,17 +47,35 @@ const createUser = async (value) => {
     }
 };
 exports.createUser = createUser;
+const getUsersData = async () => {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+                program: true
+            }
+        });
+        return users;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+};
+exports.getUsersData = getUsersData;
 const getUserData = async (userId) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
                 id: userId
+            },
+            include: {
+                program: true
             }
         });
         return user;
     }
     catch (error) {
-        console.log(`Retrieve error ${error}`);
+        console.log(`Retrieval error: ${error}`);
         return undefined;
     }
 };
@@ -73,8 +91,23 @@ const updateUserData = async (userId, value) => {
         return userUpdateDetails;
     }
     catch (error) {
-        console.log(`Update error ${error}`);
+        console.log(`Update error: ${error}`);
         return undefined;
     }
 };
 exports.updateUserData = updateUserData;
+const deleteUserData = async (userId) => {
+    try {
+        const deletedUser = await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        });
+        return deletedUser;
+    }
+    catch (error) {
+        console.log(`Delete error: ${error}`);
+        return undefined;
+    }
+};
+exports.deleteUserData = deleteUserData;
