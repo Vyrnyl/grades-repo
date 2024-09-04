@@ -10,7 +10,7 @@ const validationErrorHandler_1 = __importDefault(require("../utils/validationErr
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const getUsers = async (req, res) => {
     if (!req.user) {
-        return res.status(401).json({ message: 'User is not authenticated' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
     const id = +req.params.id;
     const users = await (0, userDataAccess_1.getUsersData)();

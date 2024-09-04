@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const gradeRoutes_1 = __importDefault(require("./routes/gradeRoutes"));
+const classRoutes_1 = __importDefault(require("./routes/classRoutes"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const userAuth_1 = __importDefault(require("./middleware/userAuth"));
@@ -29,5 +30,6 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes_1.default);
 app.use('/users', userRoutes_1.default);
 app.use('/grades', gradeRoutes_1.default);
+app.use('/classes', classRoutes_1.default);
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server Running on PORT: ${PORT}`));

@@ -71,3 +71,11 @@ export type DecodedToken = {
     exp: number
 }
 
+
+//CLASS
+type  ClassPayload = {
+    courseCode: string,
+    day: string,
+    time: string,
+    room: string
+}

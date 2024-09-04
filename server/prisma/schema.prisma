@@ -27,6 +27,7 @@ model User {
   bsaStudentRecord BsaStudentRecord[]
   bsbaStudentRecord BsbaStudentRecord[]
   bsmaStudentRecord BsmaStudentRecord[]
+  class Class[]
 }
 
 model Program {
@@ -83,6 +84,16 @@ model BsmaStudentRecord {
   bsmaCurriculum BsmaCurriculum @relation(fields: [courseId], references: [id])
 }
 
+
+model Class {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseCode String
+  day String
+  time String
+  room String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
 model RefreshToken {
   id Int @id @default(autoincrement())

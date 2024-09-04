@@ -18,7 +18,7 @@ const updateStudentGrade = async (req: Request, res: Response) => {
     const updateGradeDetails = await updateGrade(userId, programId, courseId, grade);
 
     if(!updateGradeDetails) {
-        return res.status(200).json({ error: 'Failed to update user grade' });
+        return res.status(500).json({ error: 'Failed to update user grade' });
     }
 
     res.status(200).json(updateGradeDetails);

@@ -50,7 +50,7 @@ use graderepo;
 -- );
 
 
--- insert into programs(programName, programCode) values
+-- insert into program(programName, programCode) values
 -- ('Bachelor of Science in Accountancy', 'BSA'),
 -- ('Bachelor of Science in Business Administration', 'BSBA'),
 -- ('Bachelor of Science in Management Accounting', 'BSMA');
