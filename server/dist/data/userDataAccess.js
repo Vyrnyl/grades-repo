@@ -42,7 +42,7 @@ const createUser = async (value) => {
         return newUserTransaction;
     }
     catch (error) {
-        console.log(`Database error: ${error}`);
+        console.log(`Add error: ${error}`);
         return { error: 'An error occurred while processing your request' };
     }
 };

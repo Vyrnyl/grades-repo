@@ -79,3 +79,10 @@ type  ClassPayload = {
     time: string,
     room: string
 }
+type  ClassUpdatePayload = {
+    id: number,
+    courseCode: string,
+    day: string,
+    time: string,
+    room: string
+}

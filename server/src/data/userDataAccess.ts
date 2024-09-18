@@ -46,7 +46,7 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
         });
         return newUserTransaction;
     } catch(error) {
-        console.log(`Database error: ${error}`);
+        console.log(`Add error: ${error}`);
         return { error: 'An error occurred while processing your request' };
     }
 }

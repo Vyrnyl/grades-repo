@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import { ClassPayload } from "../types/types";
+import { ClassPayload, ClassUpdatePayload } from "../types/types";
 
 const prisma = new PrismaClient();
-
 
 const getClassesSched = async (userId: number) => {
     try {
@@ -19,19 +18,43 @@ const getClassesSched = async (userId: number) => {
 }
 
 const addClassSched = async (userId: number, classData: ClassPayload) => {
-
     try {
-        const classRes = await prisma.class.create({
+        const addedClass = await prisma.class.create({
             data: {
                 userId,
                 ...classData
             }
         });
-        return classRes;
+        return addedClass;
     } catch(error) {
-        console.log(`Add class error: ${error}`);
+        console.log(`Add error: ${error}`);
         return null;
     }
 }
 
-export { getClassesSched, addClassSched };
+const updateClassSched = async (userId: number, classData: ClassUpdatePayload) =>{
+    try {
+        const updatedClass = await prisma.class.updateMany({
+            where: { id: classData.id, userId },
+            data: classData
+        });
+        return updatedClass;
+    } catch(error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+}
+
+const deleteClassSched = async (userId: number, classId: number) => {
+    try {
+        const deletedClass = await prisma.class.delete({
+            where: { id: classId, userId }
+        });
+        return deletedClass;
+    } catch(error) {
+        console.log(`Deletion error: ${error}`);
+        return null;
+    }
+}
+
+export { getClassesSched, addClassSched, updateClassSched, deleteClassSched };

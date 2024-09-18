@@ -109,6 +109,7 @@ const login = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Login successful' });
 }
 
+
 const logout = async (req: Request, res: Response) => {
 
     const refreshToken = req.headers['refresh-token'] as string;
