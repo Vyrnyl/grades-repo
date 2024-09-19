@@ -42,18 +42,21 @@ model BsaCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
+  units Int @default(3)
   bsaStudentRecord BsaStudentRecord[]
 }
 model BsbaCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
+  units Int @default(3)
   bsbaStudentRecord BsbaStudentRecord[]
 }
 model BsmaCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
+  units Int @default(3)
   bsmaStudentRecord BsmaStudentRecord[]
 }
 
