@@ -1,10 +1,17 @@
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import StudentRoutes from "./routes/StudentRoutes"
 
 function App() {
 
   return (
     <>
-      <h1>MAIN PAGE</h1>
+      {/* <h1 className=''>MAIN PAGE</h1> */}
+      
+      <Router>
+        <Routes>
+          <Route path='/*' element={<StudentRoutes/>}/>
+        </Routes>
+      </Router>
     </>
   )
 }
