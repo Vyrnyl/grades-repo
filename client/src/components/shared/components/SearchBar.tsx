@@ -1,8 +1,8 @@
-import React from 'react'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
-const searchBar = () => {
+const SearchBar = () => {
   return (
     <div className='bg-gray-300 inline-block rounded-md h-[3rem] w-[32rem]'>
         <FontAwesomeIcon icon={faMagnifyingGlass} className='bg-gree-300 w-[15%] h-[] text-[1.1rem] text-gray-600' />
@@ -13,4 +13,4 @@ const searchBar = () => {
   )
 }
 
-export default searchBar
+export default SearchBar

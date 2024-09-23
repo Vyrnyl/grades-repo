@@ -11,6 +11,9 @@ export default {
       },
       boxShadow: {
         pageComponentShadow: '0 2px 5px 2px rgba(0, 0, 0, 0.2)'
+      },
+      screens: {
+        'testScreen': {'max': '1300px'}
       }
     },
   },
