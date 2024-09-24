@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import StudentRoutes from "./routes/StudentRoutes"
+import './App.css'
 
 function App() {
 
