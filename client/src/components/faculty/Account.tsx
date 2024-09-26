@@ -1,9 +1,9 @@
-import Input from "../shared/components/Input"
-import HalfInput from "../shared/components/HalfInput"
-import SaveButton from "../shared/components/SaveButton"
-import SelectInput from "../shared/components/SelectInput"
 import PageContainer from "../shared/components/PageContainer"
 import InputFieldWrapper from "../shared/components/InputFieldWrapper"
+import Input from "../shared/components/Input"
+import HalfInput from "../shared/components/HalfInput"
+import SelectInput from "../shared/components/SelectInput"
+import SaveButton from "../shared/components/SaveButton"
 
 const Account = () => {
   return (
@@ -16,7 +16,7 @@ const Account = () => {
             <InputFieldWrapper label="Name">
               <Input type="text"/>
             </InputFieldWrapper>
-            <InputFieldWrapper label="Student ID">
+            <InputFieldWrapper label="Falculty ID">
               <HalfInput type="text"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="">
@@ -31,9 +31,6 @@ const Account = () => {
               <Input type="text"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Password">
-              <Input type="text"/>
-            </InputFieldWrapper>
-            <InputFieldWrapper label="Course/Block/Year">
               <Input type="text"/>
             </InputFieldWrapper>
           </div>

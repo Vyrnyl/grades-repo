@@ -1,5 +1,5 @@
 
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import StudentLayout from '../layouts/StudentLayout'
 import DashBoard from '../components/student/DashBoard'
 import Account from '../components/student/Account'

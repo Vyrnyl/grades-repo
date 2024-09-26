@@ -2,6 +2,7 @@
 import SearchBar from '../shared/components/SearchBar'
 import Profile from '../shared/components/Profile'
 import NotificationBell from '../shared/components/NotificationBell'
+import ActivityContainer from '../shared/components/ActivityContainer'
 
 const DashBoard = () => {
   return (
@@ -16,9 +17,7 @@ const DashBoard = () => {
         </div>
       </div>
       <div className='bg-re-200 flex-[.6]'>
-        <div className='bg-slate-100 h-[70%] w-[100%] shadow-pageComponentShadow rounded-lg'>
-          <h1 className='text-lg font-medium py-2 px-4'>Recent Activity</h1>
-        </div>
+        <ActivityContainer/>
       </div>
     </div>
   )
