@@ -9,6 +9,7 @@ const FacultyLayout = () => {
           <SideBarLink path='/' label='Dashboard'/>
           <SideBarLink path='/account' label='Account'/>
           <SideBarLink path='/course-management' label='Course Management'/>
+          <SideBarLink path='/grade-entry' label='Grade Entry'/>
           <li>Sign out</li>
         </SideBar>
         <Outlet/>

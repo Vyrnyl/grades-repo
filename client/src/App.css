@@ -53,3 +53,9 @@ html, body {
 -ms-overflow-style: none;  /* Internet Explorer 10+ */
 scrollbar-width: none;  /* Firefox */
 }
+
+
+/* Class */
+.class-shadow {
+    box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.2);
+}

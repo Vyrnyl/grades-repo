@@ -10,7 +10,8 @@ export default {
         primary: '#212121'
       },
       boxShadow: {
-        pageComponentShadow: '0 2px 5px 2px rgba(0, 0, 0, 0.2)'
+        pageComponentShadow: '0 2px 5px 2px rgba(0, 0, 0, 0.2)',
+        classShadow: '0 10px 10px 10px rgba(0, 0, 0, 0.5)'
       },
       screens: {
         'testScreen': {'max': '1300px'}
