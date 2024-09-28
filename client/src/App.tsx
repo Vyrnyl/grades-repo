@@ -12,7 +12,7 @@ function App() {
       
       <Router>
         <Routes>
-          <Route path='/*' element={<AdminRoutes/>}/>
+          <Route path='/*' element={<FacultyRoutes/>}/>
         </Routes>
       </Router>
     </>

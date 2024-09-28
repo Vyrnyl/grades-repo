@@ -9,7 +9,7 @@ type SideBarProps = {
 
 const SideBar = ({ children }: SideBarProps) => {
   return (
-    <div className="bg-primary h-[100%] flex flex-col flex-[.2] rounded-r-md">
+    <div className="bg-primary h-[100%] flex flex-col flex-[20%] rounded-r-md">
       <Logo/>
       <SidebarLinks>{children}</SidebarLinks>
     </div>

@@ -6,7 +6,7 @@ import ActivityContainer from '../shared/components/ActivityContainer'
 
 const DashBoard = () => {
   return (
-    <div className='bg-slat-100 h-[100%] flex flex-col justify-center flex-[.8]'>
+    <div className='bg-slat-100 h-[100%] w-[80%] flex flex-col justify-center'>
       <div className='bg-cya-200 flex-[.4] flex '>
         <div className='bg-blu-200 h-[8rem] w-[50%] flex justify-start  items-end'>
           <SearchBar/>

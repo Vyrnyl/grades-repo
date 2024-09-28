@@ -7,6 +7,8 @@ const AdminLayout = () => {
     <div className="bg-slate-200 h-[100vh] flex items-center gap-[4rem] p-2 pr-8">
         <SideBar>
           <SideBarLink path='/' label='Dashboard'/>
+          <SideBarLink path='/activity-tracking' label='Activity Tracking'/>
+          <SideBarLink path='/user-management' label='User Management'/>
           <li>Sign out</li>
         </SideBar>
         <Outlet/>

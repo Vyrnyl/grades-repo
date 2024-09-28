@@ -5,7 +5,7 @@ import { faUser, faChartColumn } from "@fortawesome/free-solid-svg-icons"
 
 const Dashboard = () => {
   return (
-    <div className='bg-cya-100 h-[100%] flex flex-col justify-center flex-[.8]'>
+    <div className='bg-cya-100 h-[100%] flex-[80%] flex flex-col justify-center'>
       <div className="bg-blu-200 flex-[.2] pt-[1.5rem]">
         <SearchBar/>
       </div>
@@ -14,7 +14,7 @@ const Dashboard = () => {
         <DashboardCard label="Students" icon={faUser}/>
         <DashboardCard label="Faculty" icon={faUser}/>
       </div>
-      <div className="bg-re-200 flex-[.5] pt-[4rem">
+      <div className="bg-re-200 flex-[.5]">
         <ActivityContainer>
           <div></div>
         </ActivityContainer>

@@ -6,7 +6,7 @@ type PageContainerProps = {
 
 const PageContainer = ({ children }: PageContainerProps) => {
   return (
-    <div className='bg-slate-100 h-[96%] flex flex-col flex-[.8] shadow-pageComponentShadow 
+    <div className='bg-slate-100 h-[96%] flex flex-col flex-[80%] shadow-pageComponentShadow 
       rounded-lg'>{children}</div>
   )
 }
