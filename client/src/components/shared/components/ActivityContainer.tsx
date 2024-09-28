@@ -1,9 +1,14 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
-const ActivityContainer = () => {
+type ActivityContainerProps = {
+  children: ReactNode
+}
+
+const ActivityContainer = ({ children }: ActivityContainerProps) => {
   return (
-    <div className='bg-slate-100 h-[70%] w-[100%] shadow-pageComponentShadow rounded-lg'>
+    <div className='bg-slate-100 h-[18rem] w-[100%] flex flex-col shadow-pageComponentShadow rounded-lg'>
       <h1 className='text-lg font-medium py-2 px-4'>Recent Activity</h1>
+      {children}
     </div>
   )
 }

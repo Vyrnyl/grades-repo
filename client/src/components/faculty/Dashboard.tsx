@@ -14,7 +14,9 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='bg-re-200 flex-[.6]'>
-        <ActivityContainer/>
+        <ActivityContainer>
+          <div></div>
+        </ActivityContainer>
       </div>
     </div>
   )
