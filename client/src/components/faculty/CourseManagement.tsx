@@ -1,7 +1,6 @@
 import ClassSched from '../shared/components/ClassSched'
 import PageContainer from '../shared/components/PageContainer'
 import InputFieldWrapper from '../shared/components/InputFieldWrapper'
-import Input from '../shared/components/Input'
 import ClassInput from '../shared/components/ClassInput'
 
 const CourseManagement = () => {
