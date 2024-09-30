@@ -1,16 +1,19 @@
 import Logo from './components/Logo'
 import SidebarLinks from './components/SidebarLinks'
-import SideBarLink from './components/SideBarLink'
+import AdminProfile from './components/AdminProfile'
 import { ReactNode } from 'react'
 
 type SideBarProps = {
-  children: ReactNode
+  children: ReactNode,
+  role: 'admin' | 'faculty' | 'student'
 }
 
-const SideBar = ({ children }: SideBarProps) => {
+const SideBar = ({ children, role }: SideBarProps) => {
+
   return (
     <div className="bg-primary h-[100%] flex flex-col flex-[20%] rounded-r-md">
       <Logo/>
+      {role !== 'student' && <AdminProfile/>}
       <SidebarLinks>{children}</SidebarLinks>
     </div>
   )

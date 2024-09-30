@@ -1,19 +1,20 @@
 import { Outlet } from "react-router-dom"
 import SideBar from "../components/shared/SideBar"
 import SideBarLink from '../components/shared/components/SideBarLink'
-
+import LayoutContainer from "../components/shared/LayoutContainer"
+import AdminProfile from "../components/shared/components/AdminProfile"
 const FacultyLayout = () => {
   return (
-    <div className="bg-slate-200 h-[100vh] flex items-center gap-[4rem] p-2 pr-8">
-        <SideBar>
-          <SideBarLink path='/' label='Dashboard'/>
-          <SideBarLink path='/account' label='Account'/>
-          <SideBarLink path='/course-management' label='Course Management'/>
-          <SideBarLink path='/grade-entry' label='Grade Entry'/>
-          <li>Sign out</li>
-        </SideBar>
-        <Outlet/>
-    </div>
+    <LayoutContainer>
+      <SideBar role='faculty'>
+        <SideBarLink path='/' label='Dashboard'/>
+        <SideBarLink path='/account' label='Account'/>
+        <SideBarLink path='/course-management' label='Course Management'/>
+        <SideBarLink path='/grade-entry' label='Grade Entry'/>
+        <li>Sign out</li>
+      </SideBar>
+      <Outlet/>
+    </LayoutContainer>
   )
 }
 
