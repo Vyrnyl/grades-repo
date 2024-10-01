@@ -1,3 +1,5 @@
+import nameAcronym from "../../../utils/nameAcronym";
+import randomColor from "../../../utils/randomColor";
 
 type StudentTableDataProps = {
     profilePic?: string,
@@ -9,27 +11,14 @@ type StudentTableDataProps = {
 
 const StudentTableData = ({ name, studentId, yearBlock, grade }: StudentTableDataProps) => {
 
-    const colors: { [key: string]: string }  = {
-        pink: 'bg-pink-200',
-        green: 'bg-green-200',
-        purple: 'bg-purple-200',
-        cyan: 'bg-cyan-200',
-        orange: 'bg-orange-200',
-      };
-      
-      const colorKeys = Object.keys(colors);
-      const randomKey = colorKeys[Math.floor(Math.random() * colorKeys.length)];
-      const randomColor = colors[randomKey];
-
-
-      const pfp = name.split(' ');
-      const pfpName = pfp[0][0] + pfp[1][0];
+    const color = randomColor();
+    const acronym = nameAcronym(name);
 
     return (
         <div className='flex font-medium text-slate-700 py-1 items-center hover:bg-slate-200'>
             <div className='bg-blu-300 w-[15rem] text-nowrap flex gap-2 items-center'>
-                <div className={`${randomColor} h-[1.5rem] w-[1.5rem] min-h-[1.7rem] min-w-[1.7rem] 
-                rounded-full flex items-center justify-center`}>{pfpName}</div>
+                <div className={`${color} h-[1.5rem] w-[1.5rem] min-h-[1.7rem] min-w-[1.7rem] 
+                rounded-full flex items-center justify-center text-[.8rem]`}>{acronym}</div>
                 <span className='text-wrap'>{name}</span>
             </div>
             <div className='flex-[8%]'>{studentId}</div>  

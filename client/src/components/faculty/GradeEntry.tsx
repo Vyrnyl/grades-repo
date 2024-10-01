@@ -24,7 +24,7 @@ const GradeEntry = () => {
               </div>
               <StudentTableData name='Richard Sorreda' studentId='703704' yearBlock='2B' grade={2.9}/>
               <StudentTableData name='Juan Raulo' studentId='703704' yearBlock='2B' grade={2.9}/>
-              <StudentTableData name='Jett TheGreat' studentId='703704' yearBlock='2B' grade={2.9}/>
+              <StudentTableData name='Jett' studentId='703704' yearBlock='2B' grade={2.9}/>
               <StudentTableData name='Remon Semento' studentId='703704' yearBlock='2B' grade={2.9}/>
             </div>
           </div>
