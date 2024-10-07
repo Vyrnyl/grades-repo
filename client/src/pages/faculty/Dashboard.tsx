@@ -1,6 +1,6 @@
-import SearchBar from "../shared/components/SearchBar"
-import NotificationBell from "../shared/components/NotificationBell"
-import ActivityContainer from "../shared/components/ActivityContainer"
+import SearchBar from "../../components/shared/components/SearchBar"
+import NotificationBell from "../../components/shared/components/NotificationBell"
+import ActivityContainer from "../../components/shared/components/ActivityContainer"
 
 const Dashboard = () => {
   return (

@@ -1,10 +1,13 @@
 import { Routes, Route } from "react-router-dom"
 import AdminLayout from "../layouts/AdminLayout"
-import Dashboard from "../components/admin/Dashboard"
-import ActivityTracking from "../components/admin/ActivityTracking"
-import UserManagement from "../components/admin/UserManagement"
+import Dashboard from "../pages/admin/Dashboard"
+import ActivityTracking from "../pages/admin/ActivityTracking"
+import UserManagement from "../pages/admin/UserManagement"
+import NotFound from "./NotFound"
+// import useAuth from "../hooks/useAuth" 
 
 const AdminRoutes = () => {
+
   return (
     <Routes>
         <Route element={<AdminLayout/>}>
@@ -12,6 +15,7 @@ const AdminRoutes = () => {
             <Route path='/activity-tracking' element={<ActivityTracking/>}/>
             <Route path='/user-management' element={<UserManagement/>}/>
         </Route>
+        <Route path='*' element={<NotFound/>}/>
     </Routes>
   )
 }

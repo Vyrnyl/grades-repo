@@ -14,7 +14,7 @@ const getClasses = async (req: Request, res: Response) => {
     if(!getClassesResult) {
         return res.status(404).json({ error: 'Failed to retrieve' });
     }
-
+    
     res.status(200).json(getClassesResult);
 }
 
@@ -76,7 +76,7 @@ const deleteClass = async (req: Request, res: Response) => {
     const { classId } = req.body;
 
     if(!classId) {
-        return res.status(422).json({ mess: "Deletion error" });
+        return res.status(422).json({ message: "Deletion error" });
     }
 
     const { userId } = req.user;
@@ -86,7 +86,7 @@ const deleteClass = async (req: Request, res: Response) => {
         return res.status(500).json({ error: "Failed to delete class schedule"});
     }
     
-    res.json({ mess: "Deletion successful" });
+    res.json({ message: "Deletion successful" });
 
 }
 

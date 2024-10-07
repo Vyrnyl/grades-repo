@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 const getUsers = async (req: Request, res: Response) => {
 
     if(!req.user) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ error: 'Unauthorized' });
     }
 
     const id = +req.params.id;
@@ -25,7 +25,7 @@ const getUsers = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
 
     if(!req.user) {
-        return res.status(401).json({ message: 'User is not authenticated' });
+        return res.status(401).json({ error: 'User is not authenticated' });
     }
     
     const { userId } = req.user;

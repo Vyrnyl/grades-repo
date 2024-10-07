@@ -1,6 +1,6 @@
-import NotifContent from "../shared/components/NotifContent";
-import PageContainer from "../shared/components/PageContainer"
-import CustomSelect from "../shared/components/CustomSelect"
+import NotifContent from "../../components/shared/components/NotifContent";
+import PageContainer from "../../components/shared/components/PageContainer"
+import CustomSelect from "../../components/shared/components/CustomSelect"
 
 const Notification = () => {
 

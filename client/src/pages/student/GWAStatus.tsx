@@ -1,6 +1,6 @@
 import React from 'react'
-import PageContainer from '../shared/components/PageContainer'
-import GwaTableRow from '../shared/components/GwaTableRow'
+import PageContainer from '../../components/shared/components/PageContainer'
+import GwaTableRow from '../../components/shared/components/GwaTableRow'
 
 const GWAStatus = () => {
   return (

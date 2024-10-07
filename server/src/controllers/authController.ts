@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateLogin, validateSignup } from "../validators/authValidator";
 import { checkEmail, deleteRefreshToken, storeRefreshToken } from "../data/userUtils";
-import { createUser } from "../data/userDataAccess";
+import { createUser, getUserData } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
@@ -84,7 +84,7 @@ const login = async (req: Request, res: Response) => {
     if(!isPasswordMatch) {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
-
+    
     const payload = {
         userId: user.id,
         firstName: user.firstName,
@@ -106,7 +106,9 @@ const login = async (req: Request, res: Response) => {
         'Refresh-Token': refreshToken
     });
 
-    res.status(200).json({ message: 'Login successful' });
+    const userData = await getUserData(user.id);
+
+    res.status(200).json({ message: 'Login successful', userData });
 }
 
 

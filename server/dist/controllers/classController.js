@@ -58,13 +58,13 @@ const deleteClass = async (req, res) => {
     }
     const { classId } = req.body;
     if (!classId) {
-        return res.status(422).json({ mess: "Deletion error" });
+        return res.status(422).json({ message: "Deletion error" });
     }
     const { userId } = req.user;
     const deletedClassResult = await (0, classDataAccess_1.deleteClassSched)(userId, classId);
     if (!deletedClassResult) {
         return res.status(500).json({ error: "Failed to delete class schedule" });
     }
-    res.json({ mess: "Deletion successful" });
+    res.json({ message: "Deletion successful" });
 };
 exports.deleteClass = deleteClass;

@@ -15,6 +15,9 @@ export default {
       },
       screens: {
         'testScreen': {'max': '1300px'}
+      },
+      backgroundImage: {
+        loginBg: "url(asset/images/background.jpg)"
       }
     },
   },

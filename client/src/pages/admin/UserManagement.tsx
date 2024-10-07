@@ -1,4 +1,4 @@
-import AcitvityCard from "../shared/components/AcitvityCard"
+import AcitvityCard from "../../components/shared/components/AcitvityCard"
 
 const UserManagement = () => {
   return (

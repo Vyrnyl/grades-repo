@@ -13,7 +13,7 @@ const userAuth = (req: Request, res: Response, next: NextFunction) => {
     const verified = verifyAccessToken(token);
 
     if(!verified) {
-        return res.status(401).json({ error: 'Token expired' });
+        return res.status(401).json({ error: 'Token Expired' });
     }
 
     req.user = verified;

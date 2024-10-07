@@ -83,7 +83,8 @@ const login = async (req, res) => {
         'Authorization': `Bearer ${accessToken}`,
         'Refresh-Token': refreshToken
     });
-    res.status(200).json({ message: 'Login successful' });
+    const userData = await (0, userDataAccess_1.getUserData)(user.id);
+    res.status(200).json({ message: 'Login successful', userData });
 };
 exports.login = login;
 const logout = async (req, res) => {

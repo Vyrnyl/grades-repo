@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { NewUserData, StoreRefreshTokenResponse, UserUpdatePayload } from "../types/types";
-import { getProgram } from "./userUtils";
 
 const prisma = new PrismaClient();
 

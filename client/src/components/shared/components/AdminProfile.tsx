@@ -18,5 +18,4 @@ const AdminProfile = ({ name }: AdminProfileProps) => {
     </div>
   )
 }
-
 export default AdminProfile

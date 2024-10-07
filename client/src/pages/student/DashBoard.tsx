@@ -1,8 +1,8 @@
 
-import SearchBar from '../shared/components/SearchBar'
-import Profile from '../shared/components/Profile'
-import NotificationBell from '../shared/components/NotificationBell'
-import ActivityContainer from '../shared/components/ActivityContainer'
+import SearchBar from '../../components/shared/components/SearchBar'
+import Profile from '../../components/shared/components/Profile'
+import NotificationBell from '../../components/shared/components/NotificationBell'
+import ActivityContainer from '../../components/shared/components/ActivityContainer'
 
 const DashBoard = () => {
   return (

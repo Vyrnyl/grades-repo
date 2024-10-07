@@ -1,5 +1,5 @@
-import PageContainer from '../shared/components/PageContainer'
-import StudentTableData from '../shared/components/StudentTableData'
+import PageContainer from '../../components/shared/components/PageContainer'
+import StudentTableData from '../../components/shared/components/StudentTableData'
 
 const GradeEntry = () => {
   return (

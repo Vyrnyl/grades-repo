@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, Navigate } from "react-router-dom"
 import SideBar from "../components/shared/SideBar"
 import SideBarLink from "../components/shared/components/SideBarLink"
 import LayoutContainer from "../components/shared/LayoutContainer"
 
 const AdminLayout = () => {
+
+  
   return (
     <LayoutContainer>
       <SideBar role='admin'>
@@ -12,6 +14,7 @@ const AdminLayout = () => {
         <SideBarLink path='/user-management' label='User Management'/>
         <li>Sign out</li>
       </SideBar>      
+      {/* {isAuthenticated ? <Outlet/> : <Navigate to='/login'/>} */}
       <Outlet/>
     </LayoutContainer>
   )

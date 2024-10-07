@@ -1,9 +1,9 @@
-import PageContainer from "../shared/components/PageContainer"
-import InputFieldWrapper from "../shared/components/InputFieldWrapper"
-import Input from "../shared/components/Input"
-import HalfInput from "../shared/components/HalfInput"
-import SelectInput from "../shared/components/SelectInput"
-import SaveButton from "../shared/components/SaveButton"
+import Input from "../../components/shared/components/Input"
+import HalfInput from "../../components/shared/components/HalfInput"
+import SaveButton from "../../components/shared/components/SaveButton"
+import SelectInput from "../../components/shared/components/SelectInput"
+import PageContainer from "../../components/shared/components/PageContainer"
+import InputFieldWrapper from "../../components/shared/components/InputFieldWrapper"
 
 const Account = () => {
   return (
@@ -16,7 +16,7 @@ const Account = () => {
             <InputFieldWrapper label="Name">
               <Input type="text"/>
             </InputFieldWrapper>
-            <InputFieldWrapper label="Falculty ID">
+            <InputFieldWrapper label="Student ID">
               <HalfInput type="text"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="">
@@ -31,6 +31,9 @@ const Account = () => {
               <Input type="text"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Password">
+              <Input type="text"/>
+            </InputFieldWrapper>
+            <InputFieldWrapper label="Course/Block/Year">
               <Input type="text"/>
             </InputFieldWrapper>
           </div>

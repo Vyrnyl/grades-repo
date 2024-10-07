@@ -9,7 +9,7 @@ const userAuth = (req, res, next) => {
     }
     const verified = (0, tokenService_1.verifyAccessToken)(token);
     if (!verified) {
-        return res.status(401).json({ error: 'Token expired' });
+        return res.status(401).json({ error: 'Token Expired' });
     }
     req.user = verified;
     next();

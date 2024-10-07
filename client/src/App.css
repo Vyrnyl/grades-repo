@@ -63,3 +63,14 @@ scrollbar-width: none;  /* Firefox */
 .card-shadow {
     box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.2);   
 }
+
+
+
+
+/* LoginPageBg */
+.login-bg {
+    background-image: url('./assets/images/backgorund.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(2px) brightness(70%)
+}

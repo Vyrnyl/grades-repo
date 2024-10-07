@@ -1,9 +1,12 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, Navigate } from "react-router-dom"
 import SideBar from "../components/shared/SideBar"
 import SideBarLink from "../components/shared/components/SideBarLink"
 import LayoutContainer from "../components/shared/LayoutContainer"
 
 const StudentLayout = () => {
+
+  const isAuthenticated = true;
+
   return (
     <LayoutContainer>
       <SideBar role="student">
@@ -13,7 +16,7 @@ const StudentLayout = () => {
         <SideBarLink path='/gwastatus' label='GWA Status'/>
         <li>Sign out</li>
       </SideBar>
-      <Outlet/>
+      {isAuthenticated ? <Outlet/> : <Navigate to='/login'/>}
     </LayoutContainer>
   )
 }
