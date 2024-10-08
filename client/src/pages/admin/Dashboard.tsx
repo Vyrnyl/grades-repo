@@ -1,10 +1,10 @@
 import useFetch from "../../hooks/useFetch"
-import useAuthTokenStore from "../../store/useAuthTokenStore"
+import { faUser, faChartColumn } from "@fortawesome/free-solid-svg-icons"
 
 import ActivityContainer from "../../components/shared/components/ActivityContainer"
 import SearchBar from "../../components/shared/components/SearchBar"
 import DashboardCard from "../../components/shared/components/DashboardCard"
-import { faUser, faChartColumn } from "@fortawesome/free-solid-svg-icons"
+
 
 
 const Dashboard = () => {

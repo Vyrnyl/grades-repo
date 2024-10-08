@@ -1,8 +1,12 @@
+import authenticate from '../../services/authenticate'
+import { useNavigate } from 'react-router-dom'
+
 import logo from '../../assets/images/logo.jpg'
 import LoginInput from './components/LoginInput'
-import authenticate from '../../services/authenticate'
 
 const LoginPage = () => {
+
+    const navigate = useNavigate();
 
     const authUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -10,6 +14,10 @@ const LoginPage = () => {
         const auth = await authenticate();
         
         console.log(auth);
+
+        if(auth.message) {
+            navigate('/');
+        }
         
     }
     

@@ -23,7 +23,7 @@ const authenticate = async () =>{
         } else {
             const atoken = res.headers.get('Authorization');
             localStorage.setItem('atoken', atoken ? atoken : '');
-
+            
             return data;
         };
 
