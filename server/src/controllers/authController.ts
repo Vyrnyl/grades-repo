@@ -16,7 +16,7 @@ const signup = async (req: Request, res: Response) => {
         const err = validationErrorHandler(error);
         return res.status(422).json(err);
     }
-
+    
     //CHECK EMAIL
     const emailExist = await checkEmail(value.email);
 

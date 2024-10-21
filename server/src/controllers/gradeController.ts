@@ -1,8 +1,22 @@
 import { Request, Response } from "express";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { validateGradeUpdate } from "../validators/gradeValidator";
-import { updateGrade } from "../data/gradeDataAccess";
+import { getGrades, updateGrade } from "../data/gradeDataAccess";
 
+const getStudentGrades = async (req: Request, res: Response) => {
+
+    if(!req.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const record = await getGrades(req.user.userId);
+    
+    if(!record) {
+        return res.status(500).json({ error: 'Failed to retrieve user grades' });
+    }
+    
+    res.status(200).json(record);
+}
 
 const updateStudentGrade = async (req: Request, res: Response) => {
 
@@ -21,7 +35,7 @@ const updateStudentGrade = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed to update user grade' });
     }
 
-    res.status(200).json(updateGradeDetails);
+    res.status(201).json(updateGradeDetails);
 };
 
-export { updateStudentGrade };
+export { getStudentGrades, updateStudentGrade };

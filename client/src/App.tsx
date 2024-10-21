@@ -1,18 +1,29 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import { jwtDecode, JwtPayload} from 'jwt-decode'
+import { BrowserRouter as Router, Routes, Route, } from "react-router-dom"
 
 import './App.css'
 import AdminRoutes from "./routes/AdminRoutes";
 import FacultyRoutes from "./routes/FacultyRoutes";
 import StudentRoutes from "./routes/StudentRoutes";
 import LoginPage from "./components/shared/LoginPage"
+import { useEffect, useState } from "react";
+import LogoutRoute from "./routes/LogoutRoute";
+import tokenInfo from "./utils/tokenInfo";
 
 function App() {
 
-  const token = localStorage.getItem('atoken') || '';
-  const userInfo: { role: string } = jwtDecode(token);
+  const [userRole, setUserRole] = useState('');
 
-  const role = (userRole: string) => {
+  const { role } = tokenInfo();
+
+  useEffect(() => {
+
+    if(role) {
+      setUserRole(role);
+    }
+    
+  });
+  
+  const userRoutes = (userRole: string) => {
       switch(userRole) {
         case 'admin':
             return <Route path='/*' element={<AdminRoutes/>}/>;
@@ -20,17 +31,19 @@ function App() {
             return <Route path='/*' element={<StudentRoutes/>}/>;
         case 'faculty':
             return <Route path='/*' element={<FacultyRoutes/>}/>;
-        default: <Navigate to='/login'/>
+        default:
+          return <Route path='/*' element={<LogoutRoute role={role}/>}/>;
       };
   }
+  
 
   return (
     <>
       {/* <h1 className=''>MAIN PAGE</h1> */}
       <Router>
         <Routes>
-          {role(userInfo.role)}
-          <Route path='/login' element={<LoginPage/>}/>
+          {userRoutes(userRole)}
+          <Route path='/login' element={<LoginPage setUserRole={setUserRole} />}/>
         </Routes>
       </Router>
     </>

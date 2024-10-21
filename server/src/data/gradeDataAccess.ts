@@ -10,6 +10,76 @@ type Record = {
     grade: Decimal | null;
 } | null;
 
+
+const getGrades = async (userId: number) => {
+    try {
+        const program = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                program: true
+            }
+        });
+
+        const programId = program?.program?.id;
+
+        let records: Record[];
+        if(programId === 1) {
+            records = await prisma.bsaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsaCurriculum: { // Use brackets to define the dynamic key
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+
+        } else if(programId === 2) {
+            records = await prisma.bsbaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsbaCurriculum: {
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+        } else if(programId === 3) {
+            records = await prisma.bsmaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsmaCurriculum: {
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+        } else return undefined;   
+        
+        return records;        
+    } catch(error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+}
+
 const updateGrade = async (userId: number, programId: number, courseId: number, grade: number) => {
 
     try {
@@ -63,4 +133,4 @@ const updateGrade = async (userId: number, programId: number, courseId: number, 
 
 }
 
-export { updateGrade };
+export { getGrades, updateGrade };

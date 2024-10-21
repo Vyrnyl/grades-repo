@@ -8,6 +8,7 @@ const userAuth = (req, res, next) => {
         return res.status(403).json({ error: 'Access Denied' });
     }
     const verified = (0, tokenService_1.verifyAccessToken)(token);
+    console.log(verified?.firstName);
     if (!verified) {
         return res.status(401).json({ error: 'Token Expired' });
     }

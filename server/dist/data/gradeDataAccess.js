@@ -1,8 +1,78 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateGrade = void 0;
+exports.updateGrade = exports.getGrades = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+const getGrades = async (userId) => {
+    try {
+        const program = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                program: true
+            }
+        });
+        const programId = program?.program?.id;
+        let records;
+        if (programId === 1) {
+            records = await prisma.bsaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsaCurriculum: {
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+        }
+        else if (programId === 2) {
+            records = await prisma.bsbaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsbaCurriculum: {
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+        }
+        else if (programId === 3) {
+            records = await prisma.bsmaStudentRecord.findMany({
+                where: { userId },
+                select: {
+                    id: true,
+                    userId: true,
+                    courseId: true,
+                    grade: true,
+                    bsmaCurriculum: {
+                        select: {
+                            units: true
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return undefined;
+        return records;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+};
+exports.getGrades = getGrades;
 const updateGrade = async (userId, programId, courseId, grade) => {
     try {
         const updateResult = await prisma.$transaction(async () => {

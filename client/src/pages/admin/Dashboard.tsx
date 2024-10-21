@@ -4,14 +4,11 @@ import { faUser, faChartColumn } from "@fortawesome/free-solid-svg-icons"
 import ActivityContainer from "../../components/shared/components/ActivityContainer"
 import SearchBar from "../../components/shared/components/SearchBar"
 import DashboardCard from "../../components/shared/components/DashboardCard"
+import useUserStore from "../../store/useUserStore"
 
 
 
 const Dashboard = () => {
-  
-  const { data } = useFetch('users/get-users', 'GET');
-
-  console.log(data);
 
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] flex flex-col justify-center'>

@@ -13,9 +13,8 @@ const FacultyLayout = () => {
         <SideBarLink path='/account' label='Account'/>
         <SideBarLink path='/course-management' label='Course Management'/>
         <SideBarLink path='/grade-entry' label='Grade Entry'/>
-        <li>Sign out</li>
       </SideBar>
-      {isAuthenticated ? <Outlet/> : <Navigate to='/login'/>}
+      <Outlet/>
     </LayoutContainer>
   )
 }

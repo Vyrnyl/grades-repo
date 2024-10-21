@@ -3,23 +3,29 @@ import { useNavigate } from 'react-router-dom'
 
 import logo from '../../assets/images/logo.jpg'
 import LoginInput from './components/LoginInput'
+import tokenInfo from '../../utils/tokenInfo'
 
-const LoginPage = () => {
+
+
+const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => {
 
     const navigate = useNavigate();
-
+    
     const authUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('k');
-        const auth = await authenticate();
         
+        const auth = await authenticate();
         console.log(auth);
 
+        const userInfo = tokenInfo();
+        setUserRole(userInfo.role);
+        
         if(auth.message) {
             navigate('/');
         }
-        
     }
+
     
     return (
         <div className='relative'>

@@ -9,12 +9,12 @@ const authenticate = async () =>{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: "john.doe@example.com",
-                password: "john15"
+                email: "ashley.anderson@example.com",
+                password: "ashley15"
             })
         });
         
-        const data = await res.json();       
+        const data = await res.json();
 
         if(!res.ok && res.status === 422) {
             return { validationError: data };

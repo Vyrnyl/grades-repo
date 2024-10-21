@@ -28,7 +28,7 @@ const signupSchema = Joi.object({
     sex: Joi.string().required().messages({
         'string.empty': 'Sex cannot be empty'
     }),
-    role: Joi.string().valid('student', 'professor', 'admin').required().messages({
+    role: Joi.string().valid('student', 'faculty', 'admin').required().messages({
         'string.empty': 'Role cannot be empty'
     }),
     studentId: Joi.string().max(10).when('role', {
