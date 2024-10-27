@@ -9,8 +9,8 @@ const authenticate = async () =>{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: "ashley.anderson@example.com",
-                password: "ashley15"
+                email: "ashleyshkl@gmail.com",
+                password: "ashle15"
             })
         });
         

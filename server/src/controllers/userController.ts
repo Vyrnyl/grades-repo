@@ -63,7 +63,7 @@ const updateUser = async (req: Request, res: Response) => {
     if(!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });
     }
-
+    
     res.status(200).json(userUpdateDetails);
 };
 

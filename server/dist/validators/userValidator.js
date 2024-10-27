@@ -28,10 +28,6 @@ const userUpdateSchema = joi_1.default.object({
         'string.empty': 'Confirm Password cannot be empty',
         'any.only': 'Password do not match'
     }),
-    sex: joi_1.default.string().max(10).required().messages({
-        'string.empty': 'Sex cannot be empty',
-        'string.max': 'Sex cannot exceed 10 characters'
-    }),
     studentId: joi_1.default.string().max(10).messages({
         'string.empty': 'Student ID cannot be empty',
         'string.max': 'Student ID must be at most 10'

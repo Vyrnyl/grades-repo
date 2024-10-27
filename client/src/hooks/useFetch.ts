@@ -12,6 +12,7 @@ type DataType<TData> = {
 const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) => {
 
     const [data, setData] = useState<DataType<TData> | null>(null);
+    const [bodyData, setBodyData] = useState<BodyInit | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<ErrorType<TError> | null>(null);
     const navigate = useNavigate();
@@ -26,6 +27,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
             }
 
             setLoading(true);
+            setBodyData(body || null);
             try {
                 const res = await fetch(`http://localhost:8000/${path}`, {
                     method,
@@ -33,7 +35,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
                         'Authorization': token ? token : '',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(body)
+                    body: bodyData
                 });
                 const data = await res.json();
                 
@@ -50,7 +52,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
             }
         }
         request();
-    }, []);
+    }, [bodyData]);
     
     if(data?.error === 'Token Expired' || data?.error === 'Access Denied') {
         navigate('/login');

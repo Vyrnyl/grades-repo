@@ -19,15 +19,10 @@ const userUpdateSchema = Joi.object({
     password: Joi.string().min(6).required().messages({
         'string.empty': 'Password cannot be empty',
         'string.min': 'Password must be atleast 6 characters long',
-
     }),
     confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
         'string.empty': 'Confirm Password cannot be empty',
         'any.only': 'Password do not match'
-    }),
-    sex: Joi.string().max(10).required().messages({
-        'string.empty': 'Sex cannot be empty',
-        'string.max': 'Sex cannot exceed 10 characters'
     }),
     studentId: Joi.string().max(10).messages({
         'string.empty': 'Student ID cannot be empty',
