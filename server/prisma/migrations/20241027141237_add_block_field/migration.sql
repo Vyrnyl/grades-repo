@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `block` VARCHAR(191) NULL,
+    MODIFY `sex` VARCHAR(191) NULL;

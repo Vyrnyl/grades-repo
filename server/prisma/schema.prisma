@@ -17,10 +17,11 @@ model User {
   email String @unique
   phoneNumber String?
   password String
-  sex String
+  sex String?
   role String
   studentId String?
   yearLevel Int?
+  block String?
   programId Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

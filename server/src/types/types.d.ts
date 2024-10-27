@@ -39,11 +39,7 @@ export type NewUserData = {
     lastName: string,
     email: string,
     password: string,
-    sex: string,
-    role: string,
-    studentId: string | null,
-    yearLevel: number | null,
-    programId: number | null
+    role: string
 }
 
 export type StoreRefreshTokenResponse = {

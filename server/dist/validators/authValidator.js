@@ -28,38 +28,38 @@ const signupSchema = joi_1.default.object({
         'string.empty': 'Confirm Password cannot be empty',
         'any.only': 'Password do not match'
     }),
-    sex: joi_1.default.string().required().messages({
-        'string.empty': 'Sex cannot be empty'
-    }),
+    // sex: Joi.string().required().messages({
+    //     'string.empty': 'Sex cannot be empty'
+    // }),
     role: joi_1.default.string().valid('student', 'faculty', 'admin').required().messages({
         'string.empty': 'Role cannot be empty'
     }),
-    studentId: joi_1.default.string().max(10).when('role', {
-        is: 'student',
-        then: joi_1.default.required().messages({
-            'string.empty': 'Student ID cannot be empty',
-            'string.max': 'Student ID must be at most 10'
-        }),
-        otherwise: joi_1.default.forbidden()
-    }),
-    yearLevel: joi_1.default.number().integer().max(5).when('role', {
-        is: 'student',
-        then: joi_1.default.required().messages({
-            'number.base': 'Year level must be a type of number',
-            'number.max': 'Year level must be at most 5',
-            'number.empty': 'Year level cannot be empty',
-            'any.required': 'Year level cannot be empty'
-        }),
-        otherwise: joi_1.default.forbidden()
-    }),
-    programId: joi_1.default.number().integer().max(10).when('role', {
-        is: 'student',
-        then: joi_1.default.required().messages({
-            'any.required': 'Program ID cannot be empty',
-            'number.empty': 'Program ID cannot be empty',
-            'number.max': 'Program ID must be at most 10'
-        })
-    })
+    // studentId: Joi.string().max(10).when('role', {
+    //     is: 'student',
+    //     then: Joi.required().messages({
+    //         'string.empty': 'Student ID cannot be empty',
+    //         'string.max': 'Student ID must be at most 10'
+    //     }),
+    //     otherwise: Joi.forbidden()
+    // }),
+    // yearLevel: Joi.number().integer().max(5).when('role', {
+    //     is: 'student',
+    //     then: Joi.required().messages({
+    //         'number.base': 'Year level must be a type of number',
+    //         'number.max': 'Year level must be at most 5',
+    //         'number.empty': 'Year level cannot be empty',
+    //         'any.required': 'Year level cannot be empty'
+    //     }),
+    //     otherwise: Joi.forbidden()
+    // }),
+    // programId: Joi.number().integer().max(10).when('role', {
+    //     is: 'student',
+    //     then: Joi.required().messages({
+    //         'any.required': 'Program ID cannot be empty',
+    //         'number.empty': 'Program ID cannot be empty',
+    //         'number.max': 'Program ID must be at most 10'
+    //     })
+    // })
 });
 const loginSchema = joi_1.default.object({
     email: joi_1.default.string().required().email({ tlds: { allow: false } }).messages({

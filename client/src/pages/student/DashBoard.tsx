@@ -1,12 +1,8 @@
-import useFetch from '../../hooks/useFetch'
-import { useEffect, useState } from 'react'
-
 
 import SearchBar from '../../components/shared/components/SearchBar'
 import Profile from '../../components/shared/components/Profile'
 import NotificationBell from '../../components/shared/components/NotificationBell'
 import ActivityContainer from '../../components/shared/components/ActivityContainer'
-import { User } from '../../types/studentTypes'
 import useUserStore from '../../store/useUserStore'
 
 const DashBoard = () => {
