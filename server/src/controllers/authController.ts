@@ -97,9 +97,9 @@ const login = async (req: Request, res: Response) => {
     //Store refresh token
     const storeResult = await storeRefreshToken(refreshToken);
     
-    if(storeResult.error) {
-        return res.status(500).json({ error: storeResult.error });
-    }
+    // if(storeResult.error) {
+    //     return res.status(500).json({ error: storeResult.error });
+    // }
     
     res.set({
         'Authorization': `Bearer ${accessToken}`,

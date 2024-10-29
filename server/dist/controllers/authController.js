@@ -76,9 +76,9 @@ const login = async (req, res) => {
     const refreshToken = (0, tokenService_1.generateRefreshToken)(payload);
     //Store refresh token
     const storeResult = await (0, userUtils_1.storeRefreshToken)(refreshToken);
-    if (storeResult.error) {
-        return res.status(500).json({ error: storeResult.error });
-    }
+    // if(storeResult.error) {
+    //     return res.status(500).json({ error: storeResult.error });
+    // }
     res.set({
         'Authorization': `Bearer ${accessToken}`,
         'Refresh-Token': refreshToken
