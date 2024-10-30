@@ -101,27 +101,34 @@ const Account = () => {
         <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
-              <Input type="text" name='name' value={accountInfo?.name} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <Input type="text" name='name' value={accountInfo?.name} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Student ID">
-              <HalfInput type="text" name='studentId' value={accountInfo?.studentId} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <HalfInput type="text" name='studentId' value={accountInfo?.studentId} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
             <InputFieldWrapper label="">
-              <SelectInput name='gender' value={accountInfo.gender} onChange={handleSelectChange} />
+              <SelectInput name='gender' value={accountInfo.gender} 
+              onChange={handleSelectChange} />
             </InputFieldWrapper>
           </div>
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
-              <Input type="text" name='email' value={accountInfo?.email} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <Input type="text" name='email' value={accountInfo?.email} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Phone Number">
-              <Input type="text" name='phone' value={accountInfo?.phone} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <Input type="text" name='phone' value={accountInfo?.phone} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Password">
-              <Input type="password" name='password' value={accountInfo?.password} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <Input type="password" name='password' value={accountInfo?.password} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Course/Block/Year">
-              <Input type="number" name='yearLevel' value={accountInfo?.yearLevel} onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <Input type="number" name='yearLevel' value={accountInfo?.yearLevel} 
+              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
           </div>
         </form>

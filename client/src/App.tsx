@@ -8,6 +8,7 @@ import LoginPage from "./components/shared/LoginPage"
 import { useEffect, useState } from "react";
 import LogoutRoute from "./routes/LogoutRoute";
 import tokenInfo from "./utils/tokenInfo";
+import SignupPage from "./components/shared/SignupPage";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
         <Routes>
           {userRoutes(userRole)}
           <Route path='/login' element={<LoginPage setUserRole={setUserRole} />}/>
+          <Route path='/signup' element={<SignupPage/>}/>
         </Routes>
       </Router>
     </>

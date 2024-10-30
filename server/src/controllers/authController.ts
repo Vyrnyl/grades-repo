@@ -19,7 +19,7 @@ const signup = async (req: Request, res: Response) => {
     
     //CHECK EMAIL
     const emailExist = await checkEmail(value.email);
-
+    
     if(emailExist) {
         return res.status(409).json({ error: 'Email already registered' });
     }

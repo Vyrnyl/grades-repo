@@ -1,5 +1,5 @@
 
-type LoginInputType = {
+type AuthFormInputType = {
   type?: string,
   label?: string,
   name?: string,
@@ -9,7 +9,7 @@ type LoginInputType = {
   errorMessage?: string
 }
 
-const LoginInput = ({ type, label, name, value, onChange, onFocus, errorMessage }: LoginInputType) => {
+const AuthFormInput = ({ type, label, name, value, onChange, onFocus, errorMessage }: AuthFormInputType) => {
 
   // const [invalidInput, setInvalidInput] = useState<{ path: string, message: string }[]>([]);
 
@@ -23,4 +23,4 @@ const LoginInput = ({ type, label, name, value, onChange, onFocus, errorMessage 
   )
 }
 
-export default LoginInput
+export default AuthFormInput
