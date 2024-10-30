@@ -17,7 +17,7 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
                 const studentCourses = bsa.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
-    
+                
                 await prisma.bsaStudentRecord.createMany({
                     data: studentCourses
                 });

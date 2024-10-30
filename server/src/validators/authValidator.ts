@@ -19,17 +19,16 @@ const signupSchema = Joi.object({
     password: Joi.string().min(6).required().messages({
         'string.empty': 'Password cannot be empty',
         'string.min': 'Password must be atleast 6 characters long',
-
     }),
     confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
         'string.empty': 'Confirm Password cannot be empty',
-        'any.only': 'Password do not match'
+        'any.only': "Password don't match"
     }),
     // sex: Joi.string().required().messages({
     //     'string.empty': 'Sex cannot be empty'
     // }),
-    role: Joi.string().valid('student', 'faculty', 'admin').required().messages({
-        'string.empty': 'Role cannot be empty'
+    role: Joi.string().required().messages({
+        'string.empty': 'Please select role'
     }),
     // studentId: Joi.string().max(10).when('role', {
     //     is: 'student',

@@ -29,7 +29,7 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
         e.preventDefault();
         console.log('k');
         
-        const auth = await authenticate({ email: 'ashleyshkl@gmail.com', password: 'ashle15' });
+        const auth = await authenticate(loginInfo);
         console.log(auth);
 
         if(auth.validationError) {
@@ -76,7 +76,8 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
                 </div>
                 <div className='bg-gree-200 flex-[.6]'>
                     <form className='bg-cya-500 flex flex-col items-center' onSubmit={authUser}>
-                        <span className={`bg-re-400 text-[.8rem] text-red-500 ${infoError.error ? '' : 'invisible'}`}>{infoError.error || 'x'}</span>
+                        <span className={`bg-re-400 text-[.8rem] text-red-500 
+                            ${infoError.error ? '' : 'invisible'}`}>{infoError.error || 'x'}</span>
                         <div className='bg-re-200 flex flex-col w-[100%] items-center gap-6 relative mb-2 pb-2'>
                             <AuthFormInput type='text' label='Email' name='email' 
                             onChange={(e) => handleInputChange(e, setLoginInfo)}

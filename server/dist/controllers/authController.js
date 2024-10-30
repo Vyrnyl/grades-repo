@@ -28,7 +28,9 @@ const signup = async (req, res) => {
     //DB STORE
     const newUserResult = await (0, userDataAccess_1.createUser)(value);
     if ('error' in newUserResult) {
-        return res.status(500).json(newUserResult);
+        // return res.status(500).json(newUserResult);
+        console.log(newUserResult);
+        return res.status(409).json({ error: 'Email already registered' });
     }
     //TOKEN
     const payload = {
@@ -40,9 +42,9 @@ const signup = async (req, res) => {
     const refreshToken = (0, tokenService_1.generateRefreshToken)(payload);
     //Store refresh token
     const storeResult = await (0, userUtils_1.storeRefreshToken)(refreshToken);
-    if (storeResult.error) {
-        return res.status(500).json({ error: storeResult.error });
-    }
+    // if(storeResult.error) {
+    //     return res.status(500).json({ error: storeResult.error });
+    // }
     res.set({
         'Authorization': `Bearer ${accessToken}`,
         'Refresh-Token': refreshToken

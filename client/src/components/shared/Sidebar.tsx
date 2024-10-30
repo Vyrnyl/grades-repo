@@ -13,7 +13,7 @@ const SideBar = ({ children, role }: SideBarProps) => {
   return (
     <div className="bg-primary h-[100%] flex flex-col flex-[20%] rounded-r-md">
       <Logo/>
-      {role !== 'student' && <AdminProfile name='Vernel'/>}
+      {role !== 'student' && <AdminProfile name='Test'/>}
       <SidebarLinks>{children}</SidebarLinks>
     </div>
   )

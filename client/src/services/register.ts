@@ -1,22 +1,22 @@
+import { SignupInfoType } from "../types/formTypes";
 
-
-const authenticate = async (loginInfo: { email: string, password: string}) =>{
+const register = async (signupInfo: SignupInfoType) => {
     try {
-        const res = await fetch('http://localhost:8000/auth/login', {
+        const res = await fetch('http://localhost:8000/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(loginInfo)
+            body: JSON.stringify(signupInfo)
         });
-        
-        const data = await res.json();
+
+        const data = await res.json(); 
 
         if(!res.ok && res.status === 422) {
             return { validationError: data };
-        } else if(!res.ok && res.status === 404 && data.error) {
+        } else if(!res.ok && res.status === 409 && data.error) {
             return { error: data.error };
-        } else {
+        }else {
             const atoken = res.headers.get('Authorization');
             localStorage.setItem('atoken', atoken ? atoken : '');
             
@@ -26,7 +26,6 @@ const authenticate = async (loginInfo: { email: string, password: string}) =>{
     } catch(error) {
         console.log('Fetch error: ', error);
     }
-
 }
 
-export default authenticate;
+export default register;
