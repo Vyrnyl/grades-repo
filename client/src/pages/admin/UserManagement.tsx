@@ -1,4 +1,4 @@
-import ListContainer from "../../components/shared/admin/ListContainer"
+import ListContainer from "../../components/admin/ListContainer"
 import AcitvityCard from "../../components/shared/components/AcitvityCard"
 
 const UserManagement = () => {

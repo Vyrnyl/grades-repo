@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, } from "react-router-dom"
+import { useEffect, useState } from "react";
 
-import './App.css'
 import AdminRoutes from "./routes/AdminRoutes";
 import FacultyRoutes from "./routes/FacultyRoutes";
 import StudentRoutes from "./routes/StudentRoutes";
 import LoginPage from "./components/shared/LoginPage"
-import { useEffect, useState } from "react";
 import LogoutRoute from "./routes/LogoutRoute";
 import tokenInfo from "./utils/tokenInfo";
 import SignupPage from "./components/shared/SignupPage";
+import './App.css'
 
 function App() {
 

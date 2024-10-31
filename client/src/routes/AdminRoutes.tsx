@@ -7,8 +7,6 @@ import NotFound from "./NotFound"
 // import useAuth from "../hooks/useAuth" 
 
 const AdminRoutes = () => {
-  
-  console.log('admin');
 
   return (
     <Routes>

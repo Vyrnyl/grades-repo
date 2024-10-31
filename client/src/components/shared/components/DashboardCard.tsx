@@ -3,12 +3,13 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons"
 
 type DashboardCardProps = {
   label: string,
-  icon: IconDefinition
+  icon: IconDefinition,
+  onClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
-const DashboardCard = ({ label, icon }: DashboardCardProps) => {
+const DashboardCard = ({ label, icon, onClick }: DashboardCardProps) => {
   return (
-    <div className='bg-cya-400 h-[10rem] w-[21rem] rounded-lg card-shadow'>
+    <div className='bg-cya-400 h-[10rem] w-[21rem] rounded-lg card-shadow active:scale-100 hover:scale-[102%]' onClick={onClick}>
       <div className="bg-re-300 flex justify-between px-[1rem] relative">
         <div className="bg-cya-300 absolute top-[-1.2rem]">
           <UserIconBox icon={icon}/>

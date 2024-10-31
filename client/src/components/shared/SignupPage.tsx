@@ -143,7 +143,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
                         <button className='bg-purple-500 text-white w-[65%] h-[2.5rem] rounded-lg font-[500]
                          active:bg-slate-500 mb-2'>Sign Up</button>
                          <p className='text-[.8rem]'>Already have an account? <span className='text-purple-500
-                            cursor-pointer' onClick={() => navigate('/login')}>Login</span></p>
+                            cursor-pointer active:text-blue-500' onClick={() => navigate('/login')}>Login</span></p>
                     </form>
                 </div>
             </div>
