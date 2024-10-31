@@ -93,3 +93,23 @@ scrollbar-width: none;  /* Firefox */
 ::-webkit-scrollbar-track {
     background-color: #E2E8F0;
 }
+
+/* Admin Transition Scale*/
+.scale-enter {
+    transform: scale(0.2);
+    opacity: 0;
+}
+.scale-enter-active {
+    transform: scale(1);
+    opacity: 1;
+    transition: all 200ms;
+}
+.scale-exit {
+    transform: scale(1);
+    opacity: 1;
+}
+.scale-exit-active {
+    transform: scale(0.2);
+    opacity: 0;
+    transition: all 200ms;
+}

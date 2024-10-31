@@ -1,17 +1,39 @@
+import React from "react"
+import { faX } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons"
+import PageContainer from "../shared/components/PageContainer"
+import CourseRow from "./CourseRow"
 
-const CourseList = () => {
-  return (
-    <li className="bg-purpl-300 flex justify-between px-10 py-4 border-b-2 border-l-2
-        border-r-2 border-slate-500">
-        <p className='text-slate-700 font-medium text-[1rem]'>Bachelor of Science in Accountancy (BSA)</p>
-        <div className="bg-re-300 flex gap-6">
-        <FontAwesomeIcon className="text-blue-500" icon={faPenToSquare}/>
-        <FontAwesomeIcon className="text-red-500" icon={faTrashCan}/>
-        </div>
-    </li> 
-  )
-}
+type CoursesProps = {
+    handleOpenCard: () => void;
+};
 
-export default CourseList
+const Courses = React.forwardRef<HTMLDivElement, CoursesProps>(({ handleOpenCard }, ref) => {
+    console.log("course")
+    return (
+        <PageContainer ref={ref} className={`bg-cya-300 absolute w-full top-4 flex flex-col px-[3rem]`}>
+            <div className="bg-gree-200 flex h-[20%] relative">
+                <h1 className="text-[2rem] font-bold text-slate-800 self-center">Courses</h1>
+                <FontAwesomeIcon className="absolute text-[1.3rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                    icon={faX} onClick={handleOpenCard}/>
+            </div>
+            <div className="bg-blu-200 h-[80%] mb-[1rem] overflow-y-scroll relative">
+            <table className="w-full">
+               <thead className="bg-blue-500 text-white text-[1.2rem] font-semibold sticky top-0">
+                  <tr>
+                     <th className="py-4 px-10 text-left">Program</th>
+                     <th className="py-4 px-10 text-left">Action</th>
+                  </tr>
+               </thead>
+               <tbody className="text-slate-700 font-medium text-[1rem]">
+                  <CourseRow/>
+                  <CourseRow/>
+                  <CourseRow/>
+               </tbody>
+            </table>
+            </div>
+        </PageContainer>
+    )
+})
+
+export default Courses
