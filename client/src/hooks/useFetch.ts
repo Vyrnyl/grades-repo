@@ -39,12 +39,16 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
                 });
                 const data = await res.json();
                 
-                if(!res.ok && res.status === 422) {
+                if(!res.ok && res.status === 401) {
+                    navigate('/login');
+                }
+
+                if(data.error || !res.ok && res.status === 422) {
                     setError(data);
                 } else {
                     setData(data)
                 }
-                
+
             } catch(error) {
                 console.log('Error: ', error);
             } finally {

@@ -1,4 +1,4 @@
-import { faUser, faChartColumn, faX } from "@fortawesome/free-solid-svg-icons"
+import { faUser, faChartColumn } from "@fortawesome/free-solid-svg-icons"
 import { CSSTransition } from "react-transition-group"
 import { useRef, useState } from "react"
 

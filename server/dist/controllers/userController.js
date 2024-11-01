@@ -22,7 +22,7 @@ const getUsers = async (req, res) => {
 exports.getUsers = getUsers;
 const getUser = async (req, res) => {
     if (!req.user) {
-        return res.status(401).json({ error: 'User is not authenticated' });
+        return res.status(401).json({ error: 'Unauthorized' });
     }
     const { userId } = req.user;
     const userDetails = await (0, userDataAccess_1.getUserData)(userId);

@@ -1,17 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import PageContainer from '../shared/components/PageContainer'
 import StudentRow from './StudentRow';
+import useFetch from '../../hooks/useFetch';
+import { User } from '../../types/studentTypes';
 
 type StudentListProps = {
     handleOpenCard: () => void;
 }
 
+
 const StudentList = React.forwardRef<HTMLDivElement, StudentListProps>(({ handleOpenCard }, ref) => {
 
-    console.log("stud")
+    const { data } = useFetch('user/get-users', 'GET');
+
+
+    const [students, setStudents] = useState<User[] | []>([]);
+
+    useEffect(() => {
+        if(Array.isArray(data)) {
+            const list = data.filter((d) => d.role === 'student');
+            setStudents(list);
+        }
+    }, [data]);
 
     return (
         <PageContainer ref={ref} className='bg-cya-300 absolute w-full top-4 flex flex-col px-[3rem]'>
@@ -28,13 +41,12 @@ const StudentList = React.forwardRef<HTMLDivElement, StudentListProps>(({ handle
                         <th className="p-4 text-center">Name</th>
                         <th className="p-4 text-center">Year Level/Block</th>
                         <th className="p-4 text-center">Course</th>
+                        <th className="p-4 text-center">Status</th>
                         <th className="p-4 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody className="text-gray-700">
-                    <StudentRow/>
-                    <StudentRow/>
-                    <StudentRow/>
+                    {students.map((student, i) => <StudentRow key={i} student={student}/>)}
                 </tbody>
             </table>
             </div>

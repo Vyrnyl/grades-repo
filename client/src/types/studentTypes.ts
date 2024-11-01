@@ -19,7 +19,7 @@ type Program = {
     id: number,
     programCode: string,
     programName: string
-  }
+}
   
   type User = {
     id: number,
@@ -32,6 +32,8 @@ type Program = {
     studentId: string,
     yearLevel: number,
     role: string,
+    block: string,
+    status: string,
     programId: number,
     program: Program,
     createdAt: string,

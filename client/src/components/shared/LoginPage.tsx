@@ -30,7 +30,6 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
         console.log('k');
         
         const auth = await authenticate(loginInfo);
-        console.log(auth);
 
         if(auth.validationError) {
             if(auth.validationError[0].path === 'password') {

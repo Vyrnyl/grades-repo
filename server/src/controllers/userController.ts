@@ -25,7 +25,7 @@ const getUsers = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
 
     if(!req.user) {
-        return res.status(401).json({ error: 'User is not authenticated' });
+        return res.status(401).json({ error: 'Unauthorized' });
     }
     
     const { userId } = req.user;

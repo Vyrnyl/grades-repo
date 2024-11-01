@@ -23,6 +23,7 @@ model User {
   yearLevel Int?
   block String?
   programId Int?
+  status String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   program Program? @relation(fields: [programId], references: [id])

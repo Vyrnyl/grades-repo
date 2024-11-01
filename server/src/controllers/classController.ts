@@ -10,7 +10,7 @@ const getClasses = async (req: Request, res: Response) => {
     }
 
     const getClassesResult = await getClassesSched(req.user.userId);
-
+    
     if(!getClassesResult) {
         return res.status(404).json({ error: 'Failed to retrieve' });
     }

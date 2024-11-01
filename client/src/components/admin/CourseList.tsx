@@ -1,15 +1,26 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { faX } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import PageContainer from "../shared/components/PageContainer"
 import CourseRow from "./CourseRow"
+import useFetch from "../../hooks/useFetch"
+import { Program } from "../../types/studentTypes"
 
 type CoursesProps = {
     handleOpenCard: () => void;
 };
 
 const Courses = React.forwardRef<HTMLDivElement, CoursesProps>(({ handleOpenCard }, ref) => {
-    console.log("course")
+
+    const { loading, data } = useFetch('program/get-programs', 'GET');
+    const [programs, setPrograms] = useState<Program[] | []>([]);
+
+    useEffect(() => {
+        if(Array.isArray(data)) {
+            setPrograms(data);
+        }
+    }, [data]);
+
     return (
         <PageContainer ref={ref} className={`bg-cya-300 absolute w-full top-4 flex flex-col px-[3rem]`}>
             <div className="bg-gree-200 flex h-[20%] relative">
@@ -26,9 +37,7 @@ const Courses = React.forwardRef<HTMLDivElement, CoursesProps>(({ handleOpenCard
                   </tr>
                </thead>
                <tbody className="text-slate-700 font-medium text-[1rem]">
-                  <CourseRow/>
-                  <CourseRow/>
-                  <CourseRow/>
+                  {programs.map((program, i) => <CourseRow key={i} program={program}/>)}
                </tbody>
             </table>
             </div>
