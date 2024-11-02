@@ -46,19 +46,23 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'User is not authenticated' });
     }
 
-    const { error, value } = validateUserUpdate(req.body);
+    // const { error, value } = validateUserUpdate(req.body);
 
-    if(error) {
-        const err = validationErrorHandler(error);
-        return res.status(422).json(err);
+    // if(error) {
+    //     const err = validationErrorHandler(error);
+    //     return res.status(422).json(err);
+    // }
+    
+    // const { userId } = req.user;
+
+    const value = req.body;
+
+    if(value.password) {
+        value.password = await bcrypt.hash(value.password, 10);
+        delete value.confirmPassword;
     }
 
-    const { userId } = req.user;
-
-    value.password = await bcrypt.hash(value.password, 10);
-    delete value.confirmPassword;
-
-    const userUpdateDetails = await updateUserData(userId, value);
+    const userUpdateDetails = await updateUserData(1, value);
     
     if(!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });

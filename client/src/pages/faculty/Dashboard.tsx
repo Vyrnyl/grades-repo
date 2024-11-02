@@ -6,7 +6,7 @@ import ActivityContainer from "../../components/shared/components/ActivityContai
 
 const Dashboard = () => {
 
-  const { data } = useFetch('users/get-users', 'GET');
+  const { data } = useFetch('user/get-users', 'GET');
 
   console.log(data);
   return (

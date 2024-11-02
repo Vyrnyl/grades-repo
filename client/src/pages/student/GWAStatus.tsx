@@ -13,7 +13,7 @@ const GWAStatus = () => {
     const { userInfo } = useUserStore();
     const [records, setRecords] = useState<Grades[]>([]);
     const [gwaList, setGwaList] = useState<number[]>([]);
-    const { data } = useFetch('grades/get-grades', 'GET');
+    const { data } = useFetch('grade/get-grades', 'GET');
     
     //GWA
     useEffect(() => {

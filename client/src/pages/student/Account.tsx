@@ -39,7 +39,7 @@ const Account = () => {
     }
   );
 
-  const { data, error } = useFetch('users/update-user', 'PUT', JSON.stringify(updateData));
+  const { data, error } = useFetch('user/update-user', 'PUT', JSON.stringify(updateData));
   
   const { userInfo } = useUserStore();
   const [accountInfo, setAccountInfo] = useState<AccountInfoType>({

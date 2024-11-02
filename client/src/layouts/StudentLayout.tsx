@@ -10,7 +10,7 @@ import { useEffect } from "react"
 const StudentLayout = () => {
 
   const { setUserInfo } = useUserStore();
-  const {  error, data } = useFetch('users/get-user', 'GET');
+  const {  error, data } = useFetch('user/get-user', 'GET');
   
   useEffect(() => {
     if (!error && data) {

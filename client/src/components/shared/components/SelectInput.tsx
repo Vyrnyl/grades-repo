@@ -1,8 +1,8 @@
 import React from "react"
 
 type SelectInputType = {
-  name: string,
-  value: string,
+  name?: string,
+  value?: string,
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 const SelectInput = ({ name, value, onChange }: SelectInputType ) => {
