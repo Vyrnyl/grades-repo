@@ -102,7 +102,7 @@ const Account = () => {
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
               <Input type="text" name='name' value={accountInfo?.name} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Student ID">
               <HalfInput type="text" name='studentId' value={accountInfo?.studentId} 
@@ -116,24 +116,24 @@ const Account = () => {
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
               <Input type="text" name='email' value={accountInfo?.email} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Phone Number">
               <Input type="text" name='phone' value={accountInfo?.phone} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Password">
               <Input type="password" name='password' value={accountInfo?.password} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Course/Block/Year">
               <Input type="number" name='yearLevel' value={accountInfo?.yearLevel} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
           </div>
         </form>
         <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
-          <SaveButton onClick={saveForm}/>
+          <SaveButton className="bg-slate-500" onClick={saveForm}/>
         </div>  
     </PageContainer>
   )

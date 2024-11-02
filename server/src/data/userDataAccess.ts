@@ -82,6 +82,7 @@ const getUserData = async (userId: number) => {
 }
 
 const updateUserData = async (userId: number, value: UserUpdatePayload) => {
+   
     try {
         const userUpdateDetails = await prisma.user.update({
             where:{
@@ -89,11 +90,46 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
             },
             data: value
         });
+
+
+        await prisma.$transaction(async () => {
+    
+            if(value.programId === 1) {
+                const bsa = await prisma.bsaCurriculum.findMany();
+                const studentCourses = bsa.map(course => {
+                    return { userId: value.id, courseId: course.id };
+                });
+                
+                await prisma.bsaStudentRecord.createMany({
+                    data: studentCourses
+                });
+            } else if(value.programId === 2) {
+                const bsba = await prisma.bsbaCurriculum.findMany();
+                const studentCourses = bsba.map(course => {
+                    return { userId: value.id, courseId: course.id };
+                });
+    
+                await prisma.bsbaStudentRecord.createMany({
+                    data: studentCourses
+                });
+            } else if(value.programId === 3) {
+                const bsma = await prisma.bsbaCurriculum.findMany();
+                const studentCourses = bsma.map(course => {
+                    return { userId: value.id, courseId: course.id };
+                });
+    
+                await prisma.bsmaStudentRecord.createMany({
+                    data: studentCourses
+                });
+            }
+        });
+
         return userUpdateDetails;
     } catch(error) {
         console.log(`Update error: ${error}`);
         return undefined;
     }
+
 }
 
 const deleteUserData = async (userId: number) => {

@@ -20,6 +20,7 @@ export type LoginPayload = {
 };
 
 export type UserUpdatePayload = {
+    id: number;
     firstName: string;
     lastName: string;
     email: string;
@@ -28,6 +29,7 @@ export type UserUpdatePayload = {
     sex: string
     studentId: string;
     yearLevel: number;
+    programId: number
 };
 
 

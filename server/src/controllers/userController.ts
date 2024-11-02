@@ -61,8 +61,8 @@ const updateUser = async (req: Request, res: Response) => {
         value.password = await bcrypt.hash(value.password, 10);
         delete value.confirmPassword;
     }
-
-    const userUpdateDetails = await updateUserData(1, value);
+    console.log(value)
+    const userUpdateDetails = await updateUserData(value.id, value);
     
     if(!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });

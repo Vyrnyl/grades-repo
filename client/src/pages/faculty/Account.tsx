@@ -14,7 +14,7 @@ const Account = () => {
         <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
-              <Input type="text"/>
+              <Input type="text" className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Falculty ID">
               <HalfInput type="text"/>
@@ -25,18 +25,18 @@ const Account = () => {
           </div>
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
-              <Input type="text"/>
+              <Input type="text" className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Phone Number">
-              <Input type="text"/>
+              <Input type="text" className="w-[20rem]"/>
             </InputFieldWrapper>
             <InputFieldWrapper label="Password">
-              <Input type="text"/>
+              <Input type="text" className="w-[20rem]"/>
             </InputFieldWrapper>
           </div>
         </form>
         <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
-          <SaveButton/>
+          <SaveButton className="bg-slate-500"/>
         </div>
     </PageContainer>
   )
