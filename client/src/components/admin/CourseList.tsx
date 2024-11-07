@@ -33,7 +33,7 @@ const Courses = React.forwardRef<HTMLDivElement, CoursesProps>(({ handleOpenCard
                <thead className="bg-blue-500 text-white text-[1.2rem] font-semibold sticky top-0">
                   <tr>
                      <th className="py-4 px-10 text-left">Program</th>
-                     <th className="py-4 px-10 text-left">Action</th>
+                     {/* <th className="py-4 px-10 text-left">Action</th> */}
                   </tr>
                </thead>
                <tbody className="text-slate-700 font-medium text-[1rem]">

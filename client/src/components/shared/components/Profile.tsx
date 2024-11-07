@@ -19,7 +19,7 @@ const Profile = ({ firstName, lastName, yearLevel }: ProfileType) => {
         </div>
         <div>
             <h5 className='font-bold'>{firstName} {lastName}</h5>
-            <p className=''>{yearLevel + suff} Year</p>
+            <p className=''>{(yearLevel || '') + suff} Year</p>
         </div>
     </div>
   )

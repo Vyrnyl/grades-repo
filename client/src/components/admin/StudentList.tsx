@@ -15,10 +15,8 @@ type StudentListProps = {
 const StudentList = React.forwardRef<HTMLDivElement, StudentListProps>(({ handleOpenCard }, ref) => {
 
     const { data } = useFetch('user/get-users', 'GET');
-
-
     const [students, setStudents] = useState<User[] | []>([]);
-
+    
     useEffect(() => {
         if(Array.isArray(data)) {
             const list = data.filter((d) => d.role === 'student');
@@ -34,21 +32,25 @@ const StudentList = React.forwardRef<HTMLDivElement, StudentListProps>(({ handle
                     icon={faX} onClick={handleOpenCard}/>
             </div>
             <div className="bg-blu-200 h-[80%] mb-[1rem] overflow-y-scroll">
-            <table className="w-full font-semibold text-white">
-                <thead className="bg-blue-500 sticky top-0 z-10">
-                    <tr>
-                        <th className="p-4 text-center">Student ID</th>
-                        <th className="p-4 text-center">Name</th>
-                        <th className="p-4 text-center">Year Level/Block</th>
-                        <th className="p-4 text-center">Course</th>
-                        <th className="p-4 text-center">Status</th>
-                        <th className="p-4 text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody className="text-gray-700">
-                    {students.map((student, i) => <StudentRow key={i} student={student}/>)}
-                </tbody>
-            </table>
+                <table className="w-full font-semibold text-white">
+                    <thead className="bg-blue-500 sticky top-0 z-10">
+                        <tr>
+                            <th className="p-4 text-center">Student ID</th>
+                            <th className="p-4 text-center">Name</th>
+                            <th className="p-4 text-center">Year Level/Block</th>
+                            <th className="p-4 text-center">Course</th>
+                            <th className="p-4 text-center">Status</th>
+                            <th className="p-4 text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-gray-700">
+                        {students.map((student, i) => <StudentRow 
+                            key={i} 
+                            student={student}
+                            setStudents={setStudents}/>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </PageContainer>
     )

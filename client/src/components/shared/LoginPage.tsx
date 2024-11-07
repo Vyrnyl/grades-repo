@@ -25,10 +25,15 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
     
     //Auth
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+
     const authUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('k');
-        
+
+        setInfoError({ error: '' });
+        setIsLoading(true);
+
         const auth = await authenticate(loginInfo);
 
         if(auth.validationError) {
@@ -39,20 +44,26 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
 
         if(auth.error) {
             setInfoError(auth);
+            setIsLoading(false);
         }
-
+        
         const userInfo = tokenInfo();
         setUserRole(userInfo.role);
         
         if(auth.message) {
             navigate('/');
         }
+
     }
+
     useEffect(() => {
-        if(infoError.error) {
+        if(infoError.error && inputError.length > 0) {
             setInputError([]);
-        }
-    }, [infoError]);
+        } 
+        
+        if (inputError.length > 0) setIsLoading(false);
+
+    }, [infoError, inputError]);
     
     //HIdePass
     const [inputType, setInputType] = useState<string>('password');
@@ -62,9 +73,9 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
     //InputFocus
     const handleInputFocus = () => {
         setInfoError({ error: '' });
+        setInputError([]);
     }
-
-
+    
     return (
         <div className='relative'>
             <div className="login-bg h-[100vh] grid place-items-center"></div>
@@ -94,7 +105,7 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
                         <span className='bg-blu-500 text-[.8rem] self-start ml-[4.5rem]
                             cursor-pointer mb-2 text-purple-500 active:text-blue-500'>Forgot Password?</span>
                         <button className='bg-purple-500 text-white w-[65%] h-[2.5rem] rounded-lg font-[500]
-                         active:bg-slate-500 mb-2'>Log In</button>
+                         active:bg-slate-500 mb-2'>{isLoading ? 'Logging In...' : 'Log In'}</button>
                          <p className='text-[.8rem]'>Don't have an account? <span className='text-purple-500
                             cursor-pointer active:text-blue-500' onClick={() => navigate('/signup')}>Sign Up</span></p>
                     </form>

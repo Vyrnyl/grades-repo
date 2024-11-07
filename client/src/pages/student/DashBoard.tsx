@@ -11,6 +11,7 @@ const DashBoard = () => {
   // const { data } = useFetch('users/get-users', 'GET');
   // console.log(data);
 
+  
   return (
     <div className='bg-slat-100 h-[100%] w-[80%] flex flex-col justify-center'>
       <div className='bg-cya-200 flex-[.4] flex '>

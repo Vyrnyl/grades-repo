@@ -22,10 +22,10 @@ const GradeEntry = () => {
                 <div className='flex-[8%] '>Year/Block</div>
                 <div className='flex-[8%]'>Grade</div>
               </div>
-              <StudentTableData name='Richard Sorreda' studentId='703704' yearBlock='2B' grade={2.9}/>
-              <StudentTableData name='Juan Raulo' studentId='703704' yearBlock='2B' grade={2.9}/>
-              <StudentTableData name='Jett' studentId='703704' yearBlock='2B' grade={2.9}/>
-              <StudentTableData name='Remon Semento' studentId='703704' yearBlock='2B' grade={2.9}/>
+              <StudentTableData name='Grace Wilson' studentId='703704' yearBlock='2B' grade={2.9}/>
+              <StudentTableData name='Hank Moore' studentId='703704' yearBlock='2B' grade={2.9}/>
+              <StudentTableData name='Ivy' studentId='703704' yearBlock='2B' grade={2.9}/>
+              <StudentTableData name='Jack Semento' studentId='703704' yearBlock='2B' grade={2.9}/>
             </div>
           </div>
         </div>

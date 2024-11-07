@@ -43,7 +43,11 @@ const   FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOp
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-                {faculties.map((faculty, i) => <FacultyRow key={i} faculty={faculty}/>)}
+                {faculties.map((faculty, i) => <FacultyRow 
+                    key={i} 
+                    faculty={faculty}
+                    setFaculties={setFaculties}
+                />)}
             </tbody>
         </table>
         </div>

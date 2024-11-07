@@ -30,6 +30,20 @@ const signupSchema = Joi.object({
     role: Joi.string().required().messages({
         'string.empty': 'Please select role'
     }),
+    programId: Joi.allow(null).messages({
+        'any.required': 'Program ID cannot be empty',
+        'number.empty': 'Program ID cannot be empty',
+        'number.max': 'Program ID must be at most 10'
+    }),
+    studentId: Joi.allow(null).messages({
+        'string.empty': 'Student ID cannot be empty',
+        'string.max': 'Student ID must be at most 10'
+    }),
+    status: Joi.allow(null).messages({
+        'string.empty': 'Student ID cannot be empty',
+        'string.max': 'Student ID must be at most 10'
+    })
+    
     // studentId: Joi.string().max(10).when('role', {
     //     is: 'student',
     //     then: Joi.required().messages({
