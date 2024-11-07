@@ -12,7 +12,7 @@ type CoursesProps = {
 
 const Courses = React.forwardRef<HTMLDivElement, CoursesProps>(({ handleOpenCard }, ref) => {
 
-    const { loading, data } = useFetch('program/get-programs', 'GET');
+    const { data } = useFetch('program/get-programs', 'GET');
     const [programs, setPrograms] = useState<Program[] | []>([]);
 
     useEffect(() => {

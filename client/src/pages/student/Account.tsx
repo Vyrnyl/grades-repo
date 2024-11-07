@@ -6,135 +6,161 @@ import SelectInput from "../../components/shared/components/SelectInput"
 import PageContainer from "../../components/shared/components/PageContainer"
 import InputFieldWrapper from "../../components/shared/components/InputFieldWrapper"
 import useUserStore from "../../store/useUserStore"
-import useFetch from "../../hooks/useFetch"
 import handleInputChange from "../../utils/handleInputChange"
+import handleSelectChange from "../../utils/handleSelectChange"
 
 type AccountInfoType = {
-  name: string | undefined,
+  fullName: string,
   studentId: string,
   gender: string,
   email: string,
-  phone: string,
+  phoneNumber: string,
   password: string,
-  yearLevel: string
-}
-
-type UpdateDataType = {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  confirmPassword: string
+  yearBlock: string
 }
 
 const Account = () => {
-
-  const [updateData, setUpdateData] = useState<UpdateDataType>(
-    {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    }
-  );
-
-  const { data, error } = useFetch('user/update-user', 'PUT', JSON.stringify(updateData));
   
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('atoken');
+
   const { userInfo } = useUserStore();
+
   const [accountInfo, setAccountInfo] = useState<AccountInfoType>({
-    name: '',
+    fullName: '',
     studentId: '',
     gender: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     password: '',
-    yearLevel: ''
+    yearBlock: ''
   });
   
-  
-  //Set AccountInfo
+  //SetAccInfo
   useEffect(() => {
-    if(userInfo) {
-      setAccountInfo({
-        name: userInfo?.firstName + ' ' + userInfo.lastName,
-        studentId: userInfo?.studentId,
-        gender: userInfo?.sex,
-        email: userInfo?.email,
-        phone: userInfo?.phoneNumber,
-        password: '',
-        yearLevel: String(userInfo.yearLevel)
-      });
-    }
+
+    const yearLevel = userInfo?.yearLevel || '';
+    const block = userInfo?.block || '';
+    const formattedString = [yearLevel, block].filter(Boolean).join('/')
+
+    setAccountInfo({
+      fullName: `${userInfo?.firstName} ${userInfo?.lastName || ""}`,
+      studentId: userInfo?.studentId || "",
+      gender: userInfo?.sex || "",
+      email: userInfo?.email || "",
+      phoneNumber: userInfo?.phoneNumber || "",
+      password: '',
+      yearBlock: formattedString
+    });
   }, [userInfo]);
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setAccountInfo((prevState) => ({
-      ...prevState, 
-      [name]: value,
-    }));
-  }
-
-  const saveForm = () => {
-
-    setUpdateData(
-      {
-        firstName: accountInfo.name?.split(' ')[0] || '',
-        lastName: accountInfo.name?.split(' ')[1] || '',
-        email: 'ashleyshklj@gmail.com',
-        password: 'ashle15',
-        confirmPassword: 'ashle15'
-      }
-    );
-
-    if(error) {
-      console.log(error);
-    } else console.log(data);
-  }
   
+  
+  //SaveData
+  const [isSave, setIsSave] = useState(false);
+  const [save, setSave] = useState('Saving');
+  const handleUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsSave(true);
+
+    let fullName = accountInfo.fullName.split(' ');
+
+    const updateUser = async () => {
+
+      const updatedData = {
+        studentId: accountInfo.studentId,
+        firstName: fullName[0],
+        lastName: fullName[fullName.length - 1],
+        email: accountInfo.email,
+        phoneNumber: accountInfo.phoneNumber,
+        yearLevel: Number(accountInfo.yearBlock.split('/')[0]),
+        block: accountInfo.yearBlock.split('/')[1],
+        password: accountInfo.password,
+        sex: accountInfo.gender
+      }
+      
+      try {
+        const res = await fetch(`${apiUrl}/user/update-user`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': token ? token : '',
+            'Content-Type': 'application/json'
+        },
+          body: JSON.stringify(updatedData)
+        });
+
+        const data = await res.json();
+        
+        if(res.ok && data) {
+          setSave('Saved!');
+          setTimeout(() => {
+            setIsSave(false);
+          }, 700);
+        }
+
+      } catch(error) {
+        console.log("Fetch error" + error);
+      }
+    }
+
+    updateUser();
+  }
+
   return (
-    <PageContainer>
+    <PageContainer className="relative">
       <div className="bg-re-200 flex-[.2] ml-[5rem] w-[65%] flex items-end">
           <h1 className="text-[2rem] font-bold text-slate-800">Account</h1>
         </div>
         <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
-              <Input type="text" name='name' value={accountInfo?.name} 
+              <Input type="text" name='fullName' value={accountInfo.fullName} 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
+
             <InputFieldWrapper label="Student ID">
-              <HalfInput type="text" name='studentId' value={accountInfo?.studentId} 
+              <HalfInput type="text" name='studentId' value={accountInfo.studentId} 
               onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
+
             <InputFieldWrapper label="">
               <SelectInput name='gender' value={accountInfo.gender} 
-              onChange={handleSelectChange} />
+              onChange={(e) => handleSelectChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
           </div>
+
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
-              <Input type="text" name='email' value={accountInfo?.email} 
+              <Input type="text" name='email' value={accountInfo.email} 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
+
             <InputFieldWrapper label="Phone Number">
-              <Input type="text" name='phone' value={accountInfo?.phone} 
+              <Input type="text" name='phoneNumber' value={accountInfo.phoneNumber} 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
+
             <InputFieldWrapper label="Password">
-              <Input type="password" name='password' value={accountInfo?.password} 
+              <Input type="password" name='password' value={accountInfo.password} 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
-            <InputFieldWrapper label="Course/Block/Year">
-              <Input type="number" name='yearLevel' value={accountInfo?.yearLevel} 
+
+            <InputFieldWrapper label="Year/Block">
+              <Input type="text" name='yearBlock' value={accountInfo.yearBlock} 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
             </InputFieldWrapper>
           </div>
         </form>
         <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
-          <SaveButton className="bg-slate-500" onClick={saveForm}/>
-        </div>  
+          <SaveButton className="bg-slate-500" onClick={handleUpdate}/>
+
+          {isSave && 
+            <div className="bg-white h-[4rem] px-4 flex items-center absolute left-[50%] top-[50%] 
+            translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg z-10">
+              <h1 className="text-[1.2rem] font-semibold text-slate-700 ">{save}</h1>
+            </div>
+          }
+        </div>
     </PageContainer>
   )
 }

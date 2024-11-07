@@ -132,53 +132,63 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName} ${userData.lastName}`}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.role}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.role}`
+                .charAt(0).toUpperCase() + userData.role.substring(1)}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.sex}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.status}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
                         <div className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
-                        translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
-            
-                        <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                            icon={faX} onClick={() => setIsOpen(!isOpen)}/>
+                            translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
                 
-                        <h1 className="text-[1.5rem] font-bold text-slate-700 self-center mb-2 text-center">Edit</h1>
-                        <form onSubmit={handleUpdate} className='bg-gree-200 flex flex-col gap-4'>
-                
-                            <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='studentId' 
-                            value={updateData.studentId} placeholder='Student ID' 
-                            onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                
-                            <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='fullName' 
-                            placeholder='Full Name'
-                            value={updateData.fullName}
-                            onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                
-                            <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='email' 
-                            value={updateData.email} placeholder='Email'
-                            onChange={(e) => handleInputChange(e, setUpdateData)}/>
+                            <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                icon={faX} onClick={() => setIsOpen(!isOpen)}/>
+                    
+                            <h1 className="text-[1.5rem] font-bold text-slate-700 self-center mb-2 text-center">Edit</h1>
+                            <form onSubmit={handleUpdate} className='bg-gree-200 flex flex-col gap-4'>
+                    
+                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='studentId' 
+                                value={updateData.studentId} placeholder='Student ID' 
+                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
+                    
+                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='fullName' 
+                                placeholder='Full Name'
+                                value={updateData.fullName}
+                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
+                    
+                                <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='email' 
+                                value={updateData.email} placeholder='Email'
+                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-                            <SelectInput className='w-[10rem] h-[2rem] self-center'
-                                name='sex' value={updateData.sex || ""}
-                                onChange={(e) => handleSelectChange(e, setUpdateData)}>
-                                <option value="" disabled>Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </SelectInput>
+                                <SelectInput className='w-[10rem] h-[2rem] self-center'
+                                    name='sex' value={updateData.sex || ""}
+                                    onChange={(e) => handleSelectChange(e, setUpdateData)}>
+                                    <option value="" disabled>Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </SelectInput>
 
-                            <SelectInput className='w-[10rem] h-[2rem] self-center'
-                                name='status' value={updateData.status === 'Enrolled' ? updateData.status : 'Unenrolled'}
-                                onChange={(e) => handleSelectChange(e, setUpdateData)}>
-                                <option value="" disabled>Status</option>
-                                <option value="Enrolled">Enrolled</option>
-                                <option value="Unenrolled">Unenrolled</option>
-                            </SelectInput>
+                                <SelectInput className='w-[10rem] h-[2rem] self-center'
+                                    name='status' value={updateData.status || ""}
+                                    onChange={(e) => handleSelectChange(e, setUpdateData)}>
+                                    {userData.role === "student" ? 
+                                        <>
+                                            <option value="" disabled>Status</option>
+                                            <option value="Enrolled">Enrolled</option>
+                                            <option value="Unenrolled">Unenrolled</option>
+                                        </> :
+                                        <>
+                                            <option value="" disabled>Status</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                        </>
+                                    }
+                                </SelectInput>
 
-                            <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>
-                        </form>
-                    </div>
+                                <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>
+                            </form>
+                        </div>
                     }
 
                     <FontAwesomeIcon className="text-blue-500 active:text-white" 

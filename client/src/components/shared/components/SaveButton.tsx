@@ -1,6 +1,6 @@
 
 type SaveButtonProp = {
-  onClick?: () => void,
+  onClick?: (e: React.FormEvent) => void,
   className?: string
 }
 

@@ -18,15 +18,6 @@ type FacultyData = {
   status: string
 }
 
-type UpdateData = {
-  id: number,
-  studentId: string,
-  fullName: string,
-  email: string,
-  status: string
-}
-
-
 type FacultyRowProps = { 
   faculty: User,
   setFaculties: React.Dispatch<React.SetStateAction<[] | User[]>>

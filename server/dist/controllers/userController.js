@@ -41,17 +41,19 @@ const updateUser = async (req, res) => {
     //     const err = validationErrorHandler(error);
     //     return res.status(422).json(err);
     // }
-    // const { userId } = req.user;
+    const { userId } = req.user;
     const value = req.body;
-    if (value.password) {
-        value.password = await bcrypt_1.default.hash(value.password, 10);
-        delete value.confirmPassword;
+    if (value.password === '') {
+        delete value.password;
+        // delete value.confirmPassword;
     }
-    console.log(value);
-    const userUpdateDetails = await (0, userDataAccess_1.updateUserData)(value.id, value);
+    else
+        value.password = await bcrypt_1.default.hash(value.password, 10);
+    const userUpdateDetails = await (0, userDataAccess_1.updateUserData)(userId, value);
     if (!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });
     }
+    // console.log(value);
     res.status(200).json(userUpdateDetails);
 };
 exports.updateUser = updateUser;
