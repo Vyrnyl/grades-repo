@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes';
 import gradeRoutes from './routes/gradeRoutes';
 import classRoutes from './routes/classRoutes';
 import programRoutes from './routes/programRoutes';
+import activityRoutes from './routes/activityRoutes';
 import cors from 'cors';
 import 'dotenv/config';
 import userAuth from './middleware/userAuth';
@@ -34,6 +35,7 @@ app.use('/user', userRoutes );
 app.use('/grade', gradeRoutes);
 app.use('/class', classRoutes);
 app.use('/program', programRoutes);
+app.use('/activity', activityRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server Running on PORT: ${PORT}`));

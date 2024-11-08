@@ -52,6 +52,14 @@ export type StoreRefreshTokenResponse = {
     };
 }
 
+export type LoginActivity = {
+    studentId: string,
+    firstName: string,
+    lastName: string,
+    role: string,
+    numberOfAttempts: number,
+    status: string
+}
  
 
 //TOKEN

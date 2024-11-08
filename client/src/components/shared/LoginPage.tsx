@@ -26,7 +26,6 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
     //Auth
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    const [isError, setIsError] = useState(false);
 
     const authUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
