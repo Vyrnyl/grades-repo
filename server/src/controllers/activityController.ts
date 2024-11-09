@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addLoginActivity, getLoginActivity } from "../data/activityDataAccess";
+import { getLoginActivity } from "../data/activityDataAccess";
 
 const getActivity = async (req: Request, res: Response) => {
 
@@ -13,16 +13,16 @@ const getActivity = async (req: Request, res: Response) => {
 }
 
 
-const addActivity = async (req: Request, res: Response) => {
+// const addActivity = async (req: Request, res: Response) => {
 
 
-    const addActivityResult = await addLoginActivity(req.body);
+//     const addActivityResult = await addLoginActivity(req.body.email);
 
-    if(!addActivityResult) {
-        return res.status(500).json({ error: "Failed to create class schedule"});
-    }
+//     if(!addActivityResult) {
+//         return res.status(500).json({ error: "Failed to create"});
+//     }
 
-    res.status(200).json(addActivityResult);
-}
+//     res.status(200).json(addActivityResult);
+// }
 
-export { getActivity, addActivity }
+export { getActivity }

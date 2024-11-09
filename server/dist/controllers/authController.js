@@ -10,6 +10,7 @@ const userDataAccess_1 = require("../data/userDataAccess");
 const tokenService_1 = require("../services/tokenService");
 const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 const passwordUtils_1 = require("../utils/passwordUtils");
+const activityDataAccess_1 = require("../data/activityDataAccess");
 //SIGNUP
 const signup = async (req, res) => {
     const { error, value } = (0, authValidator_1.validateSignup)(req.body);
@@ -67,8 +68,10 @@ const login = async (req, res) => {
     //COMPARE PASSWORD
     const isPasswordMatch = await (0, passwordUtils_1.comparePassword)(value.password, user.password);
     if (!isPasswordMatch) {
+        await (0, activityDataAccess_1.addLoginActivity)(user.email, 'Failed');
         return res.status(404).json({ error: 'Invalid email or password' });
     }
+    await (0, activityDataAccess_1.addLoginActivity)(user.email, 'Successful');
     const payload = {
         userId: user.id,
         firstName: user.firstName,

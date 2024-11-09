@@ -5,6 +5,7 @@ import { createUser, getUserData } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
+import { addLoginActivity } from "../data/activityDataAccess";
 
 
 //SIGNUP
@@ -84,8 +85,12 @@ const login = async (req: Request, res: Response) => {
     const isPasswordMatch = await comparePassword(value.password, user.password);
     
     if(!isPasswordMatch) {
+        
+        await addLoginActivity(user.email, 'Failed');
+              
         return res.status(404).json({ error: 'Invalid email or password' });
     }
+    await addLoginActivity(user.email, 'Successful');
     
     const payload = {
         userId: user.id,
