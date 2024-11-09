@@ -81,6 +81,7 @@ export type DecodedToken = {
 //CLASS
 type  ClassPayload = {
     courseCode: string,
+    courseTitle: string,
     day: string,
     time: string,
     room: string

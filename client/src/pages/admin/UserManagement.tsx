@@ -29,7 +29,7 @@ const UserManagement = () => {
                   <th className="px-4 py-4 text-center min-w-[5rem]">ID</th>
                   <th className="px-4 py-4 text-center min-w-[8rem]">Name</th>
                   <th className="px-4 py-4 text-center min-w-[12rem]">Email</th>
-                  <th className="px-4 py-4 text-center min-w-[5rem]">Role</th>
+                  <th className="px-4 py-4 text-center min-w-[5rem]">User Type</th>
                   <th className="px-4 py-4 text-center min-w-[5rem]">Gender</th>
                   <th className="px-4 py-4 text-center min-w-[5rem]">Status</th>
                   <th className="px-4 py-4 text-center min-w-[5rem]">Action</th>

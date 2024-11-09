@@ -2,10 +2,37 @@ import ClassSched from '../../components/shared/components/ClassSched'
 import PageContainer from '../../components/shared/components/PageContainer'
 import InputFieldWrapper from '../../components/shared/components/InputFieldWrapper'
 import ClassInput from '../../components/shared/components/ClassInput'
+import { useState } from 'react'
+import handleInputChange from '../../utils/handleInputChange'
+
+type CourseInfo = {
+    courseCode: string,
+    courseTitle: string,
+    day: string,
+    time: string,
+    room: string
+}
 
 const CourseManagement = () => {
 
+    const [addInfo, setAddInfo] = useState<CourseInfo>({
+        courseCode: '',
+        courseTitle: '',
+        day: '',
+        time: '',
+        room: ''
+    });
     
+
+    console.log(addInfo);
+
+    const handleAdd = (e: React.FormEvent) => {
+        e.preventDefault();
+    }
+
+
+    //Style
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <PageContainer>
@@ -42,27 +69,42 @@ const CourseManagement = () => {
                         
                     </div>
                 </div>
-                <div className='bg-gree-200 w-[28%] flex flex-col justify-center items-center px-2 pb-[4rem] overflow-hidden'>
-                    <button className='bg-blue-400 text-white text-[1.1rem] font-medium p-2 rounded-md'>Add Class</button>
-                    <form className='bg-re-200 flex flex-col items-center gap-4 class-shadow w-[100%] px-[.8rem] rounded-md'>
-                        <h1 className='text-[1.3rem] font-medium self-start mt-6'>Create</h1>
-                        <InputFieldWrapper label="Course Subject">
-                            <ClassInput type="text"/>
-                        </InputFieldWrapper>
-                        <InputFieldWrapper label="Day">
-                            <ClassInput type="text"/>
-                        </InputFieldWrapper>
-                        <InputFieldWrapper label="Time">
-                            <ClassInput type="text"/>
-                        </InputFieldWrapper>
-                        <InputFieldWrapper label="Room">
-                            <ClassInput type="text"/>   
-                        </InputFieldWrapper>
-                        <div className='bg-cya-300 w-[17rem] h-[5rem] flex items-center justify-end'>
-                            <button className='bg-blue-400 font-medium p-2 rounded-md 
-                            w-[4rem] h-[2rem] flex justify-center items-center'>Add</button>
-                        </div>
-                    </form>
+                <div className='bg-gree-200 w-[32%] flex flex-col justify-center items-center px-2 pb-[4rem] overflow-hidden
+                    realtive'>
+                    <button className='bg-blue-400  text-[1.1rem] font-medium p-2 rounded-md
+                    absolute top-[6rem] active:text-white' onClick={() => setIsOpen(!isOpen)}>+Add Class</button>
+                    {isOpen && 
+                        <form className='bg-re-200 flex flex-col items-center gap-4 class-shadow w-[22rem] px-[.8rem] rounded-md
+                        absolute top-[10rem] pt-10' onSubmit={handleAdd}>
+                            <InputFieldWrapper label="Course Code">
+                                <ClassInput type="text" value={addInfo?.courseCode} name="courseCode"
+                                onChange={(e) => handleInputChange(e, setAddInfo)}/>
+                            </InputFieldWrapper>
+                            <InputFieldWrapper label="Course Title">
+                                <ClassInput type="text" value={addInfo?.courseTitle} name="courseTitle"
+                                onChange={(e) => handleInputChange(e, setAddInfo)}/>
+                            </InputFieldWrapper>
+                            <InputFieldWrapper label="Day">
+                                <ClassInput type="text" value={addInfo?.day} name="day"
+                                onChange={(e) => handleInputChange(e, setAddInfo)}/>
+                            </InputFieldWrapper>
+                            <InputFieldWrapper label="Time">
+                                <ClassInput type="text" value={addInfo?.time} name="time"
+                                onChange={(e) => handleInputChange(e, setAddInfo)}/>
+                            </InputFieldWrapper>
+                            <InputFieldWrapper label="Room">
+                                <ClassInput type="text" value={addInfo?.room} name="room"
+                                onChange={(e) => handleInputChange(e, setAddInfo)}/>   
+                            </InputFieldWrapper>
+                            <div className='bg-cya-300 w-[17rem] h-[5rem] gap-4 flex items-center justify-end'>
+                                <button className='bg-blue-400 font-medium p-2 rounded-md 
+                                w-[4rem] h-[2rem] flex justify-center items-center active:text-white' 
+                                onClick={() => setIsOpen(false)}>Cancel</button>
+                                <button className='bg-blue-400 font-medium p-2 rounded-md 
+                                w-[4rem] h-[2rem] flex justify-center items-center active:text-white'>Add</button>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         </PageContainer>

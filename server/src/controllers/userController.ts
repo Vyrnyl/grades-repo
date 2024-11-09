@@ -53,17 +53,22 @@ const updateUser = async (req: Request, res: Response) => {
     //     return res.status(422).json(err);
     // }
     
-    const { userId } = req.user;
+    // const { userId } = req.user;
 
     const value = req.body;
-
-    if(value.password === '') {
-        delete value.password;
-        // delete value.confirmPassword;
-    } else value.password = await bcrypt.hash(value.password, 10);
+    
+    try {
+        if (!value.password) {
+            delete value.password;
+        } else {
+            value.password = await bcrypt.hash(value.password, 10);
+        }
+    } catch (error) {
+        console.error("Error hashing password:", error);
+    }
     
 
-    const userUpdateDetails = await updateUserData(userId, value);
+    const userUpdateDetails = await updateUserData(value.id, value);
     
     if(!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });

@@ -68,6 +68,7 @@ const Account = () => {
     const updateUser = async () => {
 
       const updatedData = {
+        id: userInfo?.id,
         studentId: accountInfo.studentId,
         firstName: fullName[0],
         lastName: fullName[fullName.length - 1],

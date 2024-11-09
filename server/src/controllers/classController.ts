@@ -49,15 +49,15 @@ const updateClass = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { error, value } = validateClass(req.body);
+    // const { error, value } = validateClass(req.body);
     
-    if(error) {
-        const err = validationErrorHandler(error);
-        return res.status(422).json(err);
-    }
+    // if(error) {
+    //     const err = validationErrorHandler(error);
+    //     return res.status(422).json(err);
+    // }
 
     const { userId } = req.user;
-    const updateClassResult = await updateClassSched(userId, value);
+    const updateClassResult = await updateClassSched(userId, req.body);
 
     if(!updateClassResult) {
         return res.status(500).json({ error: "Failed to update class schedule"});
