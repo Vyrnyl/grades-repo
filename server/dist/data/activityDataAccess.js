@@ -23,7 +23,7 @@ const addLoginActivity = async (email, status) => {
                 email
             }
         });
-        if (userData) {
+        if (userData && userData.role !== 'admin') {
             const addedActivity = await prisma.loginActivity.create({
                 data: {
                     studentId: userData.studentId || '',

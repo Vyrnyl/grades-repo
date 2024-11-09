@@ -16,7 +16,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<ErrorType<TError> | null>(null);
     const navigate = useNavigate();
-
+    
     const token = localStorage.getItem('atoken');
     
     useEffect(() => {

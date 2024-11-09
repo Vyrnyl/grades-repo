@@ -2,8 +2,9 @@ import ClassSched from '../../components/shared/components/ClassSched'
 import PageContainer from '../../components/shared/components/PageContainer'
 import InputFieldWrapper from '../../components/shared/components/InputFieldWrapper'
 import ClassInput from '../../components/shared/components/ClassInput'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import handleInputChange from '../../utils/handleInputChange'
+import useFetch from '../../hooks/useFetch'
 
 type CourseInfo = {
     courseCode: string,
@@ -15,6 +16,12 @@ type CourseInfo = {
 
 const CourseManagement = () => {
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem('atoken');
+
+    const { data } = useFetch('class/get-classes', 'GET');
+
+    const [classes, setClasses] = useState<CourseInfo[] | []>([]);
     const [addInfo, setAddInfo] = useState<CourseInfo>({
         courseCode: '',
         courseTitle: '',
@@ -24,15 +31,57 @@ const CourseManagement = () => {
     });
     
 
-    console.log(addInfo);
+    console.log(classes);
 
+
+    //Set Classes
+    useEffect(() => {
+        if(data) {
+            setClasses(data as CourseInfo[]);
+        }
+    }, [data]);
+
+
+    //Add Class
     const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
+
+        setIsSave(true);
+        const addClass = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/class/add-class`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(addInfo)
+                });
+
+                const data = await res.json();
+                
+                if(data.message) {
+
+                    setClasses((prev) => [...prev, addInfo]);
+
+                    setSave('Added!');
+                    setTimeout(() => {
+                        setIsSave(false);
+                    }, 700);
+                }
+
+            } catch(error) {
+                console.log('Add error');
+            }
+        }
+        addClass();
     }
 
 
     //Style
     const [isOpen, setIsOpen] = useState(false);
+    const [isSave, setIsSave] = useState(false);
+    const [save, setSave] = useState('Adding');
 
     return (
         <PageContainer>
@@ -42,33 +91,19 @@ const CourseManagement = () => {
                         <h1 className='text-[2rem] font-medium'>Classes</h1>
                     </div>
                     <div className='bg-gree-300 grid grid-cols-3 gap-[1rem] pb-4 place-items-center overflow-y-scroll scrollbar-hide'>
-                        <ClassSched 
-                            courseCode='CC106' 
-                            day='Tuesday & Friday' 
-                            time='1:00PM - 3:00PM' 
-                            room='Computer Lab 3'
-                        />
-                        <ClassSched 
-                            courseCode='CC106' 
-                            day='Tuesday & Friday' 
-                            time='1:00PM - 3:00PM' 
-                            room='Computer Lab 3'
-                        />
-                        <ClassSched 
-                            courseCode='CC106' 
-                            day='Tuesday & Friday' 
-                            time='1:00PM - 3:00PM' 
-                            room='Computer Lab 3'
-                        />
-                        <ClassSched 
-                            courseCode='CC106' 
-                            day='Tuesday & Friday' 
-                            time='1:00PM - 3:00PM' 
-                            room='Computer Lab 3'
-                        />
+                        {classes.map((clss, i) => {
+                            return <ClassSched 
+                                key={i}
+                                courseCode={clss.courseCode}
+                                day={clss.day} 
+                                time={clss.time}  
+                                room={clss.room} 
+                            />     
+                        })}                   
                         
                     </div>
                 </div>
+
                 <div className='bg-gree-200 w-[32%] flex flex-col justify-center items-center px-2 pb-[4rem] overflow-hidden
                     realtive'>
                     <button className='bg-blue-400  text-[1.1rem] font-medium p-2 rounded-md
@@ -100,10 +135,16 @@ const CourseManagement = () => {
                                 <button className='bg-blue-400 font-medium p-2 rounded-md 
                                 w-[4rem] h-[2rem] flex justify-center items-center active:text-white' 
                                 onClick={() => setIsOpen(false)}>Cancel</button>
-                                <button className='bg-blue-400 font-medium p-2 rounded-md 
+                                <button type='submit' className='bg-blue-400 font-medium p-2 rounded-md 
                                 w-[4rem] h-[2rem] flex justify-center items-center active:text-white'>Add</button>
                             </div>
                         </form>
+                    }
+                    {isSave && 
+                        <div className="bg-white h-[4rem] px-4 flex items-center absolute left-[50%] top-[50%] 
+                        translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg z-10">
+                            <h1 className="text-[1.2rem] font-semibold text-slate-700 ">{save}</h1>
+                        </div>
                     }
                 </div>
             </div>

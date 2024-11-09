@@ -1,12 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteClass = exports.updateClass = exports.addClass = exports.getClasses = void 0;
-const classValidator_1 = require("../validators/classValidator");
 const classDataAccess_1 = require("../data/classDataAccess");
-const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 const getClasses = async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -22,17 +17,17 @@ const addClass = async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
-    const { error, value } = (0, classValidator_1.validateClass)(req.body);
-    if (error) {
-        const err = (0, validationErrorHandler_1.default)(error);
-        return res.status(422).json(err);
-    }
+    // const { error, value } = validateClass(req.body);
+    // if(error) {
+    //     const err = validationErrorHandler(error);
+    //     return res.status(422).json(err);
+    // }
     const { userId } = req.user;
-    const addClassResult = await (0, classDataAccess_1.addClassSched)(userId, value);
+    const addClassResult = await (0, classDataAccess_1.addClassSched)(userId, req.body);
     if (!addClassResult) {
         return res.status(500).json({ error: "Failed to create class schedule" });
     }
-    res.status(201).json({ mess: "Class added" });
+    res.status(201).json({ message: "Class added" });
 };
 exports.addClass = addClass;
 const updateClass = async (req, res) => {

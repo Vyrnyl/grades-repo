@@ -25,21 +25,21 @@ const addClass = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { error, value } = validateClass(req.body);
+    // const { error, value } = validateClass(req.body);
 
-    if(error) {
-        const err = validationErrorHandler(error);
-        return res.status(422).json(err);
-    }
+    // if(error) {
+    //     const err = validationErrorHandler(error);
+    //     return res.status(422).json(err);
+    // }
 
     const { userId } = req.user;
-    const addClassResult = await addClassSched(userId, value);
-
+    const addClassResult = await addClassSched(userId, req.body);
+    
     if(!addClassResult) {
         return res.status(500).json({ error: "Failed to create class schedule"});
     }
 
-    res.status(201).json({ mess: "Class added" });
+    res.status(201).json({ message: "Class added" });
 }
 
 

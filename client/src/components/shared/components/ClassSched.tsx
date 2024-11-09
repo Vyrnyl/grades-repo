@@ -9,10 +9,10 @@ type ClassSchedProps = {
     room: string
 }
 
-const ClassSched = ({ courseCode,  day, time, room }: ClassSchedProps) => {
+const ClassSched = ({ courseCode, day, time, room }: ClassSchedProps) => {
 
     const color = randomColor();
-
+    
     return (
         <div className={`${color} h-[11rem] w-[13rem] flex flex-col text-nowrap overflow-hidden 
             px-[1rem] py-4 gap-2 rounded-md class-shadow`}>
