@@ -83,8 +83,10 @@ const CourseManagement = () => {
     const [isSave, setIsSave] = useState(false);
     const [save, setSave] = useState('Adding');
 
+    const [isOpenCourse, setIsOpenCourse] = useState(false);
+
     return (
-        <PageContainer>
+        <PageContainer className='relative'>
             <div className='bg-blu-200 flex h-[100%] pr-4'>
                 <div className='bg-cya-200 flex-grow flex flex-col mx-[2.5rem] pb-4'>
                     <div className='bg-slat-400 h-[20%] flex items-center px-5'>
@@ -148,6 +150,28 @@ const CourseManagement = () => {
                     }
                 </div>
             </div>
+
+            <PageContainer className='bg-red-300 absolute w-[100%] h-[101%] flex flex-col px-10'>
+                <div className='bg-cya-200 flex flex-col flex-[.2] justify-center gap-4'>
+                    <h1 className="text-[1.5rem] font-semibold text-slate-700 ">Course Details</h1>
+                    <ul className='bg-gree-200 flex text-[.95rem] font-semibold text-slate-700 h-[3rem]'>
+                        <li className='flex text-center items-center
+                        flex-[.7] px-2 border-l-2 border-y-2 border-slate-500'>Course Code: FGMT 201</li>
+                        <li className='flex text-center items-center justify-center
+                        flex-1 px-2 border-l-2 border-y-2 border-slate-500'>Course Title: Financial Mangement</li>
+                        <li className='flex text-center items-center justify-center px-2 
+                        flex-[.8] border-l-2 border-y-2 border-slate-500'>Day: Monday & Thursday</li>
+                        <li className='flex text-center items-center justify-center px-2 
+                        flex-[.6] border-l-2 border-y-2 border-slate-500'>Time: 7:30-9:00am</li>
+                        <li className='flex text-center items-center justify-center px-2 
+                        flex-[.4] border-l-2 border-y-2 border-slate-500'>Room: 101</li>
+                        <li className='flex text-center items-center justify-center px-2 
+                        flex-[.4] border-x-2 border-y-2 border-slate-500'>sdsd</li>
+                    </ul>
+                </div>
+                <div className='bg-red-200 flex-[.6]'></div>
+                <div className='bg-purple-300 flex-[.2]'></div>
+            </PageContainer>
         </PageContainer>
     )
 }
