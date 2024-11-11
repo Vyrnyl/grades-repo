@@ -5,14 +5,8 @@ import ClassInput from '../../components/shared/components/ClassInput'
 import { useEffect, useState } from 'react'
 import handleInputChange from '../../utils/handleInputChange'
 import useFetch from '../../hooks/useFetch'
-
-type CourseInfo = {
-    courseCode: string,
-    courseTitle: string,
-    day: string,
-    time: string,
-    room: string
-}
+import { CourseData, CourseInfo } from '../../types/types'
+import { User } from '../../types/studentTypes'
 
 const CourseManagement = () => {
 
@@ -20,8 +14,10 @@ const CourseManagement = () => {
     const token = localStorage.getItem('atoken');
 
     const { data } = useFetch('class/get-classes', 'GET');
+    const users = useFetch('user/get-users', 'GET');
 
-    const [classes, setClasses] = useState<CourseInfo[] | []>([]);
+    const [students, setStudents] = useState<User[] | []>([]);
+    const [classes, setClasses] = useState<CourseData[] | []>([]);
     const [addInfo, setAddInfo] = useState<CourseInfo>({
         courseCode: '',
         courseTitle: '',
@@ -30,14 +26,18 @@ const CourseManagement = () => {
         room: ''
     });
     
-
-    console.log(classes);
-
+    //Set Students
+    useEffect(() => {
+        if(Array.isArray(users.data)) {
+            const list = users.data.filter((d) => d.role === 'student');
+            setStudents(list);
+        }
+    }, [users.data]);
 
     //Set Classes
     useEffect(() => {
         if(data) {
-            setClasses(data as CourseInfo[]);
+            setClasses(data as CourseData[]);
         }
     }, [data]);
 
@@ -62,9 +62,18 @@ const CourseManagement = () => {
                 
                 if(data.message) {
 
-                    setClasses((prev) => [...prev, addInfo]);
+                    setClasses((prev) => [...prev, data.addedData]);
 
+                    setAddInfo({
+                        courseCode: '',
+                        courseTitle: '',
+                        day: '',
+                        time: '',
+                        room: ''
+                    });
                     setSave('Added!');
+                    setIsOpen(false);
+
                     setTimeout(() => {
                         setIsSave(false);
                     }, 700);
@@ -83,7 +92,6 @@ const CourseManagement = () => {
     const [isSave, setIsSave] = useState(false);
     const [save, setSave] = useState('Adding');
 
-    const [isOpenCourse, setIsOpenCourse] = useState(false);
 
     return (
         <PageContainer className='relative'>
@@ -93,15 +101,13 @@ const CourseManagement = () => {
                         <h1 className='text-[2rem] font-medium'>Classes</h1>
                     </div>
                     <div className='bg-gree-300 grid grid-cols-3 gap-[1rem] pb-4 place-items-center overflow-y-scroll scrollbar-hide'>
-                        {classes.map((clss, i) => {
+                        {classes.map((classInfo, i) => {
                             return <ClassSched 
                                 key={i}
-                                courseCode={clss.courseCode}
-                                day={clss.day} 
-                                time={clss.time}  
-                                room={clss.room} 
-                            />     
-                        })}                   
+                                classInfo={classInfo}
+                                students={students}
+                            />
+                        })}
                         
                     </div>
                 </div>
@@ -134,7 +140,7 @@ const CourseManagement = () => {
                                 onChange={(e) => handleInputChange(e, setAddInfo)}/>   
                             </InputFieldWrapper>
                             <div className='bg-cya-300 w-[17rem] h-[5rem] gap-4 flex items-center justify-end'>
-                                <button className='bg-blue-400 font-medium p-2 rounded-md 
+                                <button type='button' className='bg-blue-400 font-medium p-2 rounded-md 
                                 w-[4rem] h-[2rem] flex justify-center items-center active:text-white' 
                                 onClick={() => setIsOpen(false)}>Cancel</button>
                                 <button type='submit' className='bg-blue-400 font-medium p-2 rounded-md 
@@ -150,28 +156,6 @@ const CourseManagement = () => {
                     }
                 </div>
             </div>
-
-            <PageContainer className='bg-red-300 absolute w-[100%] h-[101%] flex flex-col px-10'>
-                <div className='bg-cya-200 flex flex-col flex-[.2] justify-center gap-4'>
-                    <h1 className="text-[1.5rem] font-semibold text-slate-700 ">Course Details</h1>
-                    <ul className='bg-gree-200 flex text-[.95rem] font-semibold text-slate-700 h-[3rem]'>
-                        <li className='flex text-center items-center
-                        flex-[.7] px-2 border-l-2 border-y-2 border-slate-500'>Course Code: FGMT 201</li>
-                        <li className='flex text-center items-center justify-center
-                        flex-1 px-2 border-l-2 border-y-2 border-slate-500'>Course Title: Financial Mangement</li>
-                        <li className='flex text-center items-center justify-center px-2 
-                        flex-[.8] border-l-2 border-y-2 border-slate-500'>Day: Monday & Thursday</li>
-                        <li className='flex text-center items-center justify-center px-2 
-                        flex-[.6] border-l-2 border-y-2 border-slate-500'>Time: 7:30-9:00am</li>
-                        <li className='flex text-center items-center justify-center px-2 
-                        flex-[.4] border-l-2 border-y-2 border-slate-500'>Room: 101</li>
-                        <li className='flex text-center items-center justify-center px-2 
-                        flex-[.4] border-x-2 border-y-2 border-slate-500'>sdsd</li>
-                    </ul>
-                </div>
-                <div className='bg-red-200 flex-[.6]'></div>
-                <div className='bg-purple-300 flex-[.2]'></div>
-            </PageContainer>
         </PageContainer>
     )
 }

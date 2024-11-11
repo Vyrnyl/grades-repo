@@ -93,7 +93,7 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
         }
 
       } catch(error) {
-        console.log("Fetch error" + error);
+        console.log("Update error" + error);
       }
     }
 

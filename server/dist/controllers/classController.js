@@ -27,7 +27,7 @@ const addClass = async (req, res) => {
     if (!addClassResult) {
         return res.status(500).json({ error: "Failed to create class schedule" });
     }
-    res.status(201).json({ message: "Class added" });
+    res.status(201).json({ message: "Class added", addedData: addClassResult });
 };
 exports.addClass = addClass;
 const updateClass = async (req, res) => {
@@ -44,7 +44,7 @@ const updateClass = async (req, res) => {
     if (!updateClassResult) {
         return res.status(500).json({ error: "Failed to update class schedule" });
     }
-    res.json({ mess: "Update successful" });
+    res.json({ message: "Update successful" });
 };
 exports.updateClass = updateClass;
 const deleteClass = async (req, res) => {
