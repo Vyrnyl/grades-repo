@@ -63,7 +63,7 @@ use graderepo;
 --     ('BCOM 101', 'Business Communication'),
 --     ('ECON 101', 'Economics'),
 --     ('STAT 101', 'Business Statistics'),
---     ('OB 101', 'Organizational Behavior'),
+--     ('OB 102', 'Organizational Behavior 2'),
 --     ('ETH 101', 'Business Ethics'),
 --     ('PDV 101', 'Professional Development and Ethics'),
 --     ('ACCT 201', 'Advanced Financial Accounting'),
@@ -147,7 +147,7 @@ use graderepo;
 --     ('MKTG 101', 'Marketing Management'),
 --     ('ECON 101', 'Economics'),
 --     ('STAT 101', 'Business Statistics'),
---     ('OB 101', 'Organizational Behavior'),
+--     ('OB 102', 'Organizational Behavior 2'),
 --     ('BCOM 101', 'Business Communication'),
 --     ('ETH 101', 'Business Ethics'),
 --     ('PDV 101', 'Professional Development and Ethics'),
@@ -191,7 +191,7 @@ use graderepo;
 --     foreign key (courseId) references bsaCurriculum(id) on delete cascade
 -- );
 
--- CREATE TABLE bsbaStudentRecords(
+-- CREATE TABLE bsaStudentRecords(
 -- 	id int primary key auto_increment,
 --     studentId int,
 --     courseId int,
@@ -224,7 +224,7 @@ use graderepo;
     "email": "admin@gmail.com",
     "password": "admin123",
     "role": "admin",
-    "confirmPassword": "admin123",
+    "confirmPassword": "admin123"
   }
 [
   {
@@ -235,7 +235,7 @@ use graderepo;
     "password": "shang123",
     "role": "student",
     "confirmPassword": "shang123",
-    "programId": 2,
+    "programId": 1,
     "status": "Enrolled"
   },
   {
@@ -246,7 +246,18 @@ use graderepo;
     "password": "mika123",
     "role": "student",
     "confirmPassword": "mika123",
-    "programId": 1,
+    "programId": 2,
+    "status": "Enrolled"
+  },
+   {
+    "studentId": "2021-02170",
+    "firstName": "Lara",
+    "lastName": "Smith",
+    "email": "lara@gmail.com",
+    "password": "lara123",
+    "role": "student",
+    "confirmPassword": "lara123",
+    "programId": 3,
     "status": "Enrolled"
   },
   {
@@ -259,17 +270,6 @@ use graderepo;
     "confirmPassword": "john123",
     "programId": 3,
     "status": "Unenrolled"
-  },
-  {
-    "studentId": "2021-02170",
-    "firstName": "Lara",
-    "lastName": "Smith",
-    "email": "lara@gmail.com",
-    "password": "lara123",
-    "role": "student",
-    "confirmPassword": "lara123",
-    "programId": 1,
-    "status": "Enrolled"
   },
   {
     "studentId": "2021-02171",
@@ -440,43 +440,43 @@ use graderepo;
 ]
 
 
-UPDATE bsbastudentrecord SET grade = 2.8 WHERE userId = 3 AND courseId = 1;
-UPDATE bsbastudentrecord SET grade = 2.6 WHERE userId = 3 AND courseId = 2;
-UPDATE bsbastudentrecord SET grade = 3.0 WHERE userId = 3 AND courseId = 3;
-UPDATE bsbastudentrecord SET grade = 2.1 WHERE userId = 3 AND courseId = 4;
-UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 3 AND courseId = 5;
-UPDATE bsbastudentrecord SET grade = 2.3 WHERE userId = 3 AND courseId = 6;
-UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 3 AND courseId = 7;
-UPDATE bsbastudentrecord SET grade = 2.9 WHERE userId = 3 AND courseId = 8;
-UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 3 AND courseId = 9;
-UPDATE bsbastudentrecord SET grade = 2.7 WHERE userId = 3 AND courseId = 10;
-UPDATE bsbastudentrecord SET grade = 3.0 WHERE userId = 3 AND courseId = 11;
-UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 3 AND courseId = 12;
-UPDATE bsbastudentrecord SET grade = 2.4 WHERE userId = 3 AND courseId = 13;
-UPDATE bsbastudentrecord SET grade = 2.2 WHERE userId = 3 AND courseId = 14;
-UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 3 AND courseId = 15;
-UPDATE bsbastudentrecord SET grade = 2.5 WHERE userId = 3 AND courseId = 16;
-UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 3 AND courseId = 17;
-UPDATE bsbastudentrecord SET grade = 2.3 WHERE userId = 3 AND courseId = 18;
-UPDATE bsbastudentrecord SET grade = 1.4 WHERE userId = 3 AND courseId = 19;
-UPDATE bsbastudentrecord SET grade = 2.8 WHERE userId = 3 AND courseId = 20;
-UPDATE bsbastudentrecord SET grade = 2.0 WHERE userId = 3 AND courseId = 21;
-UPDATE bsbastudentrecord SET grade = 3.0 WHERE userId = 3 AND courseId = 22;
-UPDATE bsbastudentrecord SET grade = 2.1 WHERE userId = 3 AND courseId = 23;
-UPDATE bsbastudentrecord SET grade = 2.7 WHERE userId = 3 AND courseId = 24;
-UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 3 AND courseId = 25;
-UPDATE bsbastudentrecord SET grade = 2.9 WHERE userId = 3 AND courseId = 26;
-UPDATE bsbastudentrecord SET grade = 2.5 WHERE userId = 3 AND courseId = 27;
-UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 3 AND courseId = 28;
-UPDATE bsbastudentrecord SET grade = 2.2 WHERE userId = 3 AND courseId = 29;
-UPDATE bsbastudentrecord SET grade = 2.4 WHERE userId = 3 AND courseId = 30;
-UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 3 AND courseId = 31;
-UPDATE bsbastudentrecord SET grade = 2.6 WHERE userId = 3 AND courseId = 32;
-UPDATE bsbastudentrecord SET grade = 2.0 WHERE userId = 3 AND courseId = 33;
-UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 3 AND courseId = 34;
-UPDATE bsbastudentrecord SET grade = 2.1 WHERE userId = 3 AND courseId = 35;
-UPDATE bsbastudentrecord SET grade = 2.8 WHERE userId = 3 AND courseId = 36;
-UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 3 AND courseId = 37;
-UPDATE bsbastudentrecord SET grade = 2.9 WHERE userId = 3 AND courseId = 38;
-UPDATE bsbastudentrecord SET grade = 1.3 WHERE userId = 3 AND courseId = 39;
-UPDATE bsbastudentrecord SET grade = 2.7 WHERE userId = 3 AND courseId = 40;
+UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 19 AND courseId = 1;
+UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 19 AND courseId = 2;
+UPDATE bsbastudentrecord SET grade = 1.0 WHERE userId = 19 AND courseId = 3;
+UPDATE bsbastudentrecord SET grade = 1.1 WHERE userId = 19 AND courseId = 4;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 5;
+UPDATE bsbastudentrecord SET grade = 1.3 WHERE userId = 19 AND courseId = 6;
+UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 19 AND courseId = 7;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 8;
+UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 19 AND courseId = 9;
+UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 19 AND courseId = 10;
+UPDATE bsbastudentrecord SET grade = 1.0 WHERE userId = 19 AND courseId = 11;
+UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 19 AND courseId = 12;
+UPDATE bsbastudentrecord SET grade = 1.4 WHERE userId = 19 AND courseId = 13;
+UPDATE bsbastudentrecord SET grade = 1.2 WHERE userId = 19 AND courseId = 14;
+UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 19 AND courseId = 15;
+UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 19 AND courseId = 16;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 17;
+UPDATE bsbastudentrecord SET grade = 1.3 WHERE userId = 19 AND courseId = 18;
+UPDATE bsbastudentrecord SET grade = 1.4 WHERE userId = 19 AND courseId = 19;
+UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 19 AND courseId = 20;
+UPDATE bsbastudentrecord SET grade = 1.0 WHERE userId = 19 AND courseId = 21;
+UPDATE bsbastudentrecord SET grade = 1.0 WHERE userId = 19 AND courseId = 22;
+UPDATE bsbastudentrecord SET grade = 1.1 WHERE userId = 19 AND courseId = 23;
+UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 19 AND courseId = 24;
+UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 19 AND courseId = 25;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 26;
+UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 19 AND courseId = 27;
+UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 19 AND courseId = 28;
+UPDATE bsbastudentrecord SET grade = 1.2 WHERE userId = 19 AND courseId = 29;
+UPDATE bsbastudentrecord SET grade = 1.4 WHERE userId = 19 AND courseId = 30;
+UPDATE bsbastudentrecord SET grade = 1.5 WHERE userId = 19 AND courseId = 31;
+UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 19 AND courseId = 32;
+UPDATE bsbastudentrecord SET grade = 1.0 WHERE userId = 19 AND courseId = 33;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 34;
+UPDATE bsbastudentrecord SET grade = 1.1 WHERE userId = 19 AND courseId = 35;
+UPDATE bsbastudentrecord SET grade = 1.8 WHERE userId = 19 AND courseId = 36;
+UPDATE bsbastudentrecord SET grade = 1.6 WHERE userId = 19 AND courseId = 37;
+UPDATE bsbastudentrecord SET grade = 1.9 WHERE userId = 19 AND courseId = 38;
+UPDATE bsbastudentrecord SET grade = 1.3 WHERE userId = 19 AND courseId = 39;
+UPDATE bsbastudentrecord SET grade = 1.7 WHERE userId = 19 AND courseId = 40;

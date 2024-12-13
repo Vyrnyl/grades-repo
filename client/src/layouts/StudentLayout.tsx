@@ -23,7 +23,8 @@ const StudentLayout = () => {
       <SideBar role="student">
         <SideBarLink path='/' label='Dashboard'/>
         <SideBarLink path='/account' label='Account'/>
-        <SideBarLink path='/notification' label='Notifications'/>
+        {/* <SideBarLink path='/notification' label='Notifications'/> */}
+        <SideBarLink path='/view-grade' label='View Grade'/>
         <SideBarLink path='/gwastatus' label='GWA Status'/>
       </SideBar>
       <Outlet/>

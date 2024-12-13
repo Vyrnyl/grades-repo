@@ -23,9 +23,8 @@ const Account = () => {
   
   const apiUrl = import.meta.env.VITE_API_URL;
   const token = localStorage.getItem('atoken');
-
+  
   const { userInfo } = useUserStore();
-
   const [accountInfo, setAccountInfo] = useState<AccountInfoType>({
     fullName: '',
     studentId: '',
@@ -41,20 +40,22 @@ const Account = () => {
 
     const yearLevel = userInfo?.yearLevel || '';
     const block = userInfo?.block || '';
-    const formattedString = [yearLevel, block].filter(Boolean).join('/')
+    const formattedString = [yearLevel, block].filter(Boolean).join('/');
 
-    setAccountInfo({
-      fullName: `${userInfo?.firstName} ${userInfo?.lastName || ""}`,
-      studentId: userInfo?.studentId || "",
-      gender: userInfo?.sex || "",
-      email: userInfo?.email || "",
-      phoneNumber: userInfo?.phoneNumber || "",
-      password: '',
-      yearBlock: formattedString
-    });
+    if(userInfo) {
+      setAccountInfo({
+        fullName: `${userInfo.firstName.charAt(0) === '@' ? userInfo.firstName.slice(1) : userInfo.firstName} ${userInfo?.lastName || ""}`,
+        studentId: userInfo?.studentId || "",
+        gender: userInfo?.sex || "",
+        email: userInfo?.email || "",
+        phoneNumber: userInfo?.phoneNumber || "",
+        password: '',
+        yearBlock: formattedString
+      });
+    }
   }, [userInfo]);
   
-  
+
   //SaveData
   const [isSave, setIsSave] = useState(false);
   const [save, setSave] = useState('Saving');
@@ -70,7 +71,7 @@ const Account = () => {
       const updatedData = {
         id: userInfo?.id,
         studentId: accountInfo.studentId,
-        firstName: fullName[0],
+        firstName: userInfo?.firstName.charAt(0) === '@' ?  `@${fullName[0]}` : fullName[0],
         lastName: fullName[fullName.length - 1],
         email: accountInfo.email,
         phoneNumber: accountInfo.phoneNumber,
@@ -79,7 +80,7 @@ const Account = () => {
         password: accountInfo.password,
         sex: accountInfo.gender
       }
-      
+      console.log(updatedData)
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
           method: 'PUT',
@@ -103,20 +104,19 @@ const Account = () => {
         console.log("Fetch error" + error);
       }
     }
-
     updateUser();
   }
 
   return (
     <PageContainer className="relative">
       <div className="bg-re-200 flex-[.2] ml-[5rem] w-[65%] flex items-end">
-          <h1 className="text-[2rem] font-bold text-slate-800">Account</h1>
+          <h1 className="text-[2rem] font-bold text-slate-700">Account</h1>
         </div>
         <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
               <Input type="text" name='fullName' value={accountInfo.fullName} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Student ID">
@@ -133,22 +133,22 @@ const Account = () => {
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
               <Input type="text" name='email' value={accountInfo.email} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Phone Number">
               <Input type="text" name='phoneNumber' value={accountInfo.phoneNumber} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Password">
               <Input type="password" name='password' value={accountInfo.password} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Year/Block">
               <Input type="text" name='yearBlock' value={accountInfo.yearBlock} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
           </div>
         </form>

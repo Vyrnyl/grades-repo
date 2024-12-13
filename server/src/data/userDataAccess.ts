@@ -11,25 +11,27 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
             const newUser = await prisma.user.create({
                 data: value
             });
-    
+            
             if(newUser.programId === 1 && newUser.role === 'student') {
                 const bsa = await prisma.bsaCurriculum.findMany();
                 const studentCourses = bsa.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
                 
-                await prisma.bsaStudentRecord.createMany({
+                const x = await prisma.bsaStudentRecord.createMany({
                     data: studentCourses
                 });
+                console.log(x)
             } else if(newUser.programId === 2 && newUser.role === 'student') {
                 const bsba = await prisma.bsbaCurriculum.findMany();
                 const studentCourses = bsba.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
     
-                await prisma.bsbaStudentRecord.createMany({
+                const x = await prisma.bsbaStudentRecord.createMany({
                     data: studentCourses
                 });
+                console.log(x)
             } else if(newUser.programId === 3 && newUser.role === 'student') {
                 const bsma = await prisma.bsbaCurriculum.findMany();
                 const studentCourses = bsma.map(course => {
@@ -90,8 +92,8 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
             },
             data: value
         });
-
-
+        
+        
         // await prisma.$transaction(async () => {
     
         //     if(value.programId === 1) {

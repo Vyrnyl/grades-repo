@@ -15,18 +15,20 @@ const createUser = async (value) => {
                 const studentCourses = bsa.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
-                await prisma.bsaStudentRecord.createMany({
+                const x = await prisma.bsaStudentRecord.createMany({
                     data: studentCourses
                 });
+                console.log(x);
             }
             else if (newUser.programId === 2 && newUser.role === 'student') {
                 const bsba = await prisma.bsbaCurriculum.findMany();
                 const studentCourses = bsba.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
-                await prisma.bsbaStudentRecord.createMany({
+                const x = await prisma.bsbaStudentRecord.createMany({
                     data: studentCourses
                 });
+                console.log(x);
             }
             else if (newUser.programId === 3 && newUser.role === 'student') {
                 const bsma = await prisma.bsbaCurriculum.findMany();

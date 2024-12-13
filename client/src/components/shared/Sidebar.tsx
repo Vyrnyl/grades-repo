@@ -11,21 +11,22 @@ type SideBarProps = {
 
 const SideBar = ({ children, role }: SideBarProps) => {
 
-  const { userInfo } = useUserStore();
-  const [firstName, setFirstName] = useState('');
+  // const { userInfo } = useUserStore();
+  // const [firstName, setFirstName] = useState('');
 
-  if(userInfo) {
-    useEffect(() => {
-      setFirstName(userInfo.firstName);
-    }, [userInfo]);
-  } else useEffect(() => {
-      setFirstName('');
-  }, [userInfo]);
+  // if(userInfo) {
+  //   useEffect(() => {
+  //     setFirstName(userInfo.firstName);
+  //   }, [userInfo]);
+  // } else useEffect(() => {
+  //     setFirstName('');
+  // }, [userInfo]);
 
   return (
     <div className="bg-primary h-[100%] flex flex-col flex-[20%] rounded-r-md">
       <Logo/>
-      {role !== 'student' && <AdminProfile name={firstName}/>}
+      {/* {role !== 'student' && <AdminProfile/>} */}
+      <AdminProfile/>
       <SidebarLinks>{children}</SidebarLinks>
     </div>
   )

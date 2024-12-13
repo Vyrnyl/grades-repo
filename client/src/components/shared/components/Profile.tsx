@@ -4,16 +4,17 @@ import yearSuffix from "../../../utils/yearSuffix";
 type ProfileType = {
   firstName: string | undefined,
   lastName: string | undefined,
-  yearLevel: number | undefined
+  yearLevel: number | undefined,
+  className?: string
 }
 
-const Profile = ({ firstName, lastName, yearLevel }: ProfileType) => {
+const Profile = ({ firstName, lastName, yearLevel, className }: ProfileType) => {
 
   const suff = yearSuffix(yearLevel);
   const acronym = nameAcronym(firstName + ' ' + lastName);
 
   return (
-    <div className='bg-re-200 w-[15rem] h-[3rem] flex gap-2'>
+    <div className={`${className} bg-re-200 w-[10rem] h-[3rem] flex gap-2`}>
         <div className='bg-gray-800 w-[3rem] rounded-full grid place-items-center'>
             <span className='font-bold text-white'>{acronym}</span>
         </div>

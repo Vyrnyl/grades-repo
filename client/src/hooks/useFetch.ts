@@ -48,7 +48,6 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
                 } else {
                     setData(data)
                 }
-
             } catch(error) {
                 console.log('Error: ', error);
             } finally {

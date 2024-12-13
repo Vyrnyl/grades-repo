@@ -42,7 +42,7 @@ const signupSchema = Joi.object({
     status: Joi.allow(null).messages({
         'string.empty': 'Student ID cannot be empty',
         'string.max': 'Student ID must be at most 10'
-    })
+    }),
     
     // studentId: Joi.string().max(10).when('role', {
     //     is: 'student',
@@ -52,16 +52,8 @@ const signupSchema = Joi.object({
     //     }),
     //     otherwise: Joi.forbidden()
     // }),
-    // yearLevel: Joi.number().integer().max(5).when('role', {
-    //     is: 'student',
-    //     then: Joi.required().messages({
-    //         'number.base': 'Year level must be a type of number',
-    //         'number.max': 'Year level must be at most 5',
-    //         'number.empty': 'Year level cannot be empty',
-    //         'any.required': 'Year level cannot be empty'
-    //     }),
-    //     otherwise: Joi.forbidden()
-    // }),
+    yearLevel: Joi.number().integer().allow(null),
+    block: Joi.string().allow(null)
     // programId: Joi.number().integer().max(10).when('role', {
     //     is: 'student',
     //     then: Joi.required().messages({

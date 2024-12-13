@@ -12,7 +12,7 @@ const FacultyRoutes = () => {
         <Route element={<FacultyLayout/>}>
             <Route path='/' element={<Dashboard/>}/>
             <Route path='/account' element={<Account/>}/>
-            <Route path='/course-management' element={<CourseManagement/>}/>
+            {/* <Route path='/course-management' element={<CourseManagement/>}/> */}
             <Route path='/grade-entry' element={<GradeEntry/>}/>
         </Route>
         <Route path='*' element={<NotFound/>}/>

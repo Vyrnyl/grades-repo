@@ -28,11 +28,14 @@ const signup = async (req, res) => {
     delete value.confirmPassword;
     //DB STORE
     const newUserResult = await (0, userDataAccess_1.createUser)(value);
+    // console.log(newUserResult)
     if ('error' in newUserResult) {
         // return res.status(500).json(newUserResult);
-        console.log(newUserResult);
+        // console.log(newUserResult)
         return res.status(409).json({ error: 'Email already registered' });
     }
+    //Set Recent Activity
+    await (0, activityDataAccess_1.addAdminRecentActivity)(`New user registered with email: ${newUserResult.email}`);
     //TOKEN
     const payload = {
         userId: newUserResult.id,
@@ -42,7 +45,7 @@ const signup = async (req, res) => {
     const accessToken = (0, tokenService_1.generateAccessToken)(payload);
     const refreshToken = (0, tokenService_1.generateRefreshToken)(payload);
     //Store refresh token
-    const storeResult = await (0, userUtils_1.storeRefreshToken)(refreshToken);
+    await (0, userUtils_1.storeRefreshToken)(refreshToken);
     // if(storeResult.error) {
     //     return res.status(500).json({ error: storeResult.error });
     // }
@@ -50,7 +53,7 @@ const signup = async (req, res) => {
         'Authorization': `Bearer ${accessToken}`,
         'Refresh-Token': refreshToken
     });
-    res.status(201).json({ message: 'Registration successful' });
+    res.status(201).json(newUserResult);
 };
 exports.signup = signup;
 //LOGIN
@@ -72,6 +75,8 @@ const login = async (req, res) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await (0, activityDataAccess_1.addLoginActivity)(user.email, 'Successful');
+    if (user.email !== 'admin@gmail.com')
+        await (0, activityDataAccess_1.addAdminRecentActivity)(`User logged in with email: ${user.email}`);
     const payload = {
         userId: user.id,
         firstName: user.firstName,

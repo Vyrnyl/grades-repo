@@ -1,12 +1,11 @@
 import { faPenToSquare, faTrashCan, faX } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { User } from "../../types/studentTypes"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Input from "../shared/components/Input"
 import handleInputChange from "../../utils/handleInputChange"
-import SelectInput from "./SelectInput"
-import handleSelectChange from "../../utils/handleSelectChange"
 import SaveButton from "../shared/components/SaveButton"
+import HandleOutsideClick from "../../utils/handleOutsideClick"
 
 type UserData = {
     id: number,
@@ -47,7 +46,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const [updateData, setUpdateData] = useState<Record<string, any>>({
         id,
         studentId,
-        fullName: `${firstName} ${lastName}`,
+        firstName,
+        lastName,
         email,
         role,
         sex,
@@ -57,16 +57,16 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         
-        let fullName = updateData.fullName.split(' ');
-    
+        // let fullName = updateData.fullName.split(' ');
+
         const updateUser = async () => {
     
           setIsOpen(!isOpen);
           const updatedData = {
             id,
             studentId: updateData.studentId,
-            firstName: fullName[0],
-            lastName: fullName[fullName.length - 1],
+            firstName: updateData.firstName,
+            lastName: updateData.lastName,
             email: updateData.email,
             role: updateData.role,
             sex: updateData.sex,
@@ -116,30 +116,37 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             const data = await res.json();
 
             if(res.ok && data) {
-                setUsers((prev) => {
-                    return prev.filter((u) => u.id !== user.id);
-                });
+                setUsers(prev => prev.filter(u => u.id !== user.id));
+                console.log(user)
             }
-            console.log(data)
-
+            
         } catch(error) {
             console.log('Request Error');
         }
     }
 
+    //Program
+    const [progCode, setProgcode] = useState('');
+    useEffect(() => {
+        if(user.program) setProgcode(user.program.programCode);
+    }, [user]);
+
+    //Style
+    const ref = useRef<HTMLDivElement>(null);
+    HandleOutsideClick(ref, setIsOpen);
+    
+
     return (
         <tr className="bg-slate-100 hover:bg-slate-200 ">
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName} ${userData.lastName}`}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.role}`
-                .charAt(0).toUpperCase() + userData.role.substring(1)}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.sex}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.status}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{progCode}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
-                        <div className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
+                        <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
                             translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
                 
                             <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
@@ -152,16 +159,21 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                 value={updateData.studentId} placeholder='Student ID' 
                                 onChange={(e) => handleInputChange(e, setUpdateData)}/>
                     
-                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='fullName' 
-                                placeholder='Full Name'
-                                value={updateData.fullName}
+                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
+                                placeholder='First Name'
+                                value={updateData.firstName}
+                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
+
+                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='lastName' 
+                                placeholder='Last Name'
+                                value={updateData.lastName}
                                 onChange={(e) => handleInputChange(e, setUpdateData)}/>
                     
                                 <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='email' 
                                 value={updateData.email} placeholder='Email'
                                 onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-                                <SelectInput className='w-[10rem] h-[2rem] self-center'
+                                {/* <SelectInput className='w-[10rem] h-[2rem] self-center'
                                     name='sex' value={updateData.sex || ""}
                                     onChange={(e) => handleSelectChange(e, setUpdateData)}>
                                     <option value="" disabled>Gender</option>
@@ -184,7 +196,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             <option value="Inactive">Inactive</option>
                                         </>
                                     }
-                                </SelectInput>
+                                </SelectInput> */}
 
                                 <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>
                             </form>

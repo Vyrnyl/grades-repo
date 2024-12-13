@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 type SideBarLinkProps = {
     path: string,
@@ -6,8 +6,13 @@ type SideBarLinkProps = {
 }
 
 const SideBarLink = ({ path, label }: SideBarLinkProps) => {
+
+  const loc = useLocation();
+
   return (
-    <li className="active:text-slate-700"><Link to={path}>{label}</Link></li>
+    <li className={`${loc.pathname == path && 'text-blue-300'} active:text-slate-700`}>
+      <Link to={path}>{label}</Link>
+    </li>
   )
 }
 

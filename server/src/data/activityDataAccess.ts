@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+
+//LOGIN ACTIVITY
 const getLoginActivity = async () => {
     try {
         const activities = await prisma.loginActivity.findMany({
@@ -98,4 +100,59 @@ const getLoginUser = async (email: string) => {
     }
 }
 
-export { getLoginActivity, addLoginActivity, updateActivity, getLoginUser }
+
+
+
+//RECENT ACTIVITY
+
+const addAdminRecentActivity = async (content: string) => {
+    try {
+
+        const admin = await prisma.user.findUnique({ where: { email: 'admin@gmail.com' }});
+
+        if(!admin) {
+            return null;
+        }
+        const addActivity = await prisma.recentActivity.create({
+            data: {
+                userId: admin.id,
+                content
+            }
+        });
+
+        return addActivity;
+    } catch(error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+}
+
+const getAdminRecentActivity = async () => {
+    try {
+
+        const admin = await prisma.user.findUnique({ where: { email: 'admin@gmail.com' }});
+
+        if(!admin) return null;
+
+        const activities = await prisma.recentActivity.findMany({ 
+            where: { userId: admin.id },
+            orderBy: { id: 'desc' }
+        });
+
+        return activities;
+    } catch(error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+}
+
+
+export { 
+    getLoginActivity, 
+    addLoginActivity, 
+    updateActivity, 
+    getLoginUser,
+    
+    addAdminRecentActivity,
+    getAdminRecentActivity
+}

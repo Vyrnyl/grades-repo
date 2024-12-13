@@ -31,6 +31,8 @@ model User {
   bsbaStudentRecord BsbaStudentRecord[]
   bsmaStudentRecord BsmaStudentRecord[]
   class Class[]
+  notification Notification[]
+  recentActivity RecentActivity[]
 }
 
 model Program {
@@ -102,7 +104,6 @@ model Class {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-
 model LoginActivity {
   id Int @id @default(autoincrement())
   studentId String
@@ -115,7 +116,21 @@ model LoginActivity {
   updatedAt DateTime? @updatedAt
 }
 
+model RecentActivity {
+  id Int @id @default(autoincrement())
+  userId Int
+  content String @db.Text
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  userId Int
+  content String @db.Text
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model RefreshToken {
   id Int @id @default(autoincrement())
-  token String @unique @db.VarChar(2048)
+  token String @unique @db.VarChar(300)
 }

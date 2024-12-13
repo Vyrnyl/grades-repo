@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
+exports.getAdminRecentActivity = exports.addAdminRecentActivity = exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+//LOGIN ACTIVITY
 const getLoginActivity = async () => {
     try {
         const activities = await prisma.loginActivity.findMany({
@@ -88,3 +89,41 @@ const getLoginUser = async (email) => {
     }
 };
 exports.getLoginUser = getLoginUser;
+//RECENT ACTIVITY
+const addAdminRecentActivity = async (content) => {
+    try {
+        const admin = await prisma.user.findUnique({ where: { email: 'admin@gmail.com' } });
+        if (!admin) {
+            return null;
+        }
+        const addActivity = await prisma.recentActivity.create({
+            data: {
+                userId: admin.id,
+                content
+            }
+        });
+        return addActivity;
+    }
+    catch (error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+};
+exports.addAdminRecentActivity = addAdminRecentActivity;
+const getAdminRecentActivity = async () => {
+    try {
+        const admin = await prisma.user.findUnique({ where: { email: 'admin@gmail.com' } });
+        if (!admin)
+            return null;
+        const activities = await prisma.recentActivity.findMany({
+            where: { userId: admin.id },
+            orderBy: { id: 'desc' }
+        });
+        return activities;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+};
+exports.getAdminRecentActivity = getAdminRecentActivity;

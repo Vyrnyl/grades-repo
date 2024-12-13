@@ -2,12 +2,13 @@
 import { faPenToSquare, faTrashCan, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '../../types/studentTypes';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Input from '../shared/components/Input';
 import handleInputChange from '../../utils/handleInputChange';
 import SelectInput from './SelectInput';
 import SaveButton from '../shared/components/SaveButton';
 import handleSelectChange from '../../utils/handleSelectChange';
+import HandleOutsideClick from '../../utils/handleOutsideClick';
 
 type FacultyData = {
   id: number,
@@ -128,6 +129,10 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
     }
   }
 
+    //Style
+    const ref = useRef<HTMLDivElement>(null);
+    HandleOutsideClick(ref, setIsOpen);
+
   return (
     <tr className="bg-slate-100 hover:bg-slate-200 border-b-2 border-l-2 border-r-2 border-slate-500">
     <td className="p-4 text-center">{facultyData.studentId}</td>
@@ -138,7 +143,7 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
     <td className="py-4 px-10">
         <div className="flex gap-6 justify-center">
             {isOpen && 
-              <div className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
+              <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
                 translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
                 <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
                 icon={faX} onClick={() => setIsOpen(!isOpen)}/>

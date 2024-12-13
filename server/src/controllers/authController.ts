@@ -5,7 +5,7 @@ import { createUser, getUserData } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
-import { addLoginActivity } from "../data/activityDataAccess";
+import { addAdminRecentActivity, addLoginActivity } from "../data/activityDataAccess";
 
 
 //SIGNUP
@@ -33,12 +33,16 @@ const signup = async (req: Request, res: Response) => {
 
     //DB STORE
     const newUserResult = await createUser(value);
-    
+    // console.log(newUserResult)
     if('error' in newUserResult) {
         // return res.status(500).json(newUserResult);
-        console.log(newUserResult)
+        // console.log(newUserResult)
         return res.status(409).json({ error: 'Email already registered' });
     }
+
+    //Set Recent Activity
+    await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
+
 
     //TOKEN
     const payload = {
@@ -51,7 +55,7 @@ const signup = async (req: Request, res: Response) => {
     const refreshToken = generateRefreshToken(payload);
 
     //Store refresh token
-    const storeResult = await storeRefreshToken(refreshToken);
+    await storeRefreshToken(refreshToken);
     
     // if(storeResult.error) {
     //     return res.status(500).json({ error: storeResult.error });
@@ -61,7 +65,7 @@ const signup = async (req: Request, res: Response) => {
         'Authorization': `Bearer ${accessToken}`,
         'Refresh-Token': refreshToken
     });
-    res.status(201).json({ message: 'Registration successful' });
+    res.status(201).json(newUserResult);
 };
 
 
@@ -91,6 +95,7 @@ const login = async (req: Request, res: Response) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await addLoginActivity(user.email, 'Successful');
+    if(user.email !== 'admin@gmail.com') await addAdminRecentActivity(`User logged in with email: ${user.email}`);
     
     const payload = {
         userId: user.id,

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getProgramList } from "../data/programDataAccess";
+import { getCoursesList, getProgramList } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -8,13 +8,24 @@ const getPrograms = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const getPRogramResult = await getProgramList();
+    const getProgramResult = await getProgramList();
 
-    if(!getPRogramResult) {
+    if(!getProgramResult) {
         return res.status(404).json({ error: 'Failed to retrieve' });
     }
 
-    res.status(200).json(getPRogramResult);
+    res.status(200).json(getProgramResult);
 }
 
-export { getPrograms }
+const getCourses = async (req: Request, res: Response) => {
+
+    const getCourseResult = await getCoursesList();
+
+    if(!getCourseResult) {
+        return res.status(404).json({ error: 'Failed to retrieve' });
+    }
+
+    res.status(200).json(getCourseResult);
+}
+
+export { getPrograms, getCourses }

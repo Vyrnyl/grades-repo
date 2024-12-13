@@ -113,11 +113,11 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   //Delete User
   const [isDelete, setIsDelete] = useState(false);
 
-
   return (
     <tr className="bg-slate-100 hover:bg-slate-200 border-b-2 border-l-2 border-r-2 border-slate-500">
         <td className="p-4 text-center">{studentData.studentId || ''}</td>
-        <td className="p-4 text-center">{`${studentData.firstName} ${studentData.lastName}`}</td>
+        <td className="p-4 text-center">{`${studentData.firstName.charAt(0) == '@' ? 
+          studentData.firstName.slice(1) : studentData.firstName} ${studentData.lastName}`}</td>
         <td className="p-4 text-center">{`${studentData.yearLevel || ''}${studentData.block || ''}`}</td>
         <td className="p-4 text-center">{studentData.program}</td>
         <td className="p-4 text-center">{studentData.status || ''}</td>

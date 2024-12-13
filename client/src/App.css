@@ -79,11 +79,11 @@ scrollbar-width: none;  /* Firefox */
 
 /* Admin ScrollBar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #a5a6a8;
+    background-color: #cecdcd;
     border-radius: 10px;
 }
 

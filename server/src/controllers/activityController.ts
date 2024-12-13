@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getLoginActivity } from "../data/activityDataAccess";
+import { getLoginActivity, getAdminRecentActivity } from "../data/activityDataAccess";
 
 const getActivity = async (req: Request, res: Response) => {
 
@@ -25,4 +25,20 @@ const getActivity = async (req: Request, res: Response) => {
 //     res.status(200).json(addActivityResult);
 // }
 
-export { getActivity }
+
+
+
+//RECENT ACTIVITY
+
+const getAdminActivity = async (req: Request, res: Response) => {
+
+    const getActivityResult = await getAdminRecentActivity();
+    
+    if(!getActivityResult) {
+        return res.status(404).json({ error: 'Failed to retrieve' });
+    }
+
+    res.status(200).json(getActivityResult);
+}
+
+export { getActivity, getAdminActivity }

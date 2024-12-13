@@ -48,7 +48,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
         password: '',
         confirmPassword: ''
     });
-    console.log(signupInfo)
+    
     const registerUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -65,7 +65,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
         const userInfo = tokenInfo();
         setUserRole(userInfo.role);
 
-        if(signup.message) {
+        if(signup.id) {
             navigate('/');
         }
 

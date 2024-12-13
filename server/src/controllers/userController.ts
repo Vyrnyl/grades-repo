@@ -56,7 +56,7 @@ const updateUser = async (req: Request, res: Response) => {
     // const { userId } = req.user;
 
     const value = req.body;
-    
+
     try {
         if (!value.password) {
             delete value.password;

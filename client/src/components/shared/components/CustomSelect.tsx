@@ -3,9 +3,10 @@ import React, { useState, useRef, useEffect } from 'react';
 interface CustomSelectProps {
     options: string[];
     onChange: (selectedOption: string) => void;
+    className?: string
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ options, onChange }) => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ options, onChange, className }) => {
     const [selected, setSelected] = useState<string>(options[0]);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const selectRef = useRef<HTMLDivElement>(null);
@@ -34,7 +35,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, onChange }) => {
     }, []);
 
     return (
-        <div className="custom-select" ref={selectRef}>
+        <div className={`${className} custom-select`} ref={selectRef}>
             <div className="select-selected" onClick={handleSelectClick}>
                 {selected}
             </div>

@@ -107,10 +107,10 @@ const Account = () => {
           <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
             <InputFieldWrapper label="Name">
               <Input type="text" name='fullName' value={accountInfo.fullName} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
-            <InputFieldWrapper label="Student ID">
+            <InputFieldWrapper label="Faculty ID">
               <HalfInput type="text" name='studentId' value={accountInfo.studentId} 
               onChange={(e) => handleInputChange(e, setAccountInfo)}/>
             </InputFieldWrapper>
@@ -124,17 +124,17 @@ const Account = () => {
           <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
             <InputFieldWrapper label="Email address">
               <Input type="text" name='email' value={accountInfo.email} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Phone Number">
               <Input type="text" name='phoneNumber' value={accountInfo.phoneNumber} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Password">
               <Input type="password" name='password' value={accountInfo.password} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem]"/>
+              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
           </div>
         </form>

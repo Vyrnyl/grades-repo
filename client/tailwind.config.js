@@ -19,7 +19,12 @@ export default {
       backgroundImage: {
         loginBg: "url(asset/images/background.jpg)"
       }
-    },
+    }, 
+    // fontFamily: {
+    //   mono: ['Fira Code', 'monospace'],
+    //   sans: ['Inter', 'Roboto', 'sans-serif']
+    // }
+
   },
   plugins: [],
 }

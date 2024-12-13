@@ -1,13 +1,14 @@
 import { ReactNode } from 'react'
 
 type InputLabelProps = {
-    children: ReactNode,
-    label: string
+  className?: string
+  children: ReactNode,
+  label: string
 }
 
-const InputFieldWrapper = ({ children, label }: InputLabelProps) => {
+const InputFieldWrapper = ({ className, children, label }: InputLabelProps) => {
   return (
-    <div className="flex flex-col">
+    <div className={`${className} flex flex-col`}>
         <label>{label}</label>
         {children}
     </div>

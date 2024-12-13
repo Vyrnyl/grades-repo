@@ -1,11 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useRef } from 'react'
 import Input from '../shared/components/Input'
 import { faX } from '@fortawesome/free-solid-svg-icons'
 import handleInputChange from '../../utils/handleInputChange'
 import handleSelectChange from '../../utils/handleSelectChange'
 import SelectInput from './SelectInput'
 import SaveButton from '../shared/components/SaveButton'
+import HandleOutsideClick from '../../utils/handleOutsideClick'
 
 
 type EditFormProps = {
@@ -18,8 +19,13 @@ type EditFormProps = {
 
 
 const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData } : EditFormProps) => {
+
+    //Style
+    const ref = useRef<HTMLDivElement>(null);
+    HandleOutsideClick(ref, setIsOpen);
+
   return (
-    <div className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
+    <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
             translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
 
         <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 

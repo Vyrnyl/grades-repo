@@ -1,97 +1,85 @@
-import { useEffect, useState, Fragment } from 'react'
-import { Grades } from '../../types/studentTypes'
-import { courseUnit, gwaStatus } from '../../utils/gwaStatus'
+import { Fragment, useEffect, useState } from 'react'
 import useFetch from '../../hooks/useFetch'
-import useUserStore from '../../store/useUserStore'
-import yearSuffix from '../../utils/yearSuffix'
 
 import PageContainer from '../../components/shared/components/PageContainer'
-import GwaTableRow from '../../components/shared/components/GwaTableRow'
+import { CourseType, StudentRecord } from '../../types/types'
+import GwaRow from '../../components/faculty/GwaRow'
+import SetGwaList from '../../utils/student/SetGwaList'
+
+type Student = {
+    studentId: string,
+    firstName: string,
+    lastName: string,
+    yearLevel: number,
+    programCode: string
+};
 
 const GWAStatus = () => {
 
-    const { userInfo } = useUserStore();
-    const [records, setRecords] = useState<Grades[]>([]);
-    const [gwaList, setGwaList] = useState<number[]>([]);
     const { data } = useFetch('grade/get-grades', 'GET');
+
+    const [studentData, setStudentData] = useState<StudentRecord[]>([]);
+    const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
+    const [gwaList, setGwaList] = useState<{ sem: string, gwa: number, status: string }[]>([]);
     
-    //GWA
+    //Set list
     useEffect(() => {
-        if (data && Array.isArray(data)) {
-            setRecords(data as Grades[]);
+        if(Array.isArray(data)) {
+            setStudentData(data);
+            if(data[0].bsaStudentRecord.length > 0) setCourseGradeList(data[0].bsaStudentRecord);
+            if(data[0].bsbaStudentRecord.length > 0) setCourseGradeList(data[0].bsbaStudentRecord);
+            if(data[0].bsmaStudentRecord.length > 0) setCourseGradeList(data[0].bsmaStudentRecord);
         }
-        
-        let gwaArray = [];
-        for(let i = 0; i < records.length; i += 5) {
-
-            let totalUnits= 0;
-            let weightedSum = 0;
-            let gwa = 0;
-
-            for(let j = i; j < i + 5 && j < records.length; j++) {
-                weightedSum += Number(records[j].grade) * (courseUnit(userInfo, records, j) || 0);
-                if(records[j]) {
-                    totalUnits += courseUnit(userInfo, records, j) || 0;
-                }
-            }
-            gwa = weightedSum / totalUnits;
-            gwaArray.push(parseFloat(gwa.toFixed(1)));
-        }
-        setGwaList(gwaArray);
     }, [data]);
 
-
-    //Year
-    let studentId = userInfo?.studentId;
-    let studIdArray = studentId?.split("-");
-    let year = 0;
-    if(studIdArray) {
-        year = parseInt(studIdArray[0]);
+    //Student info
+    let student: Student = {
+        studentId: '',
+        firstName: '',
+        lastName: '',
+        yearLevel: 0,
+        programCode: ''
+    };
+    if(studentData.length > 0) {
+        student.studentId = studentData[0].studentId;
+        student.firstName = studentData[0].firstName;
+        student.lastName = studentData[0].lastName;
+        student.yearLevel = studentData[0].yearLevel;
+        student.programCode = studentData[0].program.programCode;
     }
-    let yearTaken = 0;
+
+    //Course List
+    SetGwaList(courseGradeList, setGwaList, student);
     
-
-    const gwaTableRow = (gwa: number, i: number) => {
-        //Sem
-        let sem = 1;
-        if(i % 2 === 0) {
-            yearTaken = year;
-            year++;
-            sem = 1;
-        } else sem = 2;
-        let semester = sem + yearSuffix(sem);
-
-
-        //Status
-        let status = gwaStatus(gwa);
-
-        return <GwaTableRow sem={semester} year={yearTaken} gwa={gwa} status={status}/>
-    }
-
     return (
-        <PageContainer>
-            <div className='bg-re-200 h-[100%] pt-[10rem]'>
-                <table className='bg-cya-100 border-separate border-spacing-x-[6rem]'>
-                    <thead className=''>
-                        <tr className='text-[1.1rem]'>
-                            <th>Semester</th>
-                            <th>GWA</th>
-                            <th>Status</th>
+        <PageContainer className='px-16'>
+            <div className='bg-cyn-200 font-[550] text-slate-700 flex flex-[.18] gap-10 mt-2'>
+                <div className='flex flex-col gap-2 self-end'>
+                    <p>Name: {`${student.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}`}</p>
+                    <p>ID No: {student.studentId}</p>
+                </div>
+                <div className='flex flex-col gap-2 self-end'>
+                    <p>Program: {student.programCode}</p>
+                    <p>Year: {student.yearLevel}</p>
+                </div>
+            </div>
+
+            <div className='mb-6 flex-1 mt-8 overflow-y-scroll'>
+                <table className="w-[45rem] font-semibold text-white">
+                    <thead className="bg-blue-500 sticky top-0 z-10">
+                        <tr>                  
+                            <th className="px-4 py-4 text-center w-[10rem]">Semester</th>
+                            <th className="px-4 py-4 text-center w-[10rem]">GWA</th>
+                            <th className="px-4 py-4 text-center w-[10rem]">Status</th>
                         </tr>
                     </thead>
-                    <tbody>                    
-                        {gwaList.map((g, i) => {
-                            if(g !== 0) {
-                                return (
-                                    <Fragment key={i}>
-                                        {i % 2 === 0 && 
-                                        <tr className="">
-                                            <td className="px-4 py-2" colSpan={3}></td>
-                                        </tr>}
-                                        {gwaTableRow(g, i)}
-                                    </Fragment>
-                                )
-                            }
+                    <tbody className="text-gray-700">
+                        {gwaList.map((gwaInfo, i) => {
+                            return ((i + 1) % 2 == 0 || i == 0) ? <GwaRow key={i} gwaInfo={gwaInfo}/> :
+                            <Fragment key={i}>
+                                <tr className='h-4'></tr>
+                                <GwaRow gwaInfo={gwaInfo}/>
+                            </Fragment>
                         })}
                     </tbody>
                 </table>

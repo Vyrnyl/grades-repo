@@ -28,7 +28,7 @@ const ActivityTracking = () => {
   return (
     <div className='bg-cya-100 h-[98%] flex flex-col flex-[80%] rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
       <div className="bg-gree-300 flex flex-[18%]">
-      <h1 className="text-[1.5rem] font-bold text-slate-700 self-center">LOGIN ATTEMPTS</h1>
+      <h1 className="text-[1.3rem] font-semibold text-slate-800 self-center">LOGIN ATTEMPTS</h1>
       </div>
 
       <div className="bg-re-300 flex-[82%] mb-[1rem] overflow-y-scroll">

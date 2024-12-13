@@ -11,13 +11,13 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const generateAccessToken = (payload) => {
     return jsonwebtoken_1.default.sign(payload, ACCESS_TOKEN_SECRET, {
-        expiresIn: '24h'
+        expiresIn: '72h'
     });
 };
 exports.generateAccessToken = generateAccessToken;
 const generateRefreshToken = (payload) => {
     return jsonwebtoken_1.default.sign(payload, REFRESH_TOKEN_SECRET, {
-        expiresIn: '48h'
+        expiresIn: '72h'
     });
 };
 exports.generateRefreshToken = generateRefreshToken;

@@ -12,4 +12,14 @@ const getProgramList = async () => {
     }
 }
 
-export { getProgramList }
+const getCoursesList = async () => {
+    try {
+        const courses = await prisma.bsaCurriculum.findMany();
+        return courses;
+    } catch(error) {
+        console.log(`Get courses error: ${error}`);
+        return null;
+    }
+}
+
+export { getProgramList, getCoursesList }

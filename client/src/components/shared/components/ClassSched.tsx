@@ -11,7 +11,7 @@ import { User } from "../../../types/studentTypes"
 
 
 const ClassSched = ({ classInfo, students } : { classInfo: CourseData, students: User[] }) => {
-
+    
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
 
@@ -193,9 +193,7 @@ const ClassSched = ({ classInfo, students } : { classInfo: CourseData, students:
                                         <CourseInput name="room" 
                                             value={courseInfo.room}
                                             onChange={(e) => handleInputChange(e, setCourseInfo)}/>
-                                    </li>
-
-                                    
+                                    </li>                                    
                                 </>
                             }
                             <li className='flex text-center items-center justify-center px-2 

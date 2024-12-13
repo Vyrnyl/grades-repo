@@ -6,7 +6,7 @@ type LayoutContainerProps = {
 
 const LayoutContainer = ({ children }: LayoutContainerProps) => {
   return (
-    <div className="bg-slate-200 h-[100vh] flex items-center gap-[4rem] p-2 pr-8">
+    <div className="bg-slate-200 h-[100vh] flex items-center gap-[2rem] p-2 pr-8">
         {children}
     </div>
   )

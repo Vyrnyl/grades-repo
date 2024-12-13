@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import PageContainer from '../shared/components/PageContainer'
@@ -27,8 +27,8 @@ const   FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOp
     <PageContainer ref={ref} className='bg-cya-300 absolute w-full top-4 flex flex-col px-[3rem]'>
         <div className="bg-gree-200 flex h-[20%] relative">
         <h1 className="text-[2rem] font-bold text-slate-800 self-center">Faculties</h1>
-        <FontAwesomeIcon className="absolute text-[1.3rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-            icon={faX} onClick={handleOpenCard}/>
+        <FontAwesomeIcon className="absolute text-[2rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+            icon={faClose} onClick={handleOpenCard}/>
         </div>
         <div className="bg-blu-200 h-[80%] mb-[1rem] overflow-y-scroll">
         <table className="w-full font-semibold text-white">
@@ -43,8 +43,8 @@ const   FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOp
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-                {faculties.map((faculty, i) => <FacultyRow 
-                    key={i} 
+                {faculties.map((faculty) => <FacultyRow 
+                    key={faculty.id} 
                     faculty={faculty}
                     setFaculties={setFaculties}
                 />)}
