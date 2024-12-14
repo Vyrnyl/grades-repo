@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getLoginActivity, getAdminRecentActivity } from "../data/activityDataAccess";
+import { getLoginActivity, getAdminRecentActivity, getFacultyRecentActivity } from "../data/activityDataAccess";
 
 const getActivity = async (req: Request, res: Response) => {
 
@@ -41,4 +41,21 @@ const getAdminActivity = async (req: Request, res: Response) => {
     res.status(200).json(getActivityResult);
 }
 
-export { getActivity, getAdminActivity }
+const getFacultyActivity = async (req: Request, res: Response) => {
+
+    if(!req.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { userId } = req.user;
+
+    const activities = await getFacultyRecentActivity(userId);
+
+    if(!activities) {
+        return res.status(404).json({ error: 'Failed to retrieve' });
+    }
+
+    res.status(200).json(activities);
+}
+
+export { getActivity, getAdminActivity, getFacultyActivity }

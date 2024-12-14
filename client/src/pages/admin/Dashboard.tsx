@@ -65,10 +65,10 @@ const Dashboard = () => {
         <div className='bg-cya-200 flex-[.2] flex justify-between'>
           <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome {userInfo?.firstName}!</h1>
           <div className="bg-gree-200 pt-[1rem] flex gap-2">
-            <div className="bg-slate-300 h-[5rem] w-[5rem] grid place-content-center rounded-full">
-              <FontAwesomeIcon className="text-[3rem] text-slate-600" icon={faUser}/>
+            <div className="bg-slate-300 h-[4rem] w-[4rem] grid place-content-center rounded-full">
+              <FontAwesomeIcon className="text-[2.5rem] text-slate-600" icon={faUser}/>
             </div>
-            <p className="text-[1.1rem] mt-[1.7rem] text-slate-700 font-bold">{`${userInfo?.firstName || ''}`}</p>
+            <p className="text-[1.1rem] mt-[1.2rem] text-slate-700 font-bold">{`${userInfo?.firstName || ''}`}</p>
           </div>
         </div>
 

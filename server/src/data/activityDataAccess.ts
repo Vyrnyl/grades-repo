@@ -147,6 +147,38 @@ const getAdminRecentActivity = async () => {
 }
 
 
+const addFacultyActivity = async (facultyId: number, content: string) => {
+    try {
+        const addActivity = await prisma.recentActivity.create({
+            data: {
+                userId: facultyId,
+                content
+            }
+        });
+
+        return addActivity;
+    } catch(error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+}
+
+const getFacultyRecentActivity = async (facultyId: number) => {
+    try {
+
+        const activities = await prisma.recentActivity.findMany({ 
+            where: { userId: facultyId },
+            orderBy: { id: 'desc' }
+        });
+
+        return activities;
+    } catch(error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+}
+
+
 export { 
     getLoginActivity, 
     addLoginActivity, 
@@ -154,5 +186,7 @@ export {
     getLoginUser,
     
     addAdminRecentActivity,
-    getAdminRecentActivity
+    addFacultyActivity,
+    getAdminRecentActivity,
+    getFacultyRecentActivity
 }

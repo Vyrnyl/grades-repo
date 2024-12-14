@@ -93,10 +93,9 @@ const Account = () => {
         console.log("Fetch error" + error);
       }
     }
-
     updateUser();
 }
-
+  
 
   return (
     <PageContainer className="relative">

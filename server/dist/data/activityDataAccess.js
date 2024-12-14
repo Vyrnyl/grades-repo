@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAdminRecentActivity = exports.addAdminRecentActivity = exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
+exports.getFacultyRecentActivity = exports.getAdminRecentActivity = exports.addFacultyActivity = exports.addAdminRecentActivity = exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //LOGIN ACTIVITY
@@ -127,3 +127,33 @@ const getAdminRecentActivity = async () => {
     }
 };
 exports.getAdminRecentActivity = getAdminRecentActivity;
+const addFacultyActivity = async (facultyId, content) => {
+    try {
+        const addActivity = await prisma.recentActivity.create({
+            data: {
+                userId: facultyId,
+                content
+            }
+        });
+        return addActivity;
+    }
+    catch (error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+};
+exports.addFacultyActivity = addFacultyActivity;
+const getFacultyRecentActivity = async (facultyId) => {
+    try {
+        const activities = await prisma.recentActivity.findMany({
+            where: { userId: facultyId },
+            orderBy: { id: 'desc' }
+        });
+        return activities;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+};
+exports.getFacultyRecentActivity = getFacultyRecentActivity;

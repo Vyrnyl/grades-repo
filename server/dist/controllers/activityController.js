@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAdminActivity = exports.getActivity = void 0;
+exports.getFacultyActivity = exports.getAdminActivity = exports.getActivity = void 0;
 const activityDataAccess_1 = require("../data/activityDataAccess");
 const getActivity = async (req, res) => {
     const getActivityResult = await (0, activityDataAccess_1.getLoginActivity)();
@@ -26,3 +26,15 @@ const getAdminActivity = async (req, res) => {
     res.status(200).json(getActivityResult);
 };
 exports.getAdminActivity = getAdminActivity;
+const getFacultyActivity = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const { userId } = req.user;
+    const activities = await (0, activityDataAccess_1.getFacultyRecentActivity)(userId);
+    if (!activities) {
+        return res.status(404).json({ error: 'Failed to retrieve' });
+    }
+    res.status(200).json(activities);
+};
+exports.getFacultyActivity = getFacultyActivity;

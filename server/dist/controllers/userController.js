@@ -8,6 +8,7 @@ const userDataAccess_1 = require("../data/userDataAccess");
 const userValidator_1 = require("../validators/userValidator");
 const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const activityDataAccess_1 = require("../data/activityDataAccess");
 const getUsers = async (req, res) => {
     if (!req.user) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -54,11 +55,32 @@ const updateUser = async (req, res) => {
     catch (error) {
         console.error("Error hashing password:", error);
     }
+    const { userId } = req.user;
+    const userDetails = await (0, userDataAccess_1.getUserData)(userId);
     const userUpdateDetails = await (0, userDataAccess_1.updateUserData)(value.id, value);
     if (!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });
     }
-    // console.log(value);
+    console.log(value);
+    //Set Activity
+    const setActivity = async () => {
+        if (userDetails?.firstName !== userUpdateDetails.firstName)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `You updated your first name from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
+        if (userDetails?.lastName !== userUpdateDetails.lastName)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `You updated your last name from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);
+        if (userDetails?.studentId !== userUpdateDetails.studentId)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `You updated your Faculty from ${userDetails?.studentId} to ${userUpdateDetails.studentId}.`);
+        if (userDetails?.sex !== userUpdateDetails.sex)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `Gender updated`);
+        if (userDetails?.phoneNumber !== userUpdateDetails.phoneNumber)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `Phone Number updated`);
+        if (userDetails?.email !== userUpdateDetails.email)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `You successfully updated your email address to ${userUpdateDetails.email}`);
+        if (value.password) {
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `You successfully changed your password`);
+        }
+    };
+    setActivity();
     res.status(200).json(userUpdateDetails);
 };
 exports.updateUser = updateUser;

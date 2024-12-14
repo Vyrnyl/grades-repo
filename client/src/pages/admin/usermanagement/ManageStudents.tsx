@@ -97,8 +97,7 @@ const ManageStudents = () => {
     //Paginition
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(7);
-
-    let arr = [1, 2, 1, 3, 1, 4, 1 , 1, 5, 1, 6, 1, 8, 1, 1, 2];
+    
     let x = users.reverse();
     console.log(x)
     let entries = x.slice(start, end);
@@ -147,20 +146,6 @@ const ManageStudents = () => {
                 user={user}
                 setUsers={setUsers}
               />)}
-              {/* {entries.map(x => {
-                return <>
-                  <tr className="bg-slate-100 hover:bg-slate-200 ">
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">2021-2232</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">Lea</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">g</td>
-                    <td className="px-2 py-4 text-center border-2 border-slate-500">g</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">BSA</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">2</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">C</td>
-                    <td className="px-4 py-4 text-center border-2 border-slate-500">{x}</td>
-                  </tr>
-                </>
-              })} */}
               
             </tbody>
           </table>

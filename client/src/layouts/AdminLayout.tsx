@@ -54,6 +54,7 @@ const AdminLayout = () => {
     <LayoutContainer>
       <SideBar role='admin'>
         <SideBarLink path='/' label='Dashboard'/>
+        <SideBarLink path='/course-subjects' label='Course Subjects'/>
         <SideBarLink path='/activity-tracking' label='Activity Tracking'/>
         <li className={`${(loc.pathname == '/faculty-user-management' || loc.pathname == '/student-user-management') && 'text-blue-300'} 
         bg-gree-200 relative cursor-pointer ${isUserClicked && 'text-blue-300'}`} onClick={handleClick}>

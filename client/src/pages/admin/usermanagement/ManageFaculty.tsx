@@ -87,6 +87,29 @@ const ManageFaculty = () => {
       addUser();
     }
 
+
+    //Paginition
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(7);
+
+    // let arr = [1, 2, 1, 3, 1, 4, 1 , 1, 5, 1, 6, 1, 8, 1, 1, 2];
+    let x = users.reverse();
+    console.log(x)
+    let entries = x.slice(start, end);
+    
+    const handleNext = () => {
+      if(entries.length % 7 === 0) {
+        setStart(prev => prev + 7);
+        setEnd(prev => prev + 7);
+      }
+    }
+    const handlePrev = () => {
+      if(start >= 7){
+        setStart(prev => prev - 7);
+        setEnd(prev => prev - 7);
+      }
+    }
+
     return (
       <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
       rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
@@ -111,13 +134,22 @@ const ManageFaculty = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-              {users.map((user) => <UserRow 
+              {entries.map((user) => <UserRow 
                 key={user.id}
                 user={user} 
                 setUsers={setUsers}
               />)}
             </tbody>
           </table>
+          <div className="bg-slate-200 flex justify-between mt-4 absolute w-[84%] bottom-[2rem]">
+            <span className="font-semibold text-[.9rem] self-center">Showing {entries.length} entries</span>
+            <div className="bg-blu-200">
+              <button className="text-[1rem] active:scale-[98%] text-slate-700 font-semibold 
+              border-2 border-slate-700 px-10 py-2" onClick={handlePrev}>Previous</button>
+              <button className="text-[1rem] active:scale-[98%] text-slate-700 font-semibold 
+              border-r-2 border-y-2 border-slate-700 px-12 py-2" onClick={handleNext}>Next</button>
+            </div>
+          </div>
         </div>
   
         

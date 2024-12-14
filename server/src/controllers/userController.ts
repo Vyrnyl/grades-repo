@@ -3,6 +3,7 @@ import { deleteUserData, getUserData, getUsersData, updateUserData } from "../da
 import { validateUserId, validateUserUpdate } from "../validators/userValidator";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import bcrypt from 'bcrypt';
+import { addFacultyActivity } from "../data/activityDataAccess";
 
 
 const getUsers = async (req: Request, res: Response) => {
@@ -68,13 +69,49 @@ const updateUser = async (req: Request, res: Response) => {
     }
     
 
+    const { userId } = req.user;
+    
+    const userDetails = await getUserData(userId);
     const userUpdateDetails = await updateUserData(value.id, value);
     
     if(!userUpdateDetails) {
         return res.status(500).json({ error: 'Failed to update user details' });
     }
-    
-    // console.log(value);
+
+    console.log(value)
+    //Set Activity
+    const setActivity = async () => {
+        if(userDetails?.firstName !== userUpdateDetails.firstName)
+            await addFacultyActivity(userId, 
+                `You updated your first name from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
+        
+        if(userDetails?.lastName !== userUpdateDetails.lastName)
+            await addFacultyActivity(userId, 
+                `You updated your last name from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);
+        
+        if(userDetails?.studentId !== userUpdateDetails.studentId)
+            await addFacultyActivity(userId, 
+                `You updated your Faculty from ${userDetails?.studentId} to ${userUpdateDetails.studentId}.`);
+        
+        if(userDetails?.sex !== userUpdateDetails.sex)
+            await addFacultyActivity(userId, 
+                `Gender updated`);
+        
+        if(userDetails?.phoneNumber !== userUpdateDetails.phoneNumber)
+            await addFacultyActivity(userId, 
+                `Phone Number updated`);
+        
+        if(userDetails?.email !== userUpdateDetails.email)
+            await addFacultyActivity(userId, 
+                `You successfully updated your email address to ${userUpdateDetails.email}`);
+        
+        if(value.password) {
+            await addFacultyActivity(userId, 
+                `You successfully changed your password`);
+        }
+    }
+    setActivity();
+
     res.status(200).json(userUpdateDetails);
 };
 
