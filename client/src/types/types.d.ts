@@ -41,9 +41,11 @@ type CourseType = {
     userId: number; 
     courseId: number; 
     grade: number | null,
-    bsaCurriculum?: Course,
-    bsbaCurriculum?: Course,
-    bsmaCurriculum?: Course
+    bsitCurriculum?: Course,
+    bscsCurriculum?: Course,
+    bsisCurriculum?: Course,
+    blisCurriculum?: Course,
+    bsemcCurriculum?: Course
 }
 
 type StudentRecord = {
@@ -54,9 +56,11 @@ type StudentRecord = {
     yearLevel: number,
     block: string
     program: Program,
-    bsaStudentRecord: CourseType[],
-    bsbaStudentRecord: CourseType[],
-    bsmaStudentRecord: CourseType[]
+    bsitStudentRecord: CourseType[],
+    bscsStudentRecord: CourseType[],
+    bsisStudentRecord: CourseType[],
+    blisStudentRecord: CourseType[],
+    bsemcStudentRecord: CourseType[]
 }
 
 

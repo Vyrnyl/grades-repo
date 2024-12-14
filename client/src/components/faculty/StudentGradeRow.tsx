@@ -1,7 +1,7 @@
-import { faPenToSquare, faSave, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare, faSave } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { StudentRecord } from '../../types/types'
-import { SetStateAction, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type StudentGradeRowProps = {
   student: StudentRecord,
@@ -23,17 +23,30 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
   //Set Grade
   useEffect(() => {
     
-    if(student.bsaStudentRecord.length > 0) {
-      const grade = student.bsaStudentRecord.find(record => record.bsaCurriculum?.courseCode == courseCode);
+    if(student.bsitStudentRecord.length > 0) {
+      const grade = student.bsitStudentRecord.find(record => record.bsitCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
     }
-    if(student.bsbaStudentRecord.length > 0) {
-      const grade = student.bsbaStudentRecord.find(record => record.bsbaCurriculum?.courseCode == courseCode);
+    if(student.bscsStudentRecord.length > 0) {
+      const grade = student.bscsStudentRecord.find(record => record.bscsCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
     }
-    if(student.bsmaStudentRecord.length > 0) {
-      const grade = student.bsmaStudentRecord.find(record => record.bsmaCurriculum?.courseCode == courseCode);
+    if(student.bsisStudentRecord.length > 0) {
+      const grade = student.bsisStudentRecord.find(record => record.bsisCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
+    }
+    if(student.blisStudentRecord.length > 0) {
+      const grade = student.blisStudentRecord.find(record => record.blisCurriculum?.courseCode == courseCode);
+      if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
+    }
+    if(student.bsemcStudentRecord.length > 0) {
+      const grade = student.bsemcStudentRecord.find(record => record.bsmecCurriculum?.courseCode == courseCode);
+      if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
     }
     
   }, [courseId]);
@@ -55,33 +68,37 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
   const handleGradeUpdate = async () => {
     setIsEdit(false); 
     
-    try {
-      const res = await fetch(`${apiUrl}/grade/update-grade`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': token ? token : '',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userId: student.id,
-          programId: student.program.id,
-          courseCode: courseCode,
-          grade: editGrade
-        })
-      });
-
-      const data = await res.json();
-
-      if(data) setGrade(Number(editGrade));
-
-    } catch(err) {
-      console.log('Update error');
+    const save = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/grade/update-grade`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': token ? token : '',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: student.id,
+            programId: student.program.id,
+            courseCode: courseCode,
+            grade: editGrade
+          })
+        });
+  
+        const data = await res.json();
+        console.log(data);
+        if(data) setGrade(Number(editGrade));
+  
+      } catch(err) {
+        console.log('Update error');
+      }
     }
+
+    if(editGrade && (Number(editGrade) <= 3 && Number(editGrade) >= 0)) save();
     
   }
-
-
-
+  
+  // console.log(grade)
+  
   //Style
   const [isEdit, setIsEdit] = useState(false);
   useEffect(() => {
@@ -95,10 +112,14 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
       <td className="px-4 py-4 text-center border-2 border-slate-500">{`${student.studentId}`}</td>
       <td className="px-2 py-4 text-center border-2 border-slate-500">{`${programCode || ''} 
       ${student.yearLevel || ''}${student.block || ''}`}</td>
-      <td className="px-2 py-4 text-center border-2 border-slate-500">
+      <td className="px-2 py-4 text-center border-2 border-slate-500 relative">
         {!isEdit || closeEdit ? `${grade == 0 ? '' : grade || ''}` : 
-          <input type="number" className='bg-transparent h-[1.4rem] w-[100%] focus:outline-none border-b-2 border-slate-500
-          rounded-sm px-2 text-center' value={editGrade || ''} onChange={(e) => setEditGrade(e.target.value)}/>
+          <>
+            <input type="number" className='bg-transparent h-[1.4rem] w-[100%] focus:outline-none border-b-2 border-slate-500
+            rounded-sm px-2 text-center' value={editGrade || ''} onChange={(e) => setEditGrade(e.target.value)}/>
+            {editGrade && (Number(editGrade) > 3 || Number(editGrade) <= 0) && 
+              <p className='bg-blu-300 text-red-500 text-[.7rem] absolute left-[20%]'>Invalid grade input</p>}
+            </>
         }
         
       </td>

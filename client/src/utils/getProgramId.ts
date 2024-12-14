@@ -3,14 +3,20 @@
 const getProgramId = (selected: string) => {
     let programId = 1;
       switch(selected) {
-        case 'BS Accountancy':
+        case 'BS Information Technology':
           programId = 1;
           break;
-        case 'BS Business Administration':
+        case 'BS Computer Science':
           programId = 2;
           break;
-        case 'BS Management Accounting':
+        case 'BS Information Systems':
           programId = 3;
+          break;
+        case 'BL Information Science':
+          programId = 4;
+          break;
+        case 'BS Entertainment and Multimedia Computing':
+          programId = 5;
           break;
         default: programId = 1
       }

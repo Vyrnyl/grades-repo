@@ -64,6 +64,8 @@ const GradeEntry = () => {
     } else setCloseEdit(false)
   }, [isEditOpen]);
 
+  
+
   return (
     <PageContainer className='flex flex-col px-6 pt-10'>
         <div className='bg-cya-200 flex flex-col justify-end gap-4'>

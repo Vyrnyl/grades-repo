@@ -9,6 +9,8 @@ const DashBoard = () => {
   const { userInfo } = useUserStore();
   const [programCode, setProgramCode] = useState('');
 
+  // console.log(userInfo)
+
   //Set program
   useEffect(() => {
     if(userInfo?.program) setProgramCode(userInfo.program.programCode);
@@ -17,9 +19,11 @@ const DashBoard = () => {
   return (
     <div className='bg-slat-100 h-[100%] w-[80%] flex flex-col justify-center'>
       <div className='bg-cya-200 flex-[.2] flex justify-between pl-16'>
-        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName.slice(1)}!</h1>
+        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName.charAt(0) == '@' ? 
+          userInfo.firstName.slice(1) : userInfo?.firstName}!</h1>
         <div className='bg-gree-200 h-[8rem] w-[50%] flex items-end justify-end'>
-          <Profile className='mb-8' firstName={userInfo?.firstName} lastName={userInfo?.lastName} yearLevel={userInfo?.yearLevel}/>
+          <Profile className='mb-8' firstName={userInfo?.firstName.charAt(0) == '@' ? 
+          userInfo.firstName.slice(1) : userInfo?.firstName} lastName={userInfo?.lastName} yearLevel={userInfo?.yearLevel}/>
         </div>
       </div>
       
@@ -31,7 +35,8 @@ const DashBoard = () => {
               <FontAwesomeIcon className=" text-[8rem] text-slate-600" icon={faUser}/>
             </div>
             <p className='font-sans text-[1.45rem] font-semibold text-slate-700'>
-              {`${userInfo?.lastName.toUpperCase() || ''}, ${userInfo?.firstName.toUpperCase() || ''}`}
+              {`${userInfo?.lastName.toUpperCase() || ''}, ${userInfo?.firstName.charAt(0) == '@' ? 
+          userInfo.firstName.slice(1).toUpperCase() : userInfo?.firstName.toUpperCase() || ''}`}
             </p>
             <p className='font-sans text-[1.1rem]'>{programCode}</p>
           </div>

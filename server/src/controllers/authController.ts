@@ -41,7 +41,7 @@ const signup = async (req: Request, res: Response) => {
     }
 
     //Set Recent Activity
-    await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
+    // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
 
 
     //TOKEN

@@ -15,9 +15,11 @@ type Record = {
     courseCode: string;
     courseTitle: string;
     units: number;
-    bsaStudentRecord?: Grade[];
-    bsbaStudentRecord?: Grade[];
-    bsmaStudentRecord?: Grade[];
+    bsitStudentRecord?: Grade[];
+    bscsStudentRecord?: Grade[];
+    bsisStudentRecord?: Grade[];
+    blisStudentRecord?: Grade[];
+    bsemcStudentRecord?: Grade[];
 } | null;
 
 
@@ -33,14 +35,20 @@ const getGrades = async (userId: number) => {
                 yearLevel: true,
                 block: true,
                 program: true,
-                bsaStudentRecord: {
-                    include: { bsaCurriculum: true }
+                bsitStudentRecord: {
+                    include: { bsitCurriculum: true }
                 },
-                bsbaStudentRecord: {
-                    include: { bsbaCurriculum: true }
+                bscsStudentRecord: {
+                    include: { bscsCurriculum: true }
                 },
-                bsmaStudentRecord: {
-                    include: { bsmaCurriculum: true }
+                bsisStudentRecord: {
+                    include: { bsisCurriculum: true }
+                },
+                blisStudentRecord: {
+                    include: { blisCurriculum: true }
+                },
+                bsemcStudentRecord: {
+                    include: { bsemcCurriculum: true }
                 }
             },
             where: { id: userId }
@@ -52,14 +60,14 @@ const getGrades = async (userId: number) => {
 
         // let records: Grade[];
         // if(programId === 1) {
-        //     records = await prisma.bsaStudentRecord.findMany({
+        //     records = await prisma.bsitStudentRecord.findMany({
         //         where: { userId },
         //         select: {
         //             id: true,
         //             userId: true,
         //             courseId: true,
         //             grade: true,
-        //             bsaCurriculum: { // Use brackets to define the dynamic key
+        //             bsitCurriculum: { // Use brackets to define the dynamic key
         //                 select: {
         //                     units: true
         //                 }
@@ -68,14 +76,14 @@ const getGrades = async (userId: number) => {
         //     });
 
         // } else if(programId === 2) {
-        //     records = await prisma.bsbaStudentRecord.findMany({
+        //     records = await prisma.bscsStudentRecord.findMany({
         //         where: { userId },
         //         select: {
         //             id: true,
         //             userId: true,
         //             courseId: true,
         //             grade: true,
-        //             bsbaCurriculum: {
+        //             bscsCurriculum: {
         //                 select: {
         //                     units: true
         //                 }
@@ -83,14 +91,14 @@ const getGrades = async (userId: number) => {
         //         }
         //     });
         // } else if(programId === 3) {
-        //     records = await prisma.bsmaStudentRecord.findMany({
+        //     records = await prisma.bsisStudentRecord.findMany({
         //         where: { userId },
         //         select: {
         //             id: true,
         //             userId: true,
         //             courseId: true,
         //             grade: true,
-        //             bsmaCurriculum: {
+        //             bsisCurriculum: {
         //                 select: {
         //                     units: true
         //                 }
@@ -109,12 +117,14 @@ const getGrades = async (userId: number) => {
 const getRecords = async () => {
     try {
 
-        const bsaRecord = await prisma.bsaStudentRecord.findMany();
-        const bsbaRecord = await prisma.bsbaStudentRecord.findMany();
-        const bsmaRecord = await prisma.bsmaStudentRecord.findMany();
+        const bsitRecord = await prisma.bsitStudentRecord.findMany();
+        const bscsRecord = await prisma.bscsStudentRecord.findMany();
+        const bsisRecord = await prisma.bsisStudentRecord.findMany();
+        const blisRecord = await prisma.blisStudentRecord.findMany();
+        const bsemcRecord = await prisma.bsemcStudentRecord.findMany();
 
         let recordArray: { id: number; userId: number; courseId: number; grade: Decimal | null; }[] = 
-        [...bsaRecord, ...bsbaRecord, ...bsmaRecord];
+        [...bsitRecord, ...bscsRecord, ...bsisRecord, ...blisRecord, ...bsemcRecord];
         
         return recordArray;
     } catch(error) {
@@ -135,14 +145,20 @@ const getStudents = async () => {
                 yearLevel: true,
                 block: true,
                 program: true,
-                bsaStudentRecord: {
-                    include: { bsaCurriculum: true }
+                bsitStudentRecord: {
+                    include: { bsitCurriculum: true }
                 },
-                bsbaStudentRecord: {
-                    include: { bsbaCurriculum: true }
+                bscsStudentRecord: {
+                    include: { bscsCurriculum: true }
                 },
-                bsmaStudentRecord: {
-                    include: { bsmaCurriculum: true }
+                bsisStudentRecord: {
+                    include: { bsisCurriculum: true }
+                },
+                blisStudentRecord: {
+                    include: { blisCurriculum: true }
+                },
+                bsemcStudentRecord: {
+                    include: { bsemcCurriculum: true }
                 }
             },
             where: { role: 'student' }
@@ -164,50 +180,82 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
             let update: Grade;
 
             if(programId === 1) {
-                record = await prisma.bsaCurriculum.findFirst({
+                record = await prisma.bsitCurriculum.findFirst({
                     where: { courseCode },
                     include: {
-                        bsaStudentRecord: {
+                        bsitStudentRecord: {
                             where: { userId }
                         }
                     }
                 });
 
-                if(record?.bsaStudentRecord) {
-                    update = await prisma.bsaStudentRecord.update({
-                        where: { id: record?.bsaStudentRecord[0].id },
+                if(record?.bsitStudentRecord) {
+                    update = await prisma.bsitStudentRecord.update({
+                        where: { id: record?.bsitStudentRecord[0].id },
                         data: { grade }
                     });
                 }
             } else if(programId === 2) {
-                record = await prisma.bsbaCurriculum.findFirst({
+                record = await prisma.bscsCurriculum.findFirst({
                     where: { courseCode },
                     include: {
-                        bsbaStudentRecord: {
+                        bscsStudentRecord: {
                             where: { userId }
                         }
                     }
                 });
 
-                if(record?.bsbaStudentRecord) {
-                    update = await prisma.bsbaStudentRecord.update({
-                        where: { id: record?.bsbaStudentRecord[0].id },
+                if(record?.bscsStudentRecord) {
+                    update = await prisma.bscsStudentRecord.update({
+                        where: { id: record?.bscsStudentRecord[0].id },
                         data: { grade }
                     });
                 }
             } else if(programId === 3) {
-                record = await prisma.bsmaCurriculum.findFirst({
+                record = await prisma.bsisCurriculum.findFirst({
                     where: { courseCode },
                     include: {
-                        bsmaStudentRecord: {
+                        bsisStudentRecord: {
                             where: { userId }
                         }
                     }
                 });
 
-                if(record?.bsmaStudentRecord) {
-                    update = await prisma.bsmaStudentRecord.update({
-                        where: { id: record?.bsmaStudentRecord[0].id },
+                if(record?.bsisStudentRecord) {
+                    update = await prisma.bsisStudentRecord.update({
+                        where: { id: record?.bsisStudentRecord[0].id },
+                        data: { grade }
+                    });
+                }
+            } else if(programId === 4) {
+                record = await prisma.blisCurriculum.findFirst({
+                    where: { courseCode },
+                    include: {
+                        blisStudentRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+
+                if(record?.blisStudentRecord) {
+                    update = await prisma.blisStudentRecord.update({
+                        where: { id: record?.blisStudentRecord[0].id },
+                        data: { grade }
+                    });
+                }
+            } else if(programId === 5) {
+                record = await prisma.bsemcCurriculum.findFirst({
+                    where: { courseCode },
+                    include: {
+                        bsemcStudentRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+
+                if(record?.bsemcStudentRecord) {
+                    update = await prisma.bsemcStudentRecord.update({
+                        where: { id: record?.bsemcStudentRecord[0].id },
                         data: { grade }
                     });
                 }
@@ -216,31 +264,31 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
 
 
             // if(programId === 1) {
-            //     record = await prisma.bsaStudentRecord.findFirst({
+            //     record = await prisma.bsitStudentRecord.findFirst({
             //         where: { userId }
             //     });
 
-            //     update = await prisma.bsaStudentRecord.update({
+            //     update = await prisma.bsitStudentRecord.update({
             //         where: { id: record?.id, courseId },
             //         data: {
             //             grade
             //         }
             //     });
             // } else if(programId === 2) {
-            //     record = await prisma.bsbaStudentRecord.findFirst({
+            //     record = await prisma.bscsStudentRecord.findFirst({
             //         where: { userId, courseId }
             //     });
-            //     update = await prisma.bsbaStudentRecord.update({
+            //     update = await prisma.bscsStudentRecord.update({
             //         where: { id: record?.id, courseId },
             //         data: {
             //             grade
             //         }
             //     });
             // } else if(programId === 3) {
-            //     record = await prisma.bsmaStudentRecord.findFirst({
+            //     record = await prisma.bsisStudentRecord.findFirst({
             //         where: { userId, courseId }
             //     });
-            //     update = await prisma.bsmaStudentRecord.update({
+            //     update = await prisma.bsisStudentRecord.update({
             //         where: { id: record?.id, courseId },
             //         data: {
             //             grade

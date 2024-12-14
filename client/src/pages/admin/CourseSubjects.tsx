@@ -60,22 +60,22 @@ const CourseSubjects = () => {
 
     //Paginition
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(7);
+    const [end, setEnd] = useState(6);
     
     // let x = users.reverse();
     // console.log(x)
     let entries = courseList.slice(start, end);
     
     const handleNext = () => {
-      if(entries.length % 7 === 0) {
-        setStart(prev => prev + 7);
-        setEnd(prev => prev + 7);
+      if(entries.length % 6 === 0) {
+        setStart(prev => prev + 6);
+        setEnd(prev => prev + 6);
       }
     }
     const handlePrev = () => {
-      if(start >= 7){
-        setStart(prev => prev - 7);
-        setEnd(prev => prev - 7);
+      if(start >= 6){
+        setStart(prev => prev - 6);
+        setEnd(prev => prev - 6);
       }
     }
 
@@ -102,7 +102,7 @@ const CourseSubjects = () => {
                         <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Option</th>
                     </tr>
                 </thead>
-                <tbody className="text-gray-700">
+                <tbody className="text-gray-700 overflow-y-scroll">
                     {entries.map(course => {
                       return <>
                         <tr>
@@ -118,7 +118,7 @@ const CourseSubjects = () => {
                 </tbody>
             </table>
             <div className="bg-slate-200 flex justify-between mt-4 absolute w-[84%] bottom-[2rem]">
-                <span className="font-semibold text-[.9rem] self-center">Showing  entries</span>
+                <span className="font-semibold text-[.9rem] self-center">Showing {entries.length} entries</span>
                 <div className="bg-blu-200">
                 <button className="text-[1rem] active:scale-[98%] text-slate-700 font-semibold 
                 border-2 border-slate-700 px-10 py-2" onClick={handlePrev}>Previous</button>

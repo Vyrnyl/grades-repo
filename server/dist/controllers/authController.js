@@ -35,7 +35,7 @@ const signup = async (req, res) => {
         return res.status(409).json({ error: 'Email already registered' });
     }
     //Set Recent Activity
-    await (0, activityDataAccess_1.addAdminRecentActivity)(`New user registered with email: ${newUserResult.email}`);
+    // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
     //TOKEN
     const payload = {
         userId: newUserResult.id,

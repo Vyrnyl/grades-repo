@@ -40,7 +40,7 @@ const ManageStudents = () => {
       lastName: '',
       email: ''
     });
-    const [selectedProgram, setSelectedProgram] = useState('BS Accountancy');
+    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [selectedYearLevel, setSelectedYearLevel] = useState('1');
     const [selectedBlock, setSelectedBlock] = useState('A');
 
@@ -87,10 +87,10 @@ const ManageStudents = () => {
           setIsAddOpen(false);
         };
         if(data.error) setError('Email already registered');
-        console.log(data)
+        // console.log(data)
       }
       addUser();
-      console.log(body);
+      // console.log(body);
     }
 
 
@@ -99,7 +99,7 @@ const ManageStudents = () => {
     const [end, setEnd] = useState(7);
     
     let x = users.reverse();
-    console.log(x)
+    // console.log(x)
     let entries = x.slice(start, end);
     
     const handleNext = () => {
@@ -224,9 +224,11 @@ const ManageStudents = () => {
                   <CustomSelect 
                     className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                     option={[
-                      'BS Accountancy', 
-                      'BS Business Administration', 
-                      'BS Management Accounting'
+                      'BS Information Technology', 
+                      'BS Computer Science', 
+                      'BS Information Systems',
+                      'BL Information Science',
+                      'BS Entertainment and Multimedia Computing'
                     ]} 
                     setValue={setSelectedProgram}/>
                 </div>

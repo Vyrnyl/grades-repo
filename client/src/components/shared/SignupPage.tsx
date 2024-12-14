@@ -116,9 +116,11 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
                                     className='bg-re-300 h-[2.5rem] w-[65%] focus:outline-slate-500
                                     border-[.1rem] border-slate-500 rounded-lg px-2 text-[.8rem]'>
                                     <option value="" disabled>Program</option>
-                                    <option value="1">BS Accountancy</option>
-                                    <option value="2">BS Business Administration</option>
-                                    <option value="3">BS Management Accounting</option>
+                                    <option value="1">BS Information Technology</option>
+                                    <option value="2">BS Computer Science</option>
+                                    <option value="3">BS Information Systems</option>
+                                    <option value="4">BL Information Science</option>
+                                    <option value="5">BS Entertainment and Multimedia Computing</option>
                                 </select>
                             }
                             <AuthFormInput type="text" 

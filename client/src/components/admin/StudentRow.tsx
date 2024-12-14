@@ -42,6 +42,9 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   if(student?.program) {
     const { programName } = student.program;
     program = `BS ${programName.split(' in ')[1]}`;
+
+    if(programName.split(' ')[2].charAt(0) === 'L') 
+      program = `BL ${programName.split('and')[1]}`;
   }
 
   const [studentData, setStudentData] = useState<StudentData>({
@@ -112,7 +115,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
 
   //Delete User
   const [isDelete, setIsDelete] = useState(false);
-
+  
   return (
     <tr className="bg-slate-100 hover:bg-slate-200 border-b-2 border-l-2 border-r-2 border-slate-500">
         <td className="p-4 text-center">{studentData.studentId || ''}</td>

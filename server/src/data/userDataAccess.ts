@@ -13,32 +13,50 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
             });
             
             if(newUser.programId === 1 && newUser.role === 'student') {
-                const bsa = await prisma.bsaCurriculum.findMany();
-                const studentCourses = bsa.map(course => {
+                const bsit = await prisma.bsitCurriculum.findMany();
+                const studentCourses = bsit.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
                 
-                const x = await prisma.bsaStudentRecord.createMany({
+                const x = await prisma.bsitStudentRecord.createMany({
                     data: studentCourses
                 });
                 console.log(x)
             } else if(newUser.programId === 2 && newUser.role === 'student') {
-                const bsba = await prisma.bsbaCurriculum.findMany();
-                const studentCourses = bsba.map(course => {
+                const bscs = await prisma.bscsCurriculum.findMany();
+                const studentCourses = bscs.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
     
-                const x = await prisma.bsbaStudentRecord.createMany({
+                const x = await prisma.bscsStudentRecord.createMany({
                     data: studentCourses
                 });
                 console.log(x)
             } else if(newUser.programId === 3 && newUser.role === 'student') {
-                const bsma = await prisma.bsbaCurriculum.findMany();
-                const studentCourses = bsma.map(course => {
+                const bsis = await prisma.bsisCurriculum.findMany();
+                const studentCourses = bsis.map(course => {
                     return { userId: newUser.id, courseId: course.id };
                 });
     
-                await prisma.bsmaStudentRecord.createMany({
+                await prisma.bsisStudentRecord.createMany({
+                    data: studentCourses
+                });
+            } else if(newUser.programId === 4 && newUser.role === 'student') {
+                const blis = await prisma.blisCurriculum.findMany();
+                const studentCourses = blis.map(course => {
+                    return { userId: newUser.id, courseId: course.id };
+                });
+    
+                await prisma.blisStudentRecord.createMany({
+                    data: studentCourses
+                });
+            } else if(newUser.programId === 5 && newUser.role === 'student') {
+                const bsemc = await prisma.bsemcCurriculum.findMany();
+                const studentCourses = bsemc.map(course => {
+                    return { userId: newUser.id, courseId: course.id };
+                });
+    
+                await prisma.bsemcStudentRecord.createMany({
                     data: studentCourses
                 });
             }

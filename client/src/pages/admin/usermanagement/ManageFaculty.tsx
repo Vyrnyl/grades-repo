@@ -40,7 +40,7 @@ const ManageFaculty = () => {
       lastName: '',
       email: ''
     });
-    const [selectedProgram, setSelectedProgram] = useState('BS Accountancy');
+    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     
     const handleAddData = (e: React.ChangeEvent<HTMLInputElement>) => {
       setAddData({...addData, [e.target.name]: e.target.value});
@@ -94,7 +94,7 @@ const ManageFaculty = () => {
 
     // let arr = [1, 2, 1, 3, 1, 4, 1 , 1, 5, 1, 6, 1, 8, 1, 1, 2];
     let x = users.reverse();
-    console.log(x)
+    // console.log(x)
     let entries = x.slice(start, end);
     
     const handleNext = () => {
@@ -216,9 +216,11 @@ const ManageFaculty = () => {
                   <CustomSelect 
                     className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                     option={[
-                      'BS Accountancy', 
-                      'BS Business Administration', 
-                      'BS Management Accounting'
+                      'BS Information Technology', 
+                      'BS Computer Science', 
+                      'BS Information Systems',
+                      'BL Information Science',
+                      'BS Entertainment and Multimedia Computing'
                     ]} 
                     setValue={setSelectedProgram}/>
                 </div>

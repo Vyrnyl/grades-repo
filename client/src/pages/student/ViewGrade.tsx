@@ -4,6 +4,7 @@ import PageContainer from '../../components/shared/components/PageContainer'
 import EnrolledRow from '../../components/student/EnrolledRow'
 import useFetch from '../../hooks/useFetch';
 import { CourseType, StudentRecord } from '../../types/types';
+import SetCourseList from '../../utils/student/SetCourseList';
 
 type Student = {
     studentId: string,
@@ -22,15 +23,17 @@ const ViewGrade = () => {
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
     const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
     const [filteredCourseList, setFilteredCourseList] = useState<CourseType[]>([]);
-    const [semester, setSemester] = useState(1);
+    const [semester, setSemester] = useState(2);
     
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
             setStudentData(data);
-            if(data[0].bsaStudentRecord.length > 0) setCourseGradeList(data[0].bsaStudentRecord);
-            if(data[0].bsbaStudentRecord.length > 0) setCourseGradeList(data[0].bsbaStudentRecord);
-            if(data[0].bsmaStudentRecord.length > 0) setCourseGradeList(data[0].bsmaStudentRecord);
+            if(data[0].bsitStudentRecord.length > 0) setCourseGradeList(data[0].bsitStudentRecord);
+            if(data[0].bscsStudentRecord.length > 0) setCourseGradeList(data[0].bscsStudentRecord);
+            if(data[0].bsisStudentRecord.length > 0) setCourseGradeList(data[0].bsisStudentRecord);
+            if(data[0].blisStudentRecord.length > 0) setCourseGradeList(data[0].blisStudentRecord);
+            if(data[0].bsemcStudentRecord.length > 0) setCourseGradeList(data[0].bsemcStudentRecord);
         }
     }, [data]);
 
@@ -61,34 +64,7 @@ const ViewGrade = () => {
 
     //Course List
     useEffect(() => {
-
-        if(courseGradeList.length > 0) {
-            let firstYear = courseGradeList.slice(0, 12);
-            let secondYear = courseGradeList.slice(12, 23);
-            let thirdYear = courseGradeList.slice(23, 31);
-            let fourthYear = courseGradeList.slice(31, 40);
-            
-            if(student.yearLevel === 1) {
-                let semesterCourses = semester === 1 ? firstYear.slice(0, 6) :
-                firstYear.slice(6);
-                setFilteredCourseList(semesterCourses);
-            }
-            if(student.yearLevel === 2) {
-                let semesterCourses = semester === 1 ? secondYear.slice(0, 6) :
-                secondYear.slice(6);
-                setFilteredCourseList(semesterCourses);
-            }
-            if(student.yearLevel === 3) {
-                let semesterCourses = semester === 1 ? thirdYear.slice(0, 4) :
-                thirdYear.slice(4);
-                setFilteredCourseList(semesterCourses);
-            }
-            if(student.yearLevel === 4) {
-                let semesterCourses = semester === 1 ? fourthYear.slice(0, 5) :
-                fourthYear.slice(5);
-                setFilteredCourseList(semesterCourses);
-            }
-        }
+        SetCourseList(courseGradeList, student, semester, setFilteredCourseList);
     }, [courseGradeList]);
     
     //GWA
@@ -96,23 +72,27 @@ const ViewGrade = () => {
     let totalUnits= 0;
     let weightedSum = 0;
 
+    const curriculumKeys = [
+        "bsitCurriculum",
+        "bscsCurriculum",
+        "bsisCurriculum",
+        "blisCurriculum",
+        "bsemcCurriculum"
+    ] as (keyof CourseType)[];
+    
     filteredCourseList.forEach((course) => {
-        if(course.grade && course.bsaCurriculum?.units) {
-            weightedSum += course.bsaCurriculum?.units * course.grade;
-            totalUnits += course.bsaCurriculum.units;
-        }
-        if(course.grade && course.bsbaCurriculum?.units) {
-            weightedSum += course.bsbaCurriculum?.units * course.grade;
-            totalUnits += course.bsbaCurriculum.units;
-        }
-        if(course.grade && course.bsmaCurriculum?.units) {
-            weightedSum += course.bsmaCurriculum?.units * course.grade;
-            totalUnits += course.bsmaCurriculum.units;
-        }
+        curriculumKeys.forEach((key) => {
+            const curriculum = course[key];
+            if (course.grade && typeof curriculum === "object" && curriculum?.units) {
+                weightedSum += curriculum.units * course.grade;
+                totalUnits += curriculum.units;
+            }
+        });
     });
+    
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
 
-
+    
     return (
         <PageContainer className='px-12'>
             <div className='flex-[.15] flex'>
@@ -120,7 +100,8 @@ const ViewGrade = () => {
             </div>
             <div className='font-[550] text-slate-700 flex gap-10 mt-2'>
                 <div className='flex flex-col gap-2'>
-                    <p>Student Name: {`${student.firstName.toUpperCase().slice(1)}, ${student.lastName.toUpperCase()}`}</p>
+                    <p>Student Name: {`${student?.firstName.charAt(0) == '@' ? 
+          student.firstName.slice(1).toUpperCase() : student?.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}`}</p>
                     <p>ID No: {student.studentId}</p>
                 </div>
                 <div className='flex flex-col gap-2'>

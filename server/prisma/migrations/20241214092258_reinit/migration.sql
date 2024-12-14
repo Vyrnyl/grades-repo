@@ -30,7 +30,7 @@ CREATE TABLE `Program` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsaCurriculum` (
+CREATE TABLE `BsitCurriculum` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `courseCode` VARCHAR(191) NOT NULL,
     `courseTitle` VARCHAR(191) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `BsaCurriculum` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsbaCurriculum` (
+CREATE TABLE `BscsCurriculum` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `courseCode` VARCHAR(191) NOT NULL,
     `courseTitle` VARCHAR(191) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE `BsbaCurriculum` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsmaCurriculum` (
+CREATE TABLE `BsisCurriculum` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `courseCode` VARCHAR(191) NOT NULL,
     `courseTitle` VARCHAR(191) NOT NULL,
@@ -60,7 +60,27 @@ CREATE TABLE `BsmaCurriculum` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsaStudentRecord` (
+CREATE TABLE `BlisCurriculum` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `courseCode` VARCHAR(191) NOT NULL,
+    `courseTitle` VARCHAR(191) NOT NULL,
+    `units` INTEGER NOT NULL DEFAULT 3,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BsemcCurriculum` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `courseCode` VARCHAR(191) NOT NULL,
+    `courseTitle` VARCHAR(191) NOT NULL,
+    `units` INTEGER NOT NULL DEFAULT 3,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BsitStudentRecord` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `courseId` INTEGER NOT NULL,
@@ -70,7 +90,7 @@ CREATE TABLE `BsaStudentRecord` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsbaStudentRecord` (
+CREATE TABLE `BscsStudentRecord` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `courseId` INTEGER NOT NULL,
@@ -80,7 +100,27 @@ CREATE TABLE `BsbaStudentRecord` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `BsmaStudentRecord` (
+CREATE TABLE `BsisStudentRecord` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `courseId` INTEGER NOT NULL,
+    `grade` DECIMAL(3, 1) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BlisStudentRecord` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `courseId` INTEGER NOT NULL,
+    `grade` DECIMAL(3, 1) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `BsemcStudentRecord` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `courseId` INTEGER NOT NULL,
@@ -118,9 +158,27 @@ CREATE TABLE `LoginActivity` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `RecentActivity` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `content` TEXT NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Notification` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `content` TEXT NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `RefreshToken` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `token` VARCHAR(2048) NOT NULL,
+    `token` VARCHAR(300) NOT NULL,
 
     UNIQUE INDEX `RefreshToken_token_key`(`token`),
     PRIMARY KEY (`id`)
@@ -130,22 +188,40 @@ CREATE TABLE `RefreshToken` (
 ALTER TABLE `User` ADD CONSTRAINT `User_programId_fkey` FOREIGN KEY (`programId`) REFERENCES `Program`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsaStudentRecord` ADD CONSTRAINT `BsaStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `BsitStudentRecord` ADD CONSTRAINT `BsitStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsaStudentRecord` ADD CONSTRAINT `BsaStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsaCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `BsitStudentRecord` ADD CONSTRAINT `BsitStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsitCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsbaStudentRecord` ADD CONSTRAINT `BsbaStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `BscsStudentRecord` ADD CONSTRAINT `BscsStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsbaStudentRecord` ADD CONSTRAINT `BsbaStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsbaCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `BscsStudentRecord` ADD CONSTRAINT `BscsStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BscsCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsmaStudentRecord` ADD CONSTRAINT `BsmaStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `BsisStudentRecord` ADD CONSTRAINT `BsisStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `BsmaStudentRecord` ADD CONSTRAINT `BsmaStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsmaCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `BsisStudentRecord` ADD CONSTRAINT `BsisStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsisCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BlisStudentRecord` ADD CONSTRAINT `BlisStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BlisStudentRecord` ADD CONSTRAINT `BlisStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BlisCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BsemcStudentRecord` ADD CONSTRAINT `BsemcStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `BsemcStudentRecord` ADD CONSTRAINT `BsemcStudentRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `BsemcCurriculum`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Class` ADD CONSTRAINT `Class_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `RecentActivity` ADD CONSTRAINT `RecentActivity_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Notification` ADD CONSTRAINT `Notification_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

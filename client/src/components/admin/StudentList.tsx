@@ -6,7 +6,6 @@ import PageContainer from '../shared/components/PageContainer'
 import StudentRow from './StudentRow';
 import useFetch from '../../hooks/useFetch';
 import { User } from '../../types/studentTypes';
-import useStudentStore from '../../store/useStudentStore';
 
 type StudentListProps = {
     handleOpenCard: () => void;

@@ -59,6 +59,9 @@ const Dashboard = () => {
   const [isStudentOpen, setIsStudentOpen] = useState(false);
   const [isFacultyOpen, setIsFacultyOpen] = useState(false);
 
+
+  
+
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
       <div className="bg-gree-300 h-[100%] flex flex-col justify-center">

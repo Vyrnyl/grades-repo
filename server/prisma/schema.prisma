@@ -27,9 +27,11 @@ model User {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   program Program? @relation(fields: [programId], references: [id])
-  bsaStudentRecord BsaStudentRecord[]
-  bsbaStudentRecord BsbaStudentRecord[]
-  bsmaStudentRecord BsmaStudentRecord[]
+  bsitStudentRecord BsitStudentRecord[]
+  bscsStudentRecord BscsStudentRecord[]
+  bsisStudentRecord BsisStudentRecord[]
+  blisStudentRecord BlisStudentRecord[]
+  bsemcStudentRecord BsemcStudentRecord[]
   class Class[]
   notification Notification[]
   recentActivity RecentActivity[]
@@ -43,53 +45,91 @@ model Program {
 }
 
 
-model BsaCurriculum {
+model BsitCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
   units Int @default(3)
-  bsaStudentRecord BsaStudentRecord[]
+  bsitStudentRecord BsitStudentRecord[]
 }
-model BsbaCurriculum {
+model BscsCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
   units Int @default(3)
-  bsbaStudentRecord BsbaStudentRecord[]
+  bscsStudentRecord BscsStudentRecord[]
 }
-model BsmaCurriculum {
+model BsisCurriculum {
   id Int @id @default(autoincrement())
   courseCode String
   courseTitle String
   units Int @default(3)
-  bsmaStudentRecord BsmaStudentRecord[]
+  bsisStudentRecord BsisStudentRecord[]
+}
+model BlisCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  blisStudentRecord BlisStudentRecord[]
+}
+model BsemcCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  bsemcStudentRecord BsemcStudentRecord[]
 }
 
 
+// model AddedCourse {
+//   id Int @id @default(autoincrement())
+//   courseCode String
+//   courseTitle String
+//   units Int @default(3)
+  
+// }
 
-model BsaStudentRecord {
+
+model BsitStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
   grade Decimal? @db.Decimal(3, 1)
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
-  bsaCurriculum BsaCurriculum @relation(fields: [courseId], references: [id])
+  bsitCurriculum BsitCurriculum @relation(fields: [courseId], references: [id])
 }
-model BsbaStudentRecord {
+model BscsStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
   grade Decimal? @db.Decimal(3, 1)
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
-  bsbaCurriculum BsbaCurriculum @relation(fields: [courseId], references: [id])
+  bscsCurriculum BscsCurriculum @relation(fields: [courseId], references: [id])
 }
-model BsmaStudentRecord {
+model BsisStudentRecord {
   id Int @id @default(autoincrement())
   userId Int
   courseId Int
   grade Decimal? @db.Decimal(3, 1)
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
-  bsmaCurriculum BsmaCurriculum @relation(fields: [courseId], references: [id])
+  bsisCurriculum BsisCurriculum @relation(fields: [courseId], references: [id])
+}
+model BlisStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  blisCurriculum BlisCurriculum @relation(fields: [courseId], references: [id])
+}
+model BsemcStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsemcCurriculum BsemcCurriculum @relation(fields: [courseId], references: [id])
 }
 
 
