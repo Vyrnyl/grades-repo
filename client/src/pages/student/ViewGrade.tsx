@@ -5,6 +5,7 @@ import EnrolledRow from '../../components/student/EnrolledRow'
 import useFetch from '../../hooks/useFetch';
 import { CourseType, StudentRecord } from '../../types/types';
 import SetCourseList from '../../utils/student/SetCourseList';
+import useSemStore from '../../store/useSemStore';
 
 type Student = {
     studentId: string,
@@ -23,8 +24,9 @@ const ViewGrade = () => {
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
     const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
     const [filteredCourseList, setFilteredCourseList] = useState<CourseType[]>([]);
-    const [semester, setSemester] = useState(2);
-    
+    // const [semester, setSemester] = useState(1);
+    const { semester, setSemester } = useSemStore();
+
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
@@ -65,7 +67,7 @@ const ViewGrade = () => {
     //Course List
     useEffect(() => {
         SetCourseList(courseGradeList, student, semester, setFilteredCourseList);
-    }, [courseGradeList]);
+    }, [courseGradeList, semester]);
     
     //GWA
     let gwa = 0;
@@ -98,16 +100,22 @@ const ViewGrade = () => {
             <div className='flex-[.15] flex'>
                 <h1 className='text-[2rem] font-medium text-slate-700 self-center'>Student Grade Details</h1>
             </div>
-            <div className='font-[550] text-slate-700 flex gap-10 mt-2'>
-                <div className='flex flex-col gap-2'>
+            <div className='bg-cya-200 font-[550] text-slate-700 flex gap-10 mt-2 relative'>
+                <div className='bg-blu-200 flex flex-col gap-2'>
                     <p>Student Name: {`${student?.firstName.charAt(0) == '@' ? 
           student.firstName.slice(1).toUpperCase() : student?.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}`}</p>
                     <p>ID No: {student.studentId}</p>
                 </div>
-                <div className='flex flex-col gap-2'>
+                <div className='bg-pin-200 flex flex-col gap-2'>
                     <p>Program/Block/Year: {`${student.programCode}/${student.block || ''}/${student.yearLevel || ''}`}</p>
                     <p>Period: {student.period}</p>
                 </div>
+
+                <select value={semester} onChange={(e) => setSemester(Number(e.target.value))} className='h-[1.5rem] text-[.8rem] text-slate-600 font-semibold rounded-sm border-2
+                 border-slate-700 absolute bottom-0 right-0'>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'1'}>1st Sem</option>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'2'}>2nd Sem</option>
+                </select>
             </div>
             <div className='mb-6 flex-1 mt-8 overflow-y-scroll'>
                 <table className="w-full font-semibold text-white">

@@ -6,7 +6,7 @@ import handleInputChange from '../../utils/handleInputChange'
 import handleSelectChange from '../../utils/handleSelectChange'
 import SelectInput from './SelectInput'
 import SaveButton from '../shared/components/SaveButton'
-import HandleOutsideClick from '../../utils/handleOutsideClick'
+import HandleOutsideClick from '../../utils/HandleOutsideClick'
 
 
 type EditFormProps = {
@@ -44,7 +44,7 @@ const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData }
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
             <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='yearBlock' 
-            value={updateData.yearBlock} placeholder='Year/Block'
+            value={updateData.yearBlock} placeholder='Year/Block(eg. 1A)'
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
             <SelectInput className='w-[10rem] h-[2rem] self-center'

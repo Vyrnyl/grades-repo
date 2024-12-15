@@ -147,7 +147,7 @@ const Account = () => {
             </InputFieldWrapper>
 
             <InputFieldWrapper label="Year/Block">
-              <Input type="text" name='yearBlock' value={accountInfo.yearBlock} 
+              <Input type="text" name='yearBlock' value={accountInfo.yearBlock} placeholder="eg. 1/A" 
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
           </div>

@@ -5,6 +5,7 @@ import PageContainer from '../../components/shared/components/PageContainer'
 import { CourseType, StudentRecord } from '../../types/types'
 import GwaRow from '../../components/faculty/GwaRow'
 import SetGwaList from '../../utils/student/SetGwaList'
+import useGwaListStore from '../../store/useGwaListStore'
 
 type Student = {
     studentId: string,
@@ -14,21 +15,25 @@ type Student = {
     programCode: string
 };
 
-const GWAStatus = () => {
+const GWAStatus = ({ className } : { className: string }) => {
 
     const { data } = useFetch('grade/get-grades', 'GET');
 
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
     const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
-    const [gwaList, setGwaList] = useState<{ sem: string, gwa: number, status: string }[]>([]);
+    // const [gwaList, setGwaList] = useState<{ sem: string, gwa: number, status: string }[]>([]);
+    const { gwaList, setGwaList } = useGwaListStore();
     
+    // console.log(gwaList)
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
             setStudentData(data);
-            if(data[0].bsaStudentRecord.length > 0) setCourseGradeList(data[0].bsaStudentRecord);
-            if(data[0].bsbaStudentRecord.length > 0) setCourseGradeList(data[0].bsbaStudentRecord);
-            if(data[0].bsmaStudentRecord.length > 0) setCourseGradeList(data[0].bsmaStudentRecord);
+            if(data[0].bsitStudentRecord.length > 0) setCourseGradeList(data[0].bsitStudentRecord);
+            if(data[0].bscsStudentRecord.length > 0) setCourseGradeList(data[0].bscsStudentRecord);
+            if(data[0].bsisStudentRecord.length > 0) setCourseGradeList(data[0].bsisStudentRecord);
+            if(data[0].blisStudentRecord.length > 0) setCourseGradeList(data[0].blisStudentRecord);
+            if(data[0].bsemcStudentRecord.length > 0) setCourseGradeList(data[0].bsemcStudentRecord);
         }
     }, [data]);
 
@@ -52,10 +57,11 @@ const GWAStatus = () => {
     SetGwaList(courseGradeList, setGwaList, student);
     
     return (
-        <PageContainer className='px-16'>
+        <PageContainer className={`${className} px-16`}>
             <div className='bg-cyn-200 font-[550] text-slate-700 flex flex-[.18] gap-10 mt-2'>
                 <div className='flex flex-col gap-2 self-end'>
-                    <p>Name: {`${student.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}`}</p>
+                    <p>Name: {`${student?.firstName.charAt(0) == '@' ? student.firstName.slice(1).toUpperCase() : 
+                        student?.firstName.toUpperCase() || ''}, ${student.lastName.toUpperCase()}`}</p>
                     <p>ID No: {student.studentId}</p>
                 </div>
                 <div className='flex flex-col gap-2 self-end'>
