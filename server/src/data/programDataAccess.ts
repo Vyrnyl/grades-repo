@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { AddedCourseType } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -42,4 +43,60 @@ const getCoursesList = async () => {
     }
 }
 
-export { getProgramList, getCoursesList }
+
+
+//ADDED COURSES
+
+const addAddedCourse = async (data: AddedCourseType) => {
+    try {
+        const addedCourse = await prisma.addedCourse.create({ data });
+        return addedCourse;
+    } catch(error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+}
+
+const getAddedCourses = async () => {
+    try {
+        const courses = await prisma.addedCourse.findMany();
+        return courses;
+    } catch(error) {
+        console.log(`Get Course error: ${error}`);
+        return null;
+    }
+}
+
+const updateAddedCourse = async (body: any) => {
+    try {
+        const updated = await prisma.addedCourse.updateMany({
+            where: { id: body.id },
+            data: body
+        });
+        return updated
+    } catch(error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+}
+
+const deleteAddedCourse = async (id: number) => {
+    try {
+        const deleted = await prisma.addedCourse.delete({
+            where: { id }
+        });
+        return deleted;
+    } catch(error) {
+        console.log(`Deletion error: ${error}`);
+        return null;
+    }
+}
+
+export { 
+    getProgramList, 
+    getCoursesList, 
+    addAddedCourse, 
+    getAddedCourses, 
+    updateAddedCourse,
+    deleteAddedCourse
+}

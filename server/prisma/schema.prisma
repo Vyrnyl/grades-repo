@@ -82,13 +82,15 @@ model BsemcCurriculum {
 }
 
 
-// model AddedCourse {
-//   id Int @id @default(autoincrement())
-//   courseCode String
-//   courseTitle String
-//   units Int @default(3)
-  
-// }
+model AddedCourse {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int
+  yearLevel Int
+  semester Int
+  programId Int
+}
 
 
 model BsitStudentRecord {

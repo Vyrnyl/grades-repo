@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCoursesList = exports.getProgramList = void 0;
+exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProgramList = async () => {
@@ -42,3 +42,53 @@ const getCoursesList = async () => {
     }
 };
 exports.getCoursesList = getCoursesList;
+//ADDED COURSES
+const addAddedCourse = async (data) => {
+    try {
+        const addedCourse = await prisma.addedCourse.create({ data });
+        return addedCourse;
+    }
+    catch (error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+};
+exports.addAddedCourse = addAddedCourse;
+const getAddedCourses = async () => {
+    try {
+        const courses = await prisma.addedCourse.findMany();
+        return courses;
+    }
+    catch (error) {
+        console.log(`Get Course error: ${error}`);
+        return null;
+    }
+};
+exports.getAddedCourses = getAddedCourses;
+const updateAddedCourse = async (body) => {
+    try {
+        const updated = await prisma.addedCourse.updateMany({
+            where: { id: body.id },
+            data: body
+        });
+        return updated;
+    }
+    catch (error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+};
+exports.updateAddedCourse = updateAddedCourse;
+const deleteAddedCourse = async (id) => {
+    try {
+        const deleted = await prisma.addedCourse.delete({
+            where: { id }
+        });
+        return deleted;
+    }
+    catch (error) {
+        console.log(`Deletion error: ${error}`);
+        return null;
+    }
+};
+exports.deleteAddedCourse = deleteAddedCourse;

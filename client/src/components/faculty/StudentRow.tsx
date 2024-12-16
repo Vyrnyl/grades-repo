@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import Input from "../shared/components/Input"
 import handleInputChange from "../../utils/handleInputChange"
 import SaveButton from "../shared/components/SaveButton"
-import HandleOutsideClick from "../../utils/handleOutsideClick"
+import HandleOutsideClick from "../../utils/HandleOutsideClick"
 
 type UserData = {
     id: number,
@@ -107,9 +107,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
 
     //Delete User
-  const [isDelete, setIsDelete] = useState(false);
+    const [isDelete, setIsDelete] = useState(false);
 
-  const deleteUser = async () => {
+    const deleteUser = async () => {
         setIsDelete(false);
         try {
             const res = await fetch(`${apiUrl}/user/delete-user`, {
@@ -183,7 +183,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                 value={updateData.email} placeholder='Email'
                                 onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-                                <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='yearLevel' 
+                                <Input type='number' max={5} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='yearLevel' 
                                 value={updateData.yearLevel || ''} placeholder='Year Level'
                                 onChange={(e) => handleInputChange(e, setUpdateData)}/>
                                 

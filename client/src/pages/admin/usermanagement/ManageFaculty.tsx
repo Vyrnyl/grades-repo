@@ -80,6 +80,7 @@ const ManageFaculty = () => {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
           setUsers([...users, {...data, program: { programCode }}]);
           setIsAddOpen(false);
+          setSelectedProgram('BS Information Technology');
         };
         if(data.error) setError('Email already registered');
         
@@ -91,11 +92,8 @@ const ManageFaculty = () => {
     //Paginition
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(7);
-
-    // let arr = [1, 2, 1, 3, 1, 4, 1 , 1, 5, 1, 6, 1, 8, 1, 1, 2];
-    let x = users.reverse();
-    // console.log(x)
-    let entries = x.slice(start, end);
+    
+    let entries = users.slice(start, end);
     
     const handleNext = () => {
       if(entries.length % 7 === 0) {
@@ -134,7 +132,7 @@ const ManageFaculty = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-              {entries.map((user) => <UserRow 
+              {entries.sort((a, b) => b.id - a.id).map((user) => <UserRow 
                 key={user.id}
                 user={user} 
                 setUsers={setUsers}

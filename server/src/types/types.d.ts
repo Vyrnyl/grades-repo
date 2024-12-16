@@ -93,3 +93,13 @@ type  ClassUpdatePayload = {
     time: string,
     room: string
 }
+
+//ADDED COURSE
+export type AddedCourseType = {
+    courseCode: string,
+    courseTitle: string,
+    units: number,
+    yearLevel: number,
+    semester: number,
+    programId: number
+}

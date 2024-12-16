@@ -60,7 +60,7 @@ const DashBoard = () => {
           {gwaList.length !== 0 && (gwaList[index].gwa <= 1.5 && (index !== 0 || semester !== 1 || userInfo?.yearLevel !== 1)) &&
             <div className='bg-cya-200 text-center mt-10'>
               <h1 className='font-bold text-[2.4rem] text-slate-800 italic'>Congratulations!</h1>
-              <p className='font-semibold text-[1.7rem] text-slate-800'>You Made the Dean's List</p>
+              <p className='font-semibold text-[1.7rem] text-slate-800'>You Made the {gwaList[index].status}</p>
               <span className='text-[1.4rem] text-slate-800'>{gwaList[index].sem}</span>
             </div>
           }

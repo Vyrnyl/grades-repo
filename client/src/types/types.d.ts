@@ -64,4 +64,14 @@ type StudentRecord = {
 }
 
 
-export { CourseData, CourseInfo, CourseType, StudentRecord, Course, Grade };
+type AddedCourseType = {
+    id: number,
+    courseCode: string,
+    courseTitle: string,
+    units: number,
+    yearLevel: number,
+    semester: number,
+    programId: number
+}
+
+export { CourseData, CourseInfo, CourseType, StudentRecord, Course, Grade, AddedCourseType };

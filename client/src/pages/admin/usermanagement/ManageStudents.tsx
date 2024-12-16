@@ -85,6 +85,9 @@ const ManageStudents = () => {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
           setUsers([...users, {...data, program: { programCode }}]);
           setIsAddOpen(false);
+          setSelectedProgram('BS Information Technology');
+          setSelectedYearLevel('1');
+          setSelectedBlock('A');
         };
         if(data.error) setError('Email already registered');
         // console.log(data)
@@ -141,7 +144,7 @@ const ManageStudents = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-              {entries.map((user) => <StudentRow 
+              {entries.sort((a, b) => b.id - a.id).map((user) => <StudentRow 
                 key={user.id} 
                 user={user}
                 setUsers={setUsers}
