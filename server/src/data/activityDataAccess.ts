@@ -179,6 +179,55 @@ const getFacultyRecentActivity = async (facultyId: number) => {
 }
 
 
+
+//LOGIN SESSIONS
+const addLoginSession = async () => {
+    try {
+
+        const session = await prisma.sessions.findUnique({ where: { id: 1 }});
+
+        if(session) await prisma.sessions.update({
+            where: { id: 1 },
+            data: { activeSessions: session.activeSessions + 1 }
+        });
+
+        return session;
+    } catch(error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+}
+
+const getLoginSession = async () => {
+    try {
+
+        const session = await prisma.sessions.findUnique({ where: { id: 1 }});
+
+        return session;
+    } catch(error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+}
+
+const deleteLoginSession = async () => {
+    try {
+
+        const session = await prisma.sessions.findUnique({ where: { id: 1 }});
+
+        if(session) await prisma.sessions.update({
+            where: { id: 1 },
+            data: { activeSessions: session.activeSessions - 1 }
+        });
+
+        return session;
+    } catch(error) {
+        console.log(`Error: ${error}`);
+        return null;
+    }
+}
+
+
 export { 
     getLoginActivity, 
     addLoginActivity, 
@@ -188,5 +237,9 @@ export {
     addAdminRecentActivity,
     addFacultyActivity,
     getAdminRecentActivity,
-    getFacultyRecentActivity
+    getFacultyRecentActivity,
+
+    addLoginSession,
+    getLoginSession,
+    deleteLoginSession
 }

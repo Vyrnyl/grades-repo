@@ -20,6 +20,7 @@ app.use((req, res, next) => {
     if(
         req.path === '/auth/signup' 
         || req.path === '/auth/login' 
+        || req.path === '/auth/logout' 
         || req.path === '/auth/refresh-token'
     ) {
         return next();

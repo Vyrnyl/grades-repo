@@ -14,13 +14,13 @@ const Profile = ({ firstName, lastName, yearLevel, className }: ProfileType) => 
   const acronym = nameAcronym(firstName + ' ' + lastName);
 
   return (
-    <div className={`${className} bg-re-200 w-[10rem] h-[3rem] flex gap-2`}>
+    <div className={`${className} bg-re-200 w-[15rem] h-[3rem] flex gap-2`}>
         <div className='bg-gray-800 w-[3rem] rounded-full grid place-items-center'>
             <span className='font-bold text-white'>{acronym}</span>
         </div>
         <div>
             <h5 className='font-bold'>{firstName} {lastName}</h5>
-            <p className=''>{(yearLevel || '') + suff} Year</p>
+            <p className=''>{(yearLevel || '') + suff} {yearLevel && 'Year'}</p>
         </div>
     </div>
   )

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFacultyRecentActivity = exports.getAdminRecentActivity = exports.addFacultyActivity = exports.addAdminRecentActivity = exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
+exports.deleteLoginSession = exports.getLoginSession = exports.addLoginSession = exports.getFacultyRecentActivity = exports.getAdminRecentActivity = exports.addFacultyActivity = exports.addAdminRecentActivity = exports.getLoginUser = exports.updateActivity = exports.addLoginActivity = exports.getLoginActivity = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //LOGIN ACTIVITY
@@ -157,3 +157,47 @@ const getFacultyRecentActivity = async (facultyId) => {
     }
 };
 exports.getFacultyRecentActivity = getFacultyRecentActivity;
+//LOGIN SESSIONS
+const addLoginSession = async () => {
+    try {
+        const session = await prisma.sessions.findUnique({ where: { id: 1 } });
+        if (session)
+            await prisma.sessions.update({
+                where: { id: 1 },
+                data: { activeSessions: session.activeSessions + 1 }
+            });
+        return session;
+    }
+    catch (error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+};
+exports.addLoginSession = addLoginSession;
+const getLoginSession = async () => {
+    try {
+        const session = await prisma.sessions.findUnique({ where: { id: 1 } });
+        return session;
+    }
+    catch (error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+};
+exports.getLoginSession = getLoginSession;
+const deleteLoginSession = async () => {
+    try {
+        const session = await prisma.sessions.findUnique({ where: { id: 1 } });
+        if (session)
+            await prisma.sessions.update({
+                where: { id: 1 },
+                data: { activeSessions: session.activeSessions - 1 }
+            });
+        return session;
+    }
+    catch (error) {
+        console.log(`Error: ${error}`);
+        return null;
+    }
+};
+exports.deleteLoginSession = deleteLoginSession;

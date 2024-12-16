@@ -63,7 +63,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   const [updateData, setUpdateData] = useState<Record<string, any>>({
     id,
     studentId,
-    fullName: `${student.firstName} ${student.lastName}`,
+    fullName: `${student.firstName.charAt(0) === '@' ? student.firstName.slice(1) : student.firstName} ${student.lastName}`,
     yearBlock: `${student.yearLevel || ''}${student.block || ''}`,
     // programId: String(programId),
     status
@@ -81,7 +81,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
       const updatedData = {
         id,
         studentId: updateData.studentId,
-        firstName: fullName[0],
+        firstName: student?.firstName.charAt(0) === '@' ?  `@${fullName[0]}` : fullName[0],
         lastName: fullName[fullName.length - 1],
         yearLevel: Number(yearBlock[0]),
         block: yearBlock[1],

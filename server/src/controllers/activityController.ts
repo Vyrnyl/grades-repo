@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getLoginActivity, getAdminRecentActivity, getFacultyRecentActivity } from "../data/activityDataAccess";
+import { getLoginActivity, getAdminRecentActivity, getFacultyRecentActivity, getLoginSession } from "../data/activityDataAccess";
 
 const getActivity = async (req: Request, res: Response) => {
 
@@ -58,4 +58,19 @@ const getFacultyActivity = async (req: Request, res: Response) => {
     res.status(200).json(activities);
 }
 
-export { getActivity, getAdminActivity, getFacultyActivity }
+
+
+//LOGIN SESSION
+const getSessions = async (req: Request, res: Response) => {
+    
+
+    const sessions = await getLoginSession();
+
+    if(!sessions) {
+        return res.status(404).json({ error: 'Failed to retrieve' });
+    }
+
+    res.status(200).json(sessions);
+}
+
+export { getActivity, getAdminActivity, getFacultyActivity, getSessions }

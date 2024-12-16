@@ -62,7 +62,17 @@ const Dashboard = () => {
   const [isFacultyOpen, setIsFacultyOpen] = useState(false);
 
 
-  
+  //Sessions
+  const session = useFetch('activity/get-login-sessions', 'GET');
+  const [active, setActive] = useState<{ id: number, activeSessions: number }>({ id: 0, activeSessions: 0 });
+
+  useEffect(() => {
+    if(session.data) {
+      setActive(session.data as { id: number, activeSessions: number });
+    }
+  }, [session.data, data]);
+
+  let percentage = active.activeSessions / (students.length + faculties.length + 1) * 100;
 
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
@@ -89,12 +99,12 @@ const Dashboard = () => {
           rounded-[1rem] grid place-content-center relative">
             <h1 className="absolute text-[1.5rem] font-semibold text-slate-700 top-[-2.5rem]">Active Users</h1>
             <span className="absolute text-[4rem] font-semibold text-slate-700 
-            top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">0%</span>
-            <PercentageCircle/>
+            top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">{percentage.toFixed()}%</span>
+            <PercentageCircle active={active.activeSessions} inactive={(students.length + faculties.length + 1) || 0}/>
           </div>
           <div className="bg-gree-200 border-2 border-slate-600 px-[4rem] h-[100%]
           rounded-[1rem] grid place-content-center">
-            <PieChart/>
+            <PieChart students={students}/>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
 
-const PercentageCircle: React.FC = () => {
+const PercentageCircle = ({ active, inactive} : { active: number, inactive: number }) => {
+
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
@@ -20,8 +21,8 @@ const PercentageCircle: React.FC = () => {
             labels: ['Active', 'Inactive'],
             datasets: [
               {
-                label: 'Progress',
-                data: [75, 25],
+                label: 'Users',
+                data: [active, inactive - active],
                 backgroundColor: [
                   'rgba(36, 201, 127, 0.6)',
                   'rgba(162, 166, 162, 0.6)',
@@ -57,7 +58,7 @@ const PercentageCircle: React.FC = () => {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [active, inactive]);
 
   return (
     <canvas

@@ -36,6 +36,7 @@ const signup = async (req, res) => {
     }
     //Set Recent Activity
     // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
+    // await addLoginSession();
     //TOKEN
     const payload = {
         userId: newUserResult.id,
@@ -75,6 +76,7 @@ const login = async (req, res) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await (0, activityDataAccess_1.addLoginActivity)(user.email, 'Successful');
+    await (0, activityDataAccess_1.addLoginSession)();
     if (user.email !== 'admin@gmail.com')
         await (0, activityDataAccess_1.addAdminRecentActivity)(`User logged in with email: ${user.email}`);
     const payload = {
@@ -98,13 +100,14 @@ const login = async (req, res) => {
 };
 exports.login = login;
 const logout = async (req, res) => {
-    const refreshToken = req.headers['refresh-token'];
-    if (!refreshToken) {
-        return res.status(400).json({ error: 'Refresh token is required' });
-    }
-    const deleteToken = await (0, userUtils_1.deleteRefreshToken)(refreshToken);
-    if (!deleteToken) {
-        return res.status(404).json({ error: 'Already logged out or token not found' });
+    // const refreshToken = req.headers['refresh-token'] as string;
+    // if(!refreshToken) {
+    //     return res.status(400).json({ error: 'Refresh token is required' });
+    // }
+    // const deleteToken = await deleteRefreshToken(refreshToken);
+    const deleteSession = await (0, activityDataAccess_1.deleteLoginSession)();
+    if (!deleteSession) {
+        return res.status(404).json({ error: 'Already logged out' });
     }
     res.status(200).json({ message: 'Logout successful' });
 };

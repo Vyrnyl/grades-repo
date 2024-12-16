@@ -1,20 +1,38 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
+import { User } from '../../types/studentTypes';
 
-const PieChart: React.FC = () => {
-  const chartRef = useRef<HTMLCanvasElement | null>(null); // Type the canvas ref
-  const chartInstance = useRef<Chart | null>(null); // Type the Chart.js instance
+const PieChart = ({ students } : { students: User[] }) => {
+
+  const [noOfStudents, setNoOfStudents] = useState<number[]>([0, 0, 0, 0]);
+
+  //Set Student Number
+  useEffect(() => {
+    if(students.length > 0) {
+      let firstYr = students.filter(stud => stud.yearLevel === 1).length;
+      let secondYr = students.filter(stud => stud.yearLevel === 2).length;
+      let thirdYr = students.filter(stud => stud.yearLevel === 3).length;
+      let fourthYr = students.filter(stud => stud.yearLevel === 4).length;
+      setNoOfStudents([firstYr, secondYr, thirdYr, fourthYr]);
+    }
+
+  }, [students]);
+  
+  // console.log(noOfStudents);
+
+  const chartRef = useRef<HTMLCanvasElement | null>(null); 
+  const chartInstance = useRef<Chart | null>(null);
 
   useEffect(() => {
     if (chartInstance.current) {
-      chartInstance.current.destroy(); // Destroy previous chart instance if it exists
+      chartInstance.current.destroy();
     }
     
     if (chartRef.current) {
-      const ctx = chartRef.current.getContext('2d'); // Get the canvas 2D context
+      const ctx = chartRef.current.getContext('2d');
 
       if (ctx) {
-        // Chart.js configuration
+        
         const config: ChartConfiguration<'pie', number[], string> = {
           type: 'pie',
           data: {
@@ -22,7 +40,7 @@ const PieChart: React.FC = () => {
             datasets: [
               {
                 label: 'Students',
-                data: [12, 19, 3, 5],
+                data: [noOfStudents[0], noOfStudents[1], noOfStudents[2], noOfStudents[3]],
                 backgroundColor: [
                   'rgba(45, 85, 247, 0.6)',
                   'rgba(247, 136, 45, 0.6)',
@@ -65,7 +83,7 @@ const PieChart: React.FC = () => {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [noOfStudents]);
 
   return (
     <canvas ref={chartRef} width={320} height={320} style={{ display: 'block'}} />

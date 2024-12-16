@@ -5,7 +5,7 @@ import { createUser, getUserData } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
-import { addAdminRecentActivity, addLoginActivity } from "../data/activityDataAccess";
+import { addAdminRecentActivity, addLoginActivity, addLoginSession, deleteLoginSession } from "../data/activityDataAccess";
 
 
 //SIGNUP
@@ -42,7 +42,7 @@ const signup = async (req: Request, res: Response) => {
 
     //Set Recent Activity
     // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
-
+    // await addLoginSession();
 
     //TOKEN
     const payload = {
@@ -95,6 +95,8 @@ const login = async (req: Request, res: Response) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await addLoginActivity(user.email, 'Successful');
+    await addLoginSession();
+
     if(user.email !== 'admin@gmail.com') await addAdminRecentActivity(`User logged in with email: ${user.email}`);
     
     const payload = {
@@ -126,17 +128,18 @@ const login = async (req: Request, res: Response) => {
 
 const logout = async (req: Request, res: Response) => {
 
-    const refreshToken = req.headers['refresh-token'] as string;
+    // const refreshToken = req.headers['refresh-token'] as string;
     
-    if(!refreshToken) {
-        return res.status(400).json({ error: 'Refresh token is required' });
+    // if(!refreshToken) {
+    //     return res.status(400).json({ error: 'Refresh token is required' });
+    // }
+    
+    // const deleteToken = await deleteRefreshToken(refreshToken);
+    const deleteSession = await deleteLoginSession();
+    if(!deleteSession) {
+        return res.status(404).json({ error: 'Already logged out' });
     }
-    
-    const deleteToken = await deleteRefreshToken(refreshToken);
-    
-    if(!deleteToken) {
-        return res.status(404).json({ error: 'Already logged out or token not found' });
-    }
+
 
    res.status(200).json({ message: 'Logout successful' });
 }   
