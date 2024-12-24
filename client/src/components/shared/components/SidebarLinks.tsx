@@ -1,6 +1,5 @@
 import { ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import useFetch from "../../../hooks/useFetch"
 
 type SidebarLinksProps = {
   children: ReactNode
@@ -12,13 +11,13 @@ const SidebarLinks = ({ children }: SidebarLinksProps) => {
   const navigate = useNavigate();
 
   const logOut = async () => {
-    
-    await fetch(`${apiUrl}/auth/logout`, {
-      method: 'POST'
-    });
 
     localStorage.removeItem('atoken');
     navigate('/login');
+
+    await fetch(`${apiUrl}/auth/logout`, {
+      method: 'POST'
+    });
   }
 
   return (

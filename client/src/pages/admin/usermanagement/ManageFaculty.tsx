@@ -6,7 +6,7 @@ import CustomSelect from "../../../components/faculty/CustomSelect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { User } from "../../../types/studentTypes";
-import getProgramId from "../../../utils/getProgramId";
+import getUppercaseLetters from "../../../utils/getUpperCaseLetter";
 
 type AddData = {
   studentId: string,
@@ -40,28 +40,47 @@ const ManageFaculty = () => {
       lastName: '',
       email: ''
     });
-    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     
     const handleAddData = (e: React.ChangeEvent<HTMLInputElement>) => {
       setAddData({...addData, [e.target.name]: e.target.value});
     }
     
     
+    //FACULTY HANDLED
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId: number}[]>([]);
+    const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId: number }[]>([]);
+    
+    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
+    const [selectedProgramCode, setSelectedProgramCode] = useState<string>('');
+    
+    useEffect(() => {
+
+      const setPrograms = () => {
+        setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram), userId: 37 }]);
+      }
+      setPrograms();
+
+    }, [selectedProgram]);
+
+    console.log(programHandled)
+
+
 
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
 
-      let programId = getProgramId(selectedProgram);
+      // let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
-
+      
       let body = {
         ...addData, 
-        programId,
+        programId: 1,
         role: 'faculty',
         password: pw,
         confirmPassword: pw,
         status: 'Active'
       };
+      console.log(body)
       const addUser = async () => {
 
         const res = await fetch(`${apiUrl}/auth/signup`, {
@@ -81,11 +100,21 @@ const ManageFaculty = () => {
           setUsers([...users, {...data, program: { programCode }}]);
           setIsAddOpen(false);
           setSelectedProgram('BS Information Technology');
+
+          //Add Courses
+          // const res = await fetch(`${apiUrl}/faculty/add-handled`, {
+          //   method: 'POST',
+          //   headers: {
+          //     'Authorization': token ? token : '',
+          //     'Content-Type': 'application/json'
+          //   },
+          //   body: JSON.stringify(body)
+          // });
         };
         if(data.error) setError('Email already registered');
         
       }
-      addUser();
+      // addUser();
     }
 
 
@@ -157,15 +186,15 @@ const ManageFaculty = () => {
         
         {/* ADD FORM */}
         {isAddOpen && 
-          <form onSubmit={handleFormSubmit} className="bg-slate-300  w-[33%] h-[70%] absolute z-10 flex flex-col pt-[.8rem] 
-          px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
+          <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[38%] absolute z-10 flex flex-col pt-[.8rem] 
+          px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
     
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
-            <div className="bg-blu-200 ml-[-2rem] mb-4">
+            <div className="bg-blue-200 ml-[-2rem] mb-4">
               <p className="font-semibold">Add Faculty</p>
             </div>
-            <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
+            <div className="bg-red-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
               <div className="bg-purpl-200 flex flex-col gap-4">
     
                 <div className="bg-gree-300 flex flex-col">
@@ -210,6 +239,31 @@ const ManageFaculty = () => {
                     <p className="text-[.8rem] text-red-500 ml-2">{error || ''}</p>
                 </div>
                 <div className="bg-gree-300 flex flex-col">
+                  <label className="font-semibold">Area of Specialization:</label>
+                  <CustomSelect 
+                    className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                    option={[
+                      'BS Information Technology', 
+                      'BS Computer Science', 
+                      'BS Information Systems',
+                      'BL Information Science',
+                      'BS Entertainment and Multimedia Computing'
+                    ]}
+                    setValue={setSelectedProgram}
+                  />
+
+                    <div className="bg-blu-200 h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                    flex flex-wrap gap-2 gap-x-4 overflow-scroll">
+                      <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                        <span className="text-center">PATHFIT</span>
+                        <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                        icon={faClose}/>
+                      </div>
+                    </div>
+                </div>
+
+
+                {/* <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">Program:</label>
                   <CustomSelect 
                     className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
@@ -221,10 +275,10 @@ const ManageFaculty = () => {
                       'BS Entertainment and Multimedia Computing'
                     ]} 
                     setValue={setSelectedProgram}/>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className="bg-gree-200 flex justify-end items-start mt-6">
+            <div className="bg-green-200 flex justify-end items-start mt-6">
               <div className="bg-re-200 flex gap-4">
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-2 py-[.5rem] 
                  active:text-white" onClick={() => setIsAddOpen(false)} type="button">Cancel</button>

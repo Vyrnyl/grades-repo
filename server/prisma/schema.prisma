@@ -35,6 +35,8 @@ model User {
   class Class[]
   notification Notification[]
   recentActivity RecentActivity[]
+  handledCourse HandledCourse[]
+  specialization Specialization[]
 }
 
 model Program {
@@ -132,6 +134,20 @@ model BsemcStudentRecord {
   grade Decimal? @db.Decimal(3, 1)
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   bsemcCurriculum BsemcCurriculum @relation(fields: [courseId], references: [id])
+}
+
+//FACULTY
+model HandledCourse {
+  id Int @id @default(autoincrement())
+  courseCode String
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model Specialization {
+  id Int @id @default(autoincrement())
+  programCode String
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 

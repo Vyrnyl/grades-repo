@@ -6,14 +6,48 @@ import { useEffect, useState } from 'react';
 import useGwaListStore from '../../store/useGwaListStore';
 import GWAStatus from './GWAStatus';
 import useSemStore from '../../store/useSemStore';
+import profPic from '../../assets/images/profilepic/profpic.jpg';
+import useGradeListStore from '../../store/useGradeListStore';
+
+type GwaList = { 
+  sem: string; 
+  gwa: number; 
+  status: string; 
+};
 
 const DashBoard = () => {
   
   const { userInfo } = useUserStore();
   const [programCode, setProgramCode] = useState('');
 
+  const { gradeList } = useGradeListStore();
   const { gwaList } = useGwaListStore();
   const { semester } = useSemStore();
+
+  const [list, setList] = useState<GwaList[]>([]);
+  const [x, setX] = useState(false);
+
+  useEffect(() => {
+    if(gwaList.length > 0) {
+      setList(gwaList);
+      setX(!x);
+    }
+  }, [gwaList]);
+
+  useEffect(() => {
+    let index = semester === 1 ? (gwaList.length - 3 < 0 ? 0 : gwaList.length - 3) : gwaList.length - 2;
+    if(gradeList.length > 0) {
+      gradeList[index].forEach(item => {
+        if(!item.grade) {
+          setList([]);
+          return true;
+        };
+      });
+      // console.log(list[index]);
+    }
+    
+  }, [x, semester]);
+
 
   let index = 0;
   if(semester === 1) {
@@ -21,7 +55,9 @@ const DashBoard = () => {
   } else {
     index = gwaList.length - 2;
   }
-
+  
+  console.log(gwaList)
+  
   //Set program
   useEffect(() => {
     if(userInfo?.program) setProgramCode(userInfo.program.programCode);
@@ -46,8 +82,11 @@ const DashBoard = () => {
           <h1 className='font-sans text-[2rem] text-center pr-20'>Academic Remarks</h1>
           <div className='bg-gree-200 flex flex-col items-center pt-10'>
             <div className="bg-slate-300 h-[18rem] w-[18rem] grid place-content-center rounded-full mb-2">
-              <FontAwesomeIcon className=" text-[8rem] text-slate-600" icon={faUser}/>
-              {/* <img src="" alt="" /> */}
+              {userInfo?.email.slice(0, 8) !== 'maricris' ? 
+                <FontAwesomeIcon className=" text-[8rem] text-slate-600" icon={faUser}/> : 
+                <img src={profPic} alt="ProfilePic" className='h-[100%] w-[100%] rounded-full'/>
+              }
+              
             </div>
             <p className='font-sans text-[1.45rem] font-semibold text-slate-700'>
               {`${userInfo?.lastName.toUpperCase() || ''}, ${userInfo?.firstName.charAt(0) == '@' ? 
@@ -58,7 +97,9 @@ const DashBoard = () => {
         </div>
         
         <div className='bg-purpl-200 flex-[.5]'>
-          {gwaList.length !== 0 && ((gwaList[index].gwa <= 1.5 && gwaList[index].gwa !== 0) && (index !== 0 || semester !== 1 || userInfo?.yearLevel !== 1)) &&
+          {list.length !== 0 && 
+          ((gwaList[index].gwa <= 1.5 && gwaList[index].gwa !== 0) && 
+          (index !== 0 || semester !== 1 || userInfo?.yearLevel !== 1)) &&
             <div className='bg-cya-200 text-center mt-10'>
               <h1 className='font-bold text-[2.4rem] text-slate-800 italic'>Congratulations!</h1>
               <p className='font-semibold text-[1.7rem] text-slate-800'>You Made the {gwaList[index].status}</p>

@@ -6,6 +6,7 @@ import classRoutes from './routes/classRoutes';
 import programRoutes from './routes/programRoutes';
 import activityRoutes from './routes/activityRoutes';
 import notificationRoutes from './routes/notificationRoutes';
+import facultyRoutes from './routes/facultyRoutes';
 import cors from 'cors';
 import 'dotenv/config';
 import userAuth from './middleware/userAuth';
@@ -39,6 +40,7 @@ app.use('/class', classRoutes);
 app.use('/program', programRoutes);
 app.use('/activity', activityRoutes);
 app.use('/notification', notificationRoutes);
+app.use('/faculty', facultyRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server Running on PORT: ${PORT}`));

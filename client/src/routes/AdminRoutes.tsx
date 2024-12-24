@@ -6,6 +6,7 @@ import NotFound from "./NotFound"
 import ManageFaculty from "../pages/admin/usermanagement/ManageFaculty"
 import ManageStudents from "../pages/admin/usermanagement/ManageStudents"
 import CourseSubjects from "../pages/admin/CourseSubjects"
+import UserManagement from "../pages/admin/UserManagement"
 // import useAuth from "../hooks/useAuth" 
 
 const AdminRoutes = () => {
@@ -16,8 +17,9 @@ const AdminRoutes = () => {
             <Route path='/' element={<Dashboard/>}/>
             <Route path='/course-subjects' element={<CourseSubjects/>}/>
             <Route path='/activity-tracking' element={<ActivityTracking/>}/>
-            <Route path='/faculty-user-management' element={<ManageFaculty/>}/>
-            <Route path='/student-user-management' element={<ManageStudents/>}/>
+            <Route path='/faculty-records' element={<ManageFaculty/>}/>
+            <Route path='/student-records' element={<ManageStudents/>}/>
+            <Route path='/user-management' element={<UserManagement/>}/>
         </Route>
         <Route path='*' element={<NotFound/>}/>
     </Routes>

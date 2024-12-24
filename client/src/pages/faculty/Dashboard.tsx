@@ -23,7 +23,7 @@ const Dashboard = () => {
     if(data) setActivities(data as Activity[]);
   }, [data]);
 
-  console.log(activities)
+  // console.log(activities)
 
   return (
     <div className='bg-slat-100 h-[100%] flex flex-col justify-center flex-[80%]'>

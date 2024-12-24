@@ -44,7 +44,7 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
       if(grade === undefined) setGrade(null);
     }
     if(student.bsemcStudentRecord.length > 0) {
-      const grade = student.bsemcStudentRecord.find(record => record.bsmecCurriculum?.courseCode == courseCode);
+      const grade = student.bsemcStudentRecord.find(record => record.bsemcCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
@@ -86,8 +86,10 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
   
         const data = await res.json();
         console.log(data);
-        if(data) setGrade(Number(editGrade));
-  
+        if(data) {
+          setGrade(Number(editGrade));
+        }
+        
       } catch(err) {
         console.log('Update error');
       }

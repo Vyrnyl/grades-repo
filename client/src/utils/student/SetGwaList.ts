@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { CourseType } from "../../types/types";
 import { computeGwa, gwaStatus } from "../gwaStatus";
 import yearSuffix from "../yearSuffix";
+import useGradeListStore from "../../store/useGradeListStore";
 
 
 //HARD CODED
@@ -18,6 +19,7 @@ const SetGwaList = (courseGradeList: CourseType[], setGwaList: React.Dispatch<Re
         programCode: string
     }) => {
 
+    const { setGradeList } = useGradeListStore();
 
     const setList = (list: CourseType[][]) => {
 
@@ -25,29 +27,31 @@ const SetGwaList = (courseGradeList: CourseType[], setGwaList: React.Dispatch<Re
         let yr = student.studentId.split('-')[0];
         let studYear = Number(student.studentId.split('-')[0]);
         
-
+        // console.log(list);
         let sem = 2;
         
-        let gwaList = list.map(item => {
+        let gwaList = list.map((item, i) => {
             let semesterGwa = computeGwa(item);
             let status = gwaStatus(semesterGwa);
             if(sem == 2) {
                 sem = 1;
             } else sem = 2;
-
             
             let y = `${sem}${yearSuffix(sem)} Semester ${yr.length === 4 ? Math.floor(studYear) : ''}`;
             studYear += .5;
 
             return { sem: y, gwa: semesterGwa, status }
         });
+
         if(gwaList.length > 0) {
-            let list: { sem: string, gwa: number, status: string }[] = [];
+            let glist: { sem: string, gwa: number, status: string }[] = [];
+            let gradeList: CourseType[][] = [];
             for(let i = 0; i < (student.yearLevel * 2); i++) {
-                list.push(gwaList[i]);
+                glist.push(gwaList[i]);
+                gradeList.push(list[i]);
             }
-            
-            setGwaList(list);
+            setGradeList(gradeList);
+            setGwaList(glist);
         }
     }
     

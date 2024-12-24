@@ -39,7 +39,7 @@ const AdminLayout = () => {
    const handleOutsideClick = (event: MouseEvent) => {
        if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
           const target = event.target as HTMLElement;
-          if(target.textContent !== "User Management") setIsSelectOpen(false);
+          if(target.textContent !== "Manage Records") setIsSelectOpen(false);
        }
    };
 
@@ -56,18 +56,21 @@ const AdminLayout = () => {
         <SideBarLink path='/' label='Dashboard'/>
         <SideBarLink path='/course-subjects' label='Course Subjects'/>
         <SideBarLink path='/activity-tracking' label='Activity Tracking'/>
-        <li className={`${(loc.pathname == '/faculty-user-management' || loc.pathname == '/student-user-management') && 'text-blue-300'} 
-        bg-gree-200 relative cursor-pointer ${isUserClicked && 'text-blue-300'}`} onClick={handleClick}>
-          <p className="flex gap-4">User Management 
+        <li className={`bg-gree-200 relative cursor-pointer ${isUserClicked && 'text-blue-300'} relative`} onClick={handleClick}>
+          <p className="flex gap-4 relative z-10">Manage Records
             <span><FontAwesomeIcon className="active:text-white scale-y-[70%]" icon={faCaretDown}/></span></p>
           {isSelectOpen && 
             <div ref={selectRef} className="bg-white flex flex-col text-[1rem] text-slate-700 py-2 px-8 absolute right-[-4rem] top-[1.5rem] 
-            rounded-sm border-[1px] border-slate-600">
-              <span className="active:text-blue-300" onClick={() => navigate('/faculty-user-management')}>Faculty</span><hr />
-              <span className="active:text-blue-300" onClick={() => navigate('/student-user-management')}>Student</span>
+            rounded-sm border-[1px] border-slate-600 z-10">
+              <span className="active:text-blue-300" onClick={() => navigate('/faculty-records')}>Faculty</span><hr />
+              <span className="active:text-blue-300" onClick={() => navigate('/student-records')}>Student</span>
             </div>
           }
+          <div className={`h-[2rem] w-[17.5rem] 
+          ${(loc.pathname == '/faculty-records' || loc.pathname == '/student-records')  && 'bg-blue-500'} 
+      z-0 absolute top-[50%] left-[-5.6rem] translate-y-[-50%] rounded-[.2rem]`}></div>
         </li>
+        <SideBarLink className="z-0" path='/user-management' label='User Management'/>
       </SideBar>
       <Outlet/>
     </LayoutContainer>
