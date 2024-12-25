@@ -14,7 +14,7 @@ const addHandled = async (req: Request, res: Response) => {
 
 const getHandled = async (req: Request, res: Response) => {
 
-    const courses = await getHandledCourse(9);
+    const courses = await getHandledCourse(req.body.userId);
 
     if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
 
@@ -36,7 +36,7 @@ const addFacultySpecialization = async (req: Request, res: Response) => {
 
 const getFacultySpecialization = async (req: Request, res: Response) => {
 
-    const programs = await getSpecialization(9);
+    const programs = await getSpecialization(req.body.userId);
 
     if(!programs) return res.status(404).json({ error: 'Failed to retrieve' });
 

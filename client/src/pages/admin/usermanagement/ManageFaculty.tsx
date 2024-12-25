@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { User } from "../../../types/studentTypes";
 import getUppercaseLetters from "../../../utils/getUpperCaseLetter";
+import removeObjectDuplicate from "../../../utils/admin/removeObjectDuplicate";
 
 type AddData = {
   studentId: string,
@@ -47,25 +48,52 @@ const ManageFaculty = () => {
     
     
     //FACULTY HANDLED
-    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId: number}[]>([]);
-    const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId: number }[]>([]);
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+    const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
     
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
-    const [selectedProgramCode, setSelectedProgramCode] = useState<string>('');
+    const [courseInput, setCourseInput] = useState<string>('');
     
+
+    //SET Programs
     useEffect(() => {
-
       const setPrograms = () => {
-        setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram), userId: 37 }]);
+        setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
       }
-      setPrograms();
-
+      
+      const handleClick = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        if (target.closest(".selected")) {
+          setPrograms();
+        }
+      };
+  
+      document.addEventListener("click", handleClick);
+  
+      return () => {
+        document.removeEventListener("click", handleClick);
+      };
     }, [selectedProgram]);
 
-    console.log(programHandled)
 
+    //SET Courses
+    const handelAddCourse = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
+        setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
+        setCourseInput('');
+      }
+    }
+    // console.log(courseHandled)
+    
+    //DELETE program
+    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
+      setProgramHandled(prev => {
+        return prev.filter(prog => prog.programCode !== item.programCode)
+      });
+    }
 
-
+    
+    //SUBMIT
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
 
@@ -80,7 +108,7 @@ const ManageFaculty = () => {
         confirmPassword: pw,
         status: 'Active'
       };
-      console.log(body)
+      // console.log(body)
       const addUser = async () => {
 
         const res = await fetch(`${apiUrl}/auth/signup`, {
@@ -93,29 +121,68 @@ const ManageFaculty = () => {
         });
         const data = await res.json();
 
-        // console.log(data)
-
         if(res.ok && data) {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
           setUsers([...users, {...data, program: { programCode }}]);
           setIsAddOpen(false);
           setSelectedProgram('BS Information Technology');
+          
+
+          let programCodeData = removeObjectDuplicate(programHandled.map(item => {
+            return {...item, userId: data.id}
+          }));
+          
+          //Add Programs
+          const addSpecialization = async () => {
+            
+            const res = await fetch(`${apiUrl}/faculty/add-specialization`, {
+              method: 'POST',
+              headers: {
+                'Authorization': token ? token : '',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ data: programCodeData })
+            });
+            const data: any = await res.json();
+            
+            if(res.ok && data) setProgramHandled([]);
+          }
+
+          let courseData = courseHandled.map(item => {
+            return {...item, userId: data.id}
+          });
 
           //Add Courses
-          // const res = await fetch(`${apiUrl}/faculty/add-handled`, {
-          //   method: 'POST',
-          //   headers: {
-          //     'Authorization': token ? token : '',
-          //     'Content-Type': 'application/json'
-          //   },
-          //   body: JSON.stringify(body)
-          // });
+          const addCourses = async () => {
+            const res = await fetch(`${apiUrl}/faculty/add-handled`, {
+              method: 'POST',
+              headers: {
+                'Authorization': token ? token : '',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ data: courseData })
+            });
+            const data: any = await res.json();
+            // console.log(data)
+            if(res.ok && data) setCourseHandled([]);
+          }
+
+          addSpecialization();
+          addCourses();
+
         };
-        if(data.error) setError('Email already registered');
+
+
+
+        if(data.error) {
+          setError('Email already registered')
+        } else setError('');
         
       }
-      // addUser();
+      addUser();
     }
+
+
 
 
     //Paginition
@@ -186,15 +253,21 @@ const ManageFaculty = () => {
         
         {/* ADD FORM */}
         {isAddOpen && 
-          <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[38%] absolute z-10 flex flex-col pt-[.8rem] 
+          <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
           px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
     
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
-            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
-            <div className="bg-blue-200 ml-[-2rem] mb-4">
+            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} 
+            onClick={() => {
+              setIsAddOpen(false); 
+              setProgramHandled([]);
+              setCourseHandled([]);
+            }}/>
+
+            <div className="bg-blu-200 ml-[-2rem] mb-4">
               <p className="font-semibold">Add Faculty</p>
             </div>
-            <div className="bg-red-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
+            <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
               <div className="bg-purpl-200 flex flex-col gap-4">
     
                 <div className="bg-gree-300 flex flex-col">
@@ -238,10 +311,10 @@ const ManageFaculty = () => {
                     />
                     <p className="text-[.8rem] text-red-500 ml-2">{error || ''}</p>
                 </div>
-                <div className="bg-gree-300 flex flex-col">
+                <div className="bg-gree-300 flex flex-col max-w-[15rem]">
                   <label className="font-semibold">Area of Specialization:</label>
                   <CustomSelect 
-                    className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                    className=" border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                     option={[
                       'BS Information Technology', 
                       'BS Computer Science', 
@@ -252,36 +325,57 @@ const ManageFaculty = () => {
                     setValue={setSelectedProgram}
                   />
 
-                    <div className="bg-blu-200 h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
-                    flex flex-wrap gap-2 gap-x-4 overflow-scroll">
-                      <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                        <span className="text-center">PATHFIT</span>
-                        <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                        icon={faClose}/>
-                      </div>
+                    {/* SELECTED */}
+                    <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                    flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                      {removeObjectDuplicate(programHandled).map((item, i) => {
+                        return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                          <span className="text-center">{item.programCode}</span>
+                          <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                          icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                        </div>
+                      })}
                     </div>
                 </div>
+                
+                <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
+                  <label className="font-semibold">Course Subjects Handled:</label>
+                  <Input
+                      type="text" 
+                      className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                      onChange={(e) => setCourseInput(e.target.value)}
+                      value={courseInput}
+                    />
+                    <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
+                    w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
+                    absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
 
-
-                {/* <div className="bg-gree-300 flex flex-col">
-                  <label className="font-semibold">Program:</label>
-                  <CustomSelect 
-                    className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                    option={[
-                      'BS Information Technology', 
-                      'BS Computer Science', 
-                      'BS Information Systems',
-                      'BL Information Science',
-                      'BS Entertainment and Multimedia Computing'
-                    ]} 
-                    setValue={setSelectedProgram}/>
-                </div> */}
+                    {/* SELECTED */}
+                    <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                    flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                      {courseHandled.map((item, i) => {
+                        return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                        <span className="text-center">{item.courseCode}</span>
+                        <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                        icon={faClose} 
+                        onClick={() => setCourseHandled(prev => prev.filter(course => course.courseCode !== item.courseCode))}/>
+                      </div>
+                      })}
+                    </div>
+                </div>
+                
               </div>
             </div>
-            <div className="bg-green-200 flex justify-end items-start mt-6">
+            <div className="bg-gree-200 flex justify-end items-start mt-6 mb-4">
               <div className="bg-re-200 flex gap-4">
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-2 py-[.5rem] 
-                 active:text-white" onClick={() => setIsAddOpen(false)} type="button">Cancel</button>
+                 active:text-white" 
+                 onClick={() => {
+                  setIsAddOpen(false); 
+                  setProgramHandled([]);
+                  setCourseHandled([]);
+                }} type="button">Cancel</button>
+
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
                  active:text-white" type="submit">Add</button>
               </div>

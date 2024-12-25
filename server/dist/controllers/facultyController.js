@@ -11,7 +11,7 @@ const addHandled = async (req, res) => {
 };
 exports.addHandled = addHandled;
 const getHandled = async (req, res) => {
-    const courses = await (0, facultyDataAccess_1.getHandledCourse)(9);
+    const courses = await (0, facultyDataAccess_1.getHandledCourse)(req.body.userId);
     if (!courses)
         return res.status(404).json({ error: 'Failed to retrieve' });
     res.status(200).json(courses);
@@ -26,7 +26,7 @@ const addFacultySpecialization = async (req, res) => {
 };
 exports.addFacultySpecialization = addFacultySpecialization;
 const getFacultySpecialization = async (req, res) => {
-    const programs = await (0, facultyDataAccess_1.getSpecialization)(9);
+    const programs = await (0, facultyDataAccess_1.getSpecialization)(req.body.userId);
     if (!programs)
         return res.status(404).json({ error: 'Failed to retrieve' });
     res.status(200).json(programs);

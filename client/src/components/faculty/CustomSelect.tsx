@@ -42,7 +42,7 @@ const CustomSelect = ({ className, option, setValue, selectedItem } : CustomSele
             <FontAwesomeIcon className="active:text-white scale-y-[70%]" icon={faChevronDown}/>
             {isOpen && 
                 <div className='bg-blu-300 absolute top-[1.5rem] right-0 z-50'>
-                    <ul className={` bg-white max-h-[25rem] overflow-y-auto flex flex-col`}>
+                    <ul className={`selected bg-white max-h-[25rem] overflow-y-auto flex flex-col`}>
                         {option.map((item, i) => <li key={i} onClick={getListValue} value={item}
                         className='bg-gree-200 px-4 hover:bg-slate-200 
                         '>{item}</li>)}
