@@ -96,7 +96,7 @@ const ManageFaculty = () => {
     //SUBMIT
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
-
+      
       // let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
       
@@ -324,7 +324,7 @@ const ManageFaculty = () => {
                     ]}
                     setValue={setSelectedProgram}
                   />
-
+              
                     {/* SELECTED */}
                     <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                     flex flex-wrap gap-2 gap-x-4 overflow-y-auto">

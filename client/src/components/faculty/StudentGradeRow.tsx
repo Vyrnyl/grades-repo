@@ -49,7 +49,7 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
       if(grade === undefined) setGrade(null);
     }
     
-  }, [courseId]);
+  }, [courseId, courseCode]);
   
 
   //Edit grade

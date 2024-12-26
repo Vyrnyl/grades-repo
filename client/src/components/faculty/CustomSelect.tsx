@@ -12,7 +12,7 @@ type CustomSelectProps = {
 const CustomSelect = ({ className, option, setValue, selectedItem } : CustomSelectProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState<string>(option[selectedItem|| 0]);
+    const [selected, setSelected] = useState<string>(option[selectedItem || 0]);
 
     const getListValue = (e: React.MouseEvent<HTMLLIElement>) => {
         setSelected(e.currentTarget.textContent || '');

@@ -113,7 +113,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
     const ref = useRef<HTMLDivElement>(null);
     HandleOutsideClick(ref, setIsOpen);
     return (
-        <tr>
+        <tr className='bg-slate-100 hover:bg-slate-200'>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseCode}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseTitle}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(addedCourse.programId)}</td>

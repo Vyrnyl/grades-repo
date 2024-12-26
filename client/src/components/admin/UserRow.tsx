@@ -1,11 +1,12 @@
-import { faPenToSquare, faTrashCan, faX } from "@fortawesome/free-solid-svg-icons"
+import { faClose, faPenToSquare, faTrashCan, faX } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { User } from "../../types/studentTypes"
 import { useEffect, useRef, useState } from "react"
 import Input from "../shared/components/Input"
 import handleInputChange from "../../utils/handleInputChange"
 import SaveButton from "../shared/components/SaveButton"
-import HandleOutsideClick from "../../utils/handleOutsideClick"
+import HandleOutsideClick from "../../utils/HandleOutsideClick"
+import CustomSelect from "../faculty/CustomSelect"
 
 type UserData = {
     id: number,
@@ -42,6 +43,11 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
 
     //Update
+
+    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
+
+
+
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
         id,
@@ -146,61 +152,113 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
-                        <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
-                            translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
-                
-                            <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                icon={faX} onClick={() => setIsOpen(!isOpen)}/>
-                    
-                            <h1 className="text-[1.5rem] font-bold text-slate-700 self-center mb-2 text-center">Edit</h1>
-                            <form onSubmit={handleUpdate} className='bg-gree-200 flex flex-col gap-4'>
-                    
-                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='studentId' 
-                                value={updateData.studentId} placeholder='Student ID' 
-                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                    
-                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
-                                placeholder='First Name'
-                                value={updateData.firstName}
-                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
+                        <form className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                        px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
+                            
+                            <FontAwesomeIcon className="absolute text-[1.5rem] right-4
+                            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose}/>
 
-                                <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='lastName' 
-                                placeholder='Last Name'
-                                value={updateData.lastName}
-                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                    
-                                <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='email' 
-                                value={updateData.email} placeholder='Email'
-                                onChange={(e) => handleInputChange(e, setUpdateData)}/>
+                            <div className="bg-blu-200 ml-[-2rem] mb-4">
+                                <p className="font-semibold text-[1.1rem] text-start">Edit Faculty</p>
+                            </div>
 
-                                {/* <SelectInput className='w-[10rem] h-[2rem] self-center'
-                                    name='sex' value={updateData.sex || ""}
-                                    onChange={(e) => handleSelectChange(e, setUpdateData)}>
-                                    <option value="" disabled>Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </SelectInput>
+                            <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
+                                <div className="bg-purpl-200 flex flex-col gap-4">
 
-                                <SelectInput className='w-[10rem] h-[2rem] self-center'
-                                    name='status' value={updateData.status || ""}
-                                    onChange={(e) => handleSelectChange(e, setUpdateData)}>
-                                    {userData.role === "student" ? 
-                                        <>
-                                            <option value="" disabled>Status</option>
-                                            <option value="Enrolled">Enrolled</option>
-                                            <option value="Unenrolled">Unenrolled</option>
-                                        </> :
-                                        <>
-                                            <option value="" disabled>Status</option>
-                                            <option value="Active">Active</option>
-                                            <option value="Inactive">Inactive</option>
-                                        </>
-                                    }
-                                </SelectInput> */}
+                                    <div className="bg-gree-300 flex flex-col">
+                                        <label className="font-semibold text-start">Faculty ID:</label>
+                                        <Input 
+                                            type="text" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            required={true}
+                                            name="studentId"
+                                            />
+                                    </div>
+                                    <div className="bg-gree-300 flex flex-col">
+                                        <label className="font-semibold text-start">First Name:</label>
+                                        <Input 
+                                            type="text" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            required={true}
+                                            name="firstName"
+                                            />
+                                    </div>
+                                    <div className="bg-gree-300 flex flex-col">
+                                        <label className="font-semibold text-start">Last Name:</label>
+                                        <Input 
+                                            type="text" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            required={true}
+                                            name="lastName"
+                                            />
+                                    </div>
+                                    <div className="bg-gree-300 flex flex-col">
+                                        <label className="font-semibold text-start">Email:</label>
+                                        <Input 
+                                            type="email" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            required={true}
+                                            name="email"
+                                            />
+                                    </div>
 
-                                <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>
-                            </form>
-                        </div>
+                                    <div className="bg-gree-300 flex flex-col max-w-[15rem]">
+                                        <label className="font-semibold text-start">Area of Specialization:</label>
+                                        <CustomSelect 
+                                            className=" border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                                            option={[
+                                            'BS Information Technology', 
+                                            'BS Computer Science', 
+                                            'BS Information Systems',
+                                            'BL Information Science',
+                                            'BS Entertainment and Multimedia Computing'
+                                            ]}
+                                            setValue={setSelectedProgram}
+                                        />
+
+                                        {/* SELECTED */}
+                                        <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                        flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                            <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                <span className="text-center">BSIT</span>
+                                                <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                icon={faClose}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
+                                        <label className="font-semibold text-start">Course Subjects Handled:</label>
+                                        <Input
+                                            type="text" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            />
+                                            <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
+                                            w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
+                                            absolute top-[1.5rem] right-[-4%] grid place-content-center">Add</button>
+
+                                            {/* SELECTED */}
+                                            <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                            flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                                <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                    <span className="text-center">CC101</span>
+                                                    <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                    icon={faClose}/>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                            <div className="bg-gree-200 flex justify-end items-start mt-6 mb-4">
+                                <div className="bg-re-200 flex gap-4">
+                                    {/* <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-2 py-[.5rem] 
+                                    active:text-white" type="button">Cancel</button> */}
+
+                                    <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
+                                    active:text-white" type="submit">Save</button>
+                                </div>
+                            </div>
+                        </form>
                     }
 
                     <FontAwesomeIcon className="text-blue-500 active:text-white" 

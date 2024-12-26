@@ -15,7 +15,7 @@ const addHandled = async (req: Request, res: Response) => {
 const getHandled = async (req: Request, res: Response) => {
 
     const courses = await getHandledCourse(req.body.userId);
-
+    
     if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
 
     res.status(200).json(courses);
