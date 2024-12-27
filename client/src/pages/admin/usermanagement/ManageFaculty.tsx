@@ -78,7 +78,7 @@ const ManageFaculty = () => {
 
 
     //SET Courses
-    const handelAddCourse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handelAddCourse = () => {
       if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
         setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
         setCourseInput('');
@@ -152,7 +152,7 @@ const ManageFaculty = () => {
           let courseData = courseHandled.map(item => {
             return {...item, userId: data.id}
           });
-
+          
           //Add Courses
           const addCourses = async () => {
             const res = await fetch(`${apiUrl}/faculty/add-handled`, {

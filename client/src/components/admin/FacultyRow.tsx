@@ -8,7 +8,7 @@ import handleInputChange from '../../utils/handleInputChange';
 import SelectInput from './SelectInput';
 import SaveButton from '../shared/components/SaveButton';
 import handleSelectChange from '../../utils/handleSelectChange';
-import HandleOutsideClick from '../../utils/handleOutsideClick';
+import HandleOutsideClick from '../../utils/HandleOutsideClick';
 
 type FacultyData = {
   id: number,

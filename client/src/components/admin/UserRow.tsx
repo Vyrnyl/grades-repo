@@ -60,7 +60,6 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
 
     //Update
-
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
         id,
@@ -127,6 +126,26 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             if(handledRes.ok && handledData) 
                 setHandledPrograms(programCodeData as Program[]);
 
+
+            //UPDATE COURSES
+            let courseData = courseHandled.map(item => {
+                return {courseCode: item.courseCode, userId: user.id}
+            });
+            const handledCourseRes = await fetch(`${apiUrl}/faculty/update-handled`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': token ? token : '',
+                  'Content-Type': 'application/json'
+              },
+                body: JSON.stringify({ data: courseData })
+              });
+            
+            const handledCourseData = await handledCourseRes.json();
+
+            if(handledCourseRes.ok && handledCourseData) 
+                setHandledCourses(courseHandled as Course[]);
+
+            
           } catch(error) {
             console.log("Fetch error" + error);
           }
@@ -181,8 +200,10 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
     
+   
+    
 
-    //SET Programs
+    //Handle Programs Edit
     useEffect(() => {
         const setPrograms = () => {
             setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
@@ -202,6 +223,17 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         };
     }, [selectedProgram]);
 
+    //Handle Edit Courses
+    const [courseInput, setCourseInput] = useState<string>('');
+
+    const handelAddCourse = () => {
+        if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
+            setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
+            setCourseInput('');
+        }
+    }
+
+
     //DELETE Program
     const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
         setProgramHandled(prev => {
@@ -209,9 +241,11 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         });
     }
     
-    //GET/SET ALL HANDLED
 
+
+    //GET/SET ALL HANDLED
     const [fetchedData, setFetchedData] = useState<Program[]>([]);
+    const [fetchedCourses, setFetchedCourses] = useState<Course[]>([]);
 
     useEffect(() => {
         const getHandledPrograms = async () => {
@@ -250,11 +284,14 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                 },
                     body: JSON.stringify({ userId: user.id })
                 });
-    
+                
                 const data = await res.json();
     
                 if(res.ok && data) {
                     setHandledCourses(data);
+                    setCourseHandled(data);
+
+                    setFetchedCourses(data);
                 }
                 
             } catch(error) {
@@ -309,6 +346,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                         status
                                     });
                                     setProgramHandled(fetchedData);
+                                    setCourseHandled(fetchedCourses);
                                 }
 
                             }
@@ -397,19 +435,23 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                         <Input
                                             type="text" 
                                             className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            />
+                                            onChange={(e) => setCourseInput(e.target.value)}
+                                            value={courseInput}/>
                                             <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
                                             w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
-                                            absolute top-[1.5rem] right-[-4%] grid place-content-center">Add</button>
+                                            absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
 
                                             {/* SELECTED */}
                                             <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                                             flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
-                                                <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                                                    <span className="text-center">CC101</span>
+                                                {courseHandled.map((item, i) => {
+                                                    return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                    <span className="text-center">{item.courseCode}</span>
                                                     <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                                    icon={faClose}/>
+                                                    icon={faClose}
+                                                    onClick={() => setCourseHandled(prev => prev.filter(course => course.courseCode !== item.courseCode))}/>
                                                 </div>
+                                                })}
                                             </div>
                                         </div>
 
