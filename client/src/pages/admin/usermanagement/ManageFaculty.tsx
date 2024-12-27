@@ -54,6 +54,7 @@ const ManageFaculty = () => {
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [courseInput, setCourseInput] = useState<string>('');
     
+    
 
     //SET Programs
     useEffect(() => {
@@ -223,7 +224,8 @@ const ManageFaculty = () => {
                     <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">First Name</th>
                     <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Last Name</th>
                     <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Email</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Program</th>
+                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Area Of Specialization</th>
+                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Course Subjects Handled</th>
                     <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>

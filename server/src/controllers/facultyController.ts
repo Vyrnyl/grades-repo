@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addHandledCourse, addSpecialization, getHandledCourse, getSpecialization } from "../data/facultyDataAccess";
+import { addHandledCourse, addSpecialization, getHandledCourse, getSpecialization, updateHandledCourse, updateSpecialization } from "../data/facultyDataAccess";
 
 const addHandled = async (req: Request, res: Response) => {
 
@@ -16,6 +16,15 @@ const getHandled = async (req: Request, res: Response) => {
 
     const courses = await getHandledCourse(req.body.userId);
     
+    if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
+
+    res.status(200).json(courses);
+}
+
+const updateHandled = async (req: Request, res: Response) => {
+
+    const courses = await updateHandledCourse(req.body.data)
+    console.log("ak")
     if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
 
     res.status(200).json(courses);
@@ -43,4 +52,21 @@ const getFacultySpecialization = async (req: Request, res: Response) => {
     res.status(200).json(programs);
 }
 
-export { addHandled, getHandled, addFacultySpecialization, getFacultySpecialization }
+const updateFacultySpecialization = async (req: Request, res: Response) => {
+
+    const programs = await updateSpecialization(req.body.data)
+
+    if(!programs) return res.status(404).json({ error: 'Failed to retrieve' });
+
+    res.status(200).json(programs);
+}
+
+export { 
+    addHandled, 
+    getHandled,
+    updateHandled,
+    
+    addFacultySpecialization, 
+    getFacultySpecialization,
+    updateFacultySpecialization
+}

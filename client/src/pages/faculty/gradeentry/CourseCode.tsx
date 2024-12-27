@@ -16,10 +16,10 @@ type CourseCodeType = {
 }
 
 type Program = {
-    id: number,
-    programCode: string,
-    userId: number
-  }
+  id: number,
+  programCode: string,
+  userId: number
+}
 
 const CourseCode = ({ data } : CourseCodeType) => {
 

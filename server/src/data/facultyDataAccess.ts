@@ -25,6 +25,22 @@ const getHandledCourse = async (userId: number) => {
     }
 }
 
+const updateHandledCourse = async (data: { courseCode: string, userId: number }[]) => {
+    try {
+
+        const deleted = await prisma.handledCourse.deleteMany({ where: { userId: data[0].userId }});
+
+        if(!deleted) return null;
+        console.log(deleted);
+        const result = await prisma.handledCourse.createMany({ data });
+        
+        return result;
+    } catch(error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+}
+
 
 
 
@@ -52,5 +68,29 @@ const getSpecialization = async (userId: number) => {
     }
 }
 
+const updateSpecialization = async (data: { programCode: string, userId: number }[]) => {
+    try {
 
-export { addHandledCourse, getHandledCourse, addSpecialization, getSpecialization }
+        const deleted = await prisma.specialization.deleteMany({ where: { userId: data[0].userId }});
+
+        if(!deleted) return null;
+        console.log(deleted)
+        const result = await prisma.specialization.createMany({ data });
+        
+        return result;
+    } catch(error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+}
+
+
+export { 
+    addHandledCourse, 
+    getHandledCourse,
+    updateHandledCourse,
+    
+    addSpecialization, 
+    getSpecialization,
+    updateSpecialization
+}

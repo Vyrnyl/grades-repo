@@ -22,7 +22,7 @@ const GradeEntry = () => {
   const [courseList, setCourseList] = useState<Course[]>([]);
   const [handledCourse, setHandledCourse] = useState<HandledCourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
-
+  
   //Get Courses 
   const courses = useFetch('program/get-courses', 'GET');
 

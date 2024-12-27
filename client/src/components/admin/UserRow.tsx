@@ -1,12 +1,13 @@
-import { faClose, faPenToSquare, faTrashCan, faX } from "@fortawesome/free-solid-svg-icons"
+import { faClose, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { User } from "../../types/studentTypes"
 import { useEffect, useRef, useState } from "react"
 import Input from "../shared/components/Input"
 import handleInputChange from "../../utils/handleInputChange"
-import SaveButton from "../shared/components/SaveButton"
 import HandleOutsideClick from "../../utils/HandleOutsideClick"
 import CustomSelect from "../faculty/CustomSelect"
+import getUppercaseLetters from "../../utils/getUpperCaseLetter"
+import removeObjectDuplicate from "../../utils/admin/removeObjectDuplicate"
 
 type UserData = {
     id: number,
@@ -18,6 +19,21 @@ type UserData = {
     sex: string,
     status: string
   }
+
+type Program = {
+    id: number,
+    programCode: string,
+    userId: number
+}
+
+type Course = {
+    id: number,
+    courseCode: string,
+    userId: number,
+    createdAt: string,
+    updatedAt: string
+}
+  
 
 type UserRowProps = {
     user: User,
@@ -42,11 +58,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     });
 
 
+
     //Update
-
-    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
-
-
 
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
@@ -65,9 +78,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         
         // let fullName = updateData.fullName.split(' ');
 
-        const updateUser = async () => {
-    
-          setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
           const updatedData = {
             id,
             studentId: updateData.studentId,
@@ -78,7 +89,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             sex: updateData.sex,
             status: updateData.status
           }
-          console.log(updateData);
+
+        const updateUser = async () => {
+    
           try {
             const res = await fetch(`${apiUrl}/user/update-user`, {
               method: 'PUT',
@@ -89,20 +102,39 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
               body: JSON.stringify(updatedData)
             });
     
-            const data = await res.json();
+            const userData = await res.json();
     
-            if(res.ok && data) {
+            if(res.ok && userData) {
               setUserData(updatedData);
             }
-    
+
+            //UPDATE PROGRAMS
+            let programCodeData = removeObjectDuplicate(programHandled.map(item => {
+                return {...item, userId: user.id}
+              }));
+
+            const handledRes = await fetch(`${apiUrl}/faculty/update-specialization`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': token ? token : '',
+                  'Content-Type': 'application/json'
+              },
+                body: JSON.stringify({ data: programCodeData })
+              });
+              
+            const handledData = await handledRes.json();
+            
+            if(handledRes.ok && handledData) 
+                setHandledPrograms(programCodeData as Program[]);
+
           } catch(error) {
             console.log("Fetch error" + error);
           }
         }
-    
+        
         updateUser();
     }
-
+    
 
     //Delete User
   const [isDelete, setIsDelete] = useState(false);
@@ -132,10 +164,111 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     }
 
     //Program
-    const [progCode, setProgcode] = useState('');
+    // const [progCode, setProgcode] = useState('');
+    // useEffect(() => {
+    //     if(user.program) setProgcode(user.program.programCode);
+    // }, [user]);
+
+
+    //UPDATE COURSE/PROGRAM HANDLED
+
+    //SET handled from Server
+    const [handledPrograms, setHandledPrograms] = useState<Program[]>([]);
+    const [handledCourses, setHandledCourses] = useState<Course[]>([]);
+
+    //Edit Hanlded
+    const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+    const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
+    
+
+    //SET Programs
     useEffect(() => {
-        if(user.program) setProgcode(user.program.programCode);
+        const setPrograms = () => {
+            setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
+        }
+        
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (target.closest(".selected")) {
+                setPrograms();
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [selectedProgram]);
+
+    //DELETE Program
+    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
+        setProgramHandled(prev => {
+            return prev.filter(prog => prog.programCode !== item.programCode)
+        });
+    }
+    
+    //GET/SET ALL HANDLED
+
+    const [fetchedData, setFetchedData] = useState<Program[]>([]);
+
+    useEffect(() => {
+        const getHandledPrograms = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/faculty/get-specialization`, {
+                    method: 'POST',
+                    headers: {
+                    'Authorization': token ? token : '',
+                    'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify({ userId: user.id })
+                });
+    
+                const data = await res.json();
+    
+                if(res.ok && data) {
+                    const fetchData = data as Program[];
+                    setHandledPrograms(fetchData);
+                    setProgramHandled(fetchData.map(item => ({ programCode: item.programCode })));
+
+                    setFetchedData(fetchData);
+                }
+                
+            } catch(error) {
+                console.log('Request Error');
+            }
+        }
+
+        const getHandledCourses = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/faculty/get-handled`, {
+                    method: 'POST',
+                    headers: {
+                    'Authorization': token ? token : '',
+                    'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify({ userId: user.id })
+                });
+    
+                const data = await res.json();
+    
+                if(res.ok && data) {
+                    setHandledCourses(data);
+                }
+                
+            } catch(error) {
+                console.log('Request Error');
+            }
+        }
+
+        getHandledPrograms();
+        getHandledCourses();
     }, [user]);
+
+    
+    //UPDATE ALL HANDLED
+
 
     //Style
     const ref = useRef<HTMLDivElement>(null);
@@ -148,15 +281,38 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{progCode}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+                {handledPrograms.length > 0 ? handledPrograms.map(item => item.programCode).join(', ') : ''}
+            </td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[10rem]">
+                {handledCourses.length > 0 ? handledCourses.map(item => item.courseCode).join(', ') : ''}
+            </td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
-                        <form className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                        <form onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
                         px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
                             
                             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
-                            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose}/>
+                            top-2 font-bold hover:scale-110 active:scale-100" 
+                                icon={faClose} 
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    setUpdateData({
+                                        id,
+                                        studentId,
+                                        firstName,
+                                        lastName,
+                                        email,
+                                        role,
+                                        sex,
+                                        status
+                                    });
+                                    setProgramHandled(fetchedData);
+                                }
+
+                            }
+                            />
 
                             <div className="bg-blu-200 ml-[-2rem] mb-4">
                                 <p className="font-semibold text-[1.1rem] text-start">Edit Faculty</p>
@@ -171,6 +327,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             type="text" 
                                             className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                                             required={true}
+                                            value={updateData.studentId}
+                                            onChange={(e) => handleInputChange(e, setUpdateData)}
                                             name="studentId"
                                             />
                                     </div>
@@ -180,6 +338,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             type="text" 
                                             className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                                             required={true}
+                                            value={updateData.firstName}
+                                            onChange={(e) => handleInputChange(e, setUpdateData)}
                                             name="firstName"
                                             />
                                     </div>
@@ -189,6 +349,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             type="text" 
                                             className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                                             required={true}
+                                            value={updateData.lastName}
+                                            onChange={(e) => handleInputChange(e, setUpdateData)}
                                             name="lastName"
                                             />
                                     </div>
@@ -198,6 +360,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             type="email" 
                                             className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                                             required={true}
+                                            value={updateData.email}
+                                            onChange={(e) => handleInputChange(e, setUpdateData)}
                                             name="email"
                                             />
                                     </div>
@@ -207,11 +371,11 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                         <CustomSelect 
                                             className=" border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                                             option={[
-                                            'BS Information Technology', 
-                                            'BS Computer Science', 
-                                            'BS Information Systems',
-                                            'BL Information Science',
-                                            'BS Entertainment and Multimedia Computing'
+                                                'BS Information Technology', 
+                                                'BS Computer Science', 
+                                                'BS Information Systems',
+                                                'BL Information Science',
+                                                'BS Entertainment and Multimedia Computing'
                                             ]}
                                             setValue={setSelectedProgram}
                                         />
@@ -219,11 +383,13 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                         {/* SELECTED */}
                                         <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                                         flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
-                                            <div className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                                                <span className="text-center">BSIT</span>
+                                            {removeObjectDuplicate(programHandled).map((item, i) => {
+                                                return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                <span className="text-center">{item.programCode}</span>
                                                 <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                                icon={faClose}/>
-                                            </div>
+                                                icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                                                </div>
+                                            })}
                                         </div>
                                     </div>
                                     <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
