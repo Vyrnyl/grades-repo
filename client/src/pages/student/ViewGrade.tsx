@@ -20,24 +20,33 @@ type Student = {
 const ViewGrade = () => {
 
     const { data } = useFetch('grade/get-grades', 'GET');
+
     
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
     const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
     const [filteredCourseList, setFilteredCourseList] = useState<CourseType[]>([]);
     // const [semester, setSemester] = useState(1);
     const { semester, setSemester } = useSemStore();
-
+    
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
             setStudentData(data);
-            if(data[0].bsitStudentRecord.length > 0) setCourseGradeList(data[0].bsitStudentRecord);
-            if(data[0].bscsStudentRecord.length > 0) setCourseGradeList(data[0].bscsStudentRecord);
-            if(data[0].bsisStudentRecord.length > 0) setCourseGradeList(data[0].bsisStudentRecord);
-            if(data[0].blisStudentRecord.length > 0) setCourseGradeList(data[0].blisStudentRecord);
-            if(data[0].bsemcStudentRecord.length > 0) setCourseGradeList(data[0].bsemcStudentRecord);
+            if (data[0].bsitStudentRecord.length > 0 && data[0].program.programCode === 'BSIT') {
+                setCourseGradeList(data[0].bsitStudentRecord);
+            } else if (data[0].bscsStudentRecord.length > 0 && data[0].program.programCode === 'BSCS') {
+                setCourseGradeList(data[0].bscsStudentRecord);
+            } else if (data[0].bsisStudentRecord.length > 0 && data[0].program.programCode === 'BSIS') {
+                setCourseGradeList(data[0].bsisStudentRecord);
+            } else if (data[0].blisStudentRecord.length > 0 && data[0].program.programCode === 'BLIS') {
+                setCourseGradeList(data[0].blisStudentRecord);
+            } else if (data[0].bsemcStudentRecord.length > 0 && data[0].program.programCode === 'BSEMC') {
+                setCourseGradeList(data[0].bsemcStudentRecord);
+            }
         }
+        
     }, [data]);
+    
 
     let student: Student = {
         studentId: '',
@@ -69,6 +78,8 @@ const ViewGrade = () => {
         SetCourseList(courseGradeList, student, semester, setFilteredCourseList);
     }, [courseGradeList, semester]);
     
+    // console.log(filteredCourseList)
+
     //GWA
     let gwa = 0;
     let totalUnits= 0;

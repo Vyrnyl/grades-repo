@@ -20,30 +20,31 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
   let programCode = '';
   if(student.program) programCode = student.program.programCode;
   
+
   //Set Grade
   useEffect(() => {
     
-    if(student.bsitStudentRecord.length > 0) {
+    if(student.bsitStudentRecord.length > 0 && student.program.programCode === 'BSIT') {
       const grade = student.bsitStudentRecord.find(record => record.bsitCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
-    if(student.bscsStudentRecord.length > 0) {
+    if(student.bscsStudentRecord.length > 0 && student.program.programCode === 'BSCS') {
       const grade = student.bscsStudentRecord.find(record => record.bscsCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
-    if(student.bsisStudentRecord.length > 0) {
+    if(student.bsisStudentRecord.length > 0 && student.program.programCode === 'BSIS') {
       const grade = student.bsisStudentRecord.find(record => record.bsisCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
-    if(student.blisStudentRecord.length > 0) {
+    if(student.blisStudentRecord.length > 0 && student.program.programCode === 'BLIS') {
       const grade = student.blisStudentRecord.find(record => record.blisCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
-    if(student.bsemcStudentRecord.length > 0) {
+    if(student.bsemcStudentRecord.length > 0 && student.program.programCode === 'BSEMC') {
       const grade = student.bsemcStudentRecord.find(record => record.bsemcCurriculum?.courseCode == courseCode);
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);

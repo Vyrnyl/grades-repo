@@ -52,6 +52,8 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   const [selectedYearLevel, setSelectedYearLevel] = useState<string>('1st');
   const [selectedProgram, setSelectedProgram] = useState('BSIT');
 
+  // console.log(filteredStudents)
+
   //Set Record
   useEffect(() => {
 

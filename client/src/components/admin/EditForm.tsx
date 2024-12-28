@@ -20,9 +20,10 @@ type EditFormProps = {
 
 const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData } : EditFormProps) => {
 
-    //Style
-    const ref = useRef<HTMLDivElement>(null);
-    HandleOutsideClick(ref, setIsOpen);
+
+  //Style
+  const ref = useRef<HTMLDivElement>(null);
+  HandleOutsideClick(ref, setIsOpen);
 
   return (
     <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
@@ -38,21 +39,52 @@ const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData }
             value={updateData.studentId} placeholder='Student ID' 
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-            <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='fullName' 
-            placeholder='Full Name'
-            value={updateData.fullName}
+            <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
+            placeholder='First Name'
+            value={updateData.firstName}
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-            <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='yearBlock' 
-            value={updateData.yearBlock} placeholder='Year/Block(eg. 1A)'
+            <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='lastName' 
+            placeholder='Last Name'
+            value={updateData.lastName}
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
 
-            <SelectInput className='w-[10rem] h-[2rem] self-center'
+            <SelectInput className='w-[15rem] h-[2rem] self-center'
+            name='programId' value={updateData.programId || ""}
+            onChange={(e) => handleSelectChange(e, setUpdateData)}>
+              <option className='font-semibold' value="BS Information Technology">BS Information Technology</option>
+              <option className='font-semibold' value="BS Computer Science">BS Computer Science</option>
+              <option className='font-semibold' value="BS Information Systems">BS Information Systems</option>
+              <option className='font-semibold' value="BL Information Science">BL Information Science</option>
+              <option className='font-semibold' value="BS Entertainment and Multimedia Computing">BS Entertainment and Multimedia Computing</option>
+            </SelectInput>
+
+            <SelectInput className='w-[10rem] h-[2rem] self-center text-center'
+            name='yearLevel' value={updateData.yearLevel || ""}
+            onChange={(e) => handleSelectChange(e, setUpdateData)}>
+              <option className='font-semibold' value="" disabled>Year Level</option>
+              <option className='font-semibold' value="1st">1st</option>
+              <option className='font-semibold' value="2nd">2nd</option>
+              <option className='font-semibold' value="3rd">3rd</option>
+              <option className='font-semibold' value="4th">4th</option>
+            </SelectInput>
+            
+            <SelectInput className='w-[10rem] h-[2rem] self-center text-center'
+            name='block' value={updateData.block || ""}
+            onChange={(e) => handleSelectChange(e, setUpdateData)}>
+              <option className='font-semibold' value="" disabled>Block</option>
+              <option className='font-semibold' value="A">A</option>
+              <option className='font-semibold' value="B">B</option>
+              <option className='font-semibold' value="C">C</option>
+              <option className='font-semibold' value="D">D</option>
+            </SelectInput>
+
+            <SelectInput className='w-[10rem] h-[2rem] self-center text-center'
             name='status' value={updateData.status || ""}
             onChange={(e) => handleSelectChange(e, setUpdateData)}>
-              <option value="" disabled>Status</option>
-              <option value="Enrolled">Enrolled</option>
-              <option value="Unenrolled">Unenrolled</option>
+              <option className='font-semibold' value="" disabled>Status</option>
+              <option className='font-semibold' value="Enrolled">Enrolled</option>
+              <option className='font-semibold' value="Unenrolled">Unenrolled</option>
             </SelectInput>
             
             <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>

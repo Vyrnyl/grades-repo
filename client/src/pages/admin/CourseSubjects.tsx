@@ -28,7 +28,7 @@ const CourseSubjects = () => {
     }, [courses.data]);
 
 
-    console.log(courseList)
+    // console.log(courseList)
 
     
     //Add

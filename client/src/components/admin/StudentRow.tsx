@@ -4,6 +4,9 @@ import { User } from '../../types/studentTypes';
 import { useState } from 'react';
 import { deleteUser } from './utils';
 import EditForm from './EditForm';
+import getProgramId from '../../utils/getProgramId';
+import getProgramName from '../../utils/getProgramName';
+import yearSuffix from '../../utils/yearSuffix';
 
 type StudentData = {
   id: number,
@@ -38,6 +41,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   } = student;
 
 
+
   let program = '';
   if(student?.program) {
     const { programName } = student.program;
@@ -46,6 +50,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     if(programName.split(' ')[2].charAt(0) === 'L') 
       program = `BL ${programName.split('and')[1]}`;
   }
+  
 
   const [studentData, setStudentData] = useState<StudentData>({
     id,
@@ -56,39 +61,41 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     block,
     program,
     status
-  }); 
+  });
 
   //Update
   const [isOpen, setIsOpen] = useState(false);
   const [updateData, setUpdateData] = useState<Record<string, any>>({
     id,
     studentId,
-    fullName: `${student.firstName.charAt(0) === '@' ? student.firstName.slice(1) : student.firstName} ${student.lastName}`,
-    yearBlock: `${student.yearLevel || ''}${student.block || ''}`,
-    // programId: String(programId),
+    firstName: `${student.firstName.charAt(0) === '@' ? student.firstName.slice(1) : student.firstName}`,
+    lastName: student.lastName,
+    yearLevel: `${student.yearLevel}${yearSuffix(student.yearLevel)}` || '',
+    block: student.block || '',
+    programId: program,
     status
   });
+  
   
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     
-    let fullName = updateData.fullName.split(' ');
-    let yearBlock = updateData.yearBlock.split('');
+    // let fullName = updateData.fullName.split(' ');
+    // let yearBlock = updateData.yearBlock.split('');
 
     const updateUser = async () => {
-
       setIsOpen(!isOpen);
       const updatedData = {
         id,
         studentId: updateData.studentId,
-        firstName: student?.firstName.charAt(0) === '@' ?  `@${fullName[0]}` : fullName[0],
-        lastName: fullName[fullName.length - 1],
-        yearLevel: Number(yearBlock[0]),
-        block: yearBlock[1],
-        // programId: Number(updateData.programId),
+        firstName: student?.firstName.charAt(0) === '@' ?  `@${updateData.firstName}` : updateData.firstName,
+        lastName: updateData.lastName,
+        yearLevel: typeof updateData.yearLevel == 'string' ? Number(updateData.yearLevel.charAt(0)) : updateData.yearLevel,
+        block: updateData.block,
+        programId: getProgramId(updateData.programId),
         status: updateData.status
       }
-      console.log(updateData);
+      // console.log(updatedData)
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
           method: 'PUT',
@@ -102,7 +109,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
         const data = await res.json();
 
         if(res.ok && data) {
-          setStudentData({...updatedData, program});
+          setStudentData({...updatedData, program: getProgramName(data.programId)});
         }
 
       } catch(error) {

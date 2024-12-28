@@ -56,7 +56,7 @@ const DashBoard = () => {
     index = gwaList.length - 2;
   }
   
-  console.log(gwaList)
+  // console.log(gwaList)
   
   //Set program
   useEffect(() => {

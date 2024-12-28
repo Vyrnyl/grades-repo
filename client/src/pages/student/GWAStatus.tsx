@@ -29,11 +29,17 @@ const GWAStatus = ({ className } : { className: string }) => {
     useEffect(() => {
         if(Array.isArray(data)) {
             setStudentData(data);
-            if(data[0].bsitStudentRecord.length > 0) setCourseGradeList(data[0].bsitStudentRecord);
-            if(data[0].bscsStudentRecord.length > 0) setCourseGradeList(data[0].bscsStudentRecord);
-            if(data[0].bsisStudentRecord.length > 0) setCourseGradeList(data[0].bsisStudentRecord);
-            if(data[0].blisStudentRecord.length > 0) setCourseGradeList(data[0].blisStudentRecord);
-            if(data[0].bsemcStudentRecord.length > 0) setCourseGradeList(data[0].bsemcStudentRecord);
+            if (data[0].bsitStudentRecord.length > 0 && data[0].program.programCode === 'BSIT') {
+                setCourseGradeList(data[0].bsitStudentRecord);
+            } else if (data[0].bscsStudentRecord.length > 0 && data[0].program.programCode === 'BSCS') {
+                setCourseGradeList(data[0].bscsStudentRecord);
+            } else if (data[0].bsisStudentRecord.length > 0 && data[0].program.programCode === 'BSIS') {
+                setCourseGradeList(data[0].bsisStudentRecord);
+            } else if (data[0].blisStudentRecord.length > 0 && data[0].program.programCode === 'BLIS') {
+                setCourseGradeList(data[0].blisStudentRecord);
+            } else if (data[0].bsemcStudentRecord.length > 0 && data[0].program.programCode === 'BSEMC') {
+                setCourseGradeList(data[0].bsemcStudentRecord);
+            }
         }
     }, [data]);
 
