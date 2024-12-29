@@ -18,22 +18,23 @@ const getCoursesList = async () => {
     try {
         // const courses = await prisma.bsitCurriculum.findMany();
         const courses = await prisma.$queryRaw `
-           SELECT *
-            FROM (
-                SELECT * FROM bsitCurriculum
-                UNION
-                SELECT * FROM bscsCurriculum
-                UNION
-                SELECT * FROM bsisCurriculum
-                UNION
-                SELECT * FROM blisCurriculum
-                UNION
-                SELECT * FROM bsemcCurriculum
-            ) AS combined
-            GROUP BY courseCode
-            ORDER BY courseCode ASC
-        `;
-        // if(Array.isArray(courses)) console.log(courses.length);
+        SELECT id, courseCode, courseTitle, units
+        FROM (
+            SELECT id, courseCode, courseTitle, units FROM bsitCurriculum
+            UNION
+            SELECT id, courseCode, courseTitle, units FROM bscsCurriculum
+            UNION
+            SELECT id, courseCode, courseTitle, units FROM bsisCurriculum
+            UNION
+            SELECT id, courseCode, courseTitle, units FROM blisCurriculum
+            UNION
+            SELECT id, courseCode, courseTitle, units FROM bsemcCurriculum
+            UNION
+            SELECT id, courseCode, courseTitle, units FROM addedCourse
+        ) AS combined
+        GROUP BY courseCode
+        ORDER BY courseCode ASC;
+      `;
         return courses;
     }
     catch (error) {
@@ -46,6 +47,21 @@ exports.getCoursesList = getCoursesList;
 const addAddedCourse = async (data) => {
     try {
         const addedCourse = await prisma.addedCourse.create({ data });
+        const users = await prisma.user.findMany({
+            where: {
+                programId: addedCourse.programId,
+                role: "student",
+            },
+        });
+        if (addedCourse) {
+            let record = users.map((u) => ({
+                userId: u.id,
+                courseId: addedCourse.id,
+            }));
+            await prisma.addedCourseRecord.createMany({
+                data: record,
+            });
+        }
         return addedCourse;
     }
     catch (error) {
@@ -69,7 +85,7 @@ const updateAddedCourse = async (body) => {
     try {
         const updated = await prisma.addedCourse.updateMany({
             where: { id: body.id },
-            data: body
+            data: body,
         });
         return updated;
     }
@@ -82,7 +98,7 @@ exports.updateAddedCourse = updateAddedCourse;
 const deleteAddedCourse = async (id) => {
     try {
         const deleted = await prisma.addedCourse.delete({
-            where: { id }
+            where: { id },
         });
         return deleted;
     }

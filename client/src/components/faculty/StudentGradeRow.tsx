@@ -49,6 +49,11 @@ const StudentGradeRow = ({ student, courseId, courseCode, setCloseEdit, closeEdi
       if(grade) setGrade(grade?.grade);
       if(grade === undefined) setGrade(null);
     }
+    if(student.addedCourseRecord.length > 0) {
+      const grade = student.addedCourseRecord.find(record => record.addedCourse?.courseCode == courseCode);
+      if(grade) setGrade(grade?.grade);
+      if(grade === undefined) setGrade(null);
+    }
     
   }, [courseId, courseCode]);
   

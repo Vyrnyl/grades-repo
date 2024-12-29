@@ -32,6 +32,7 @@ model User {
   bsisStudentRecord BsisStudentRecord[]
   blisStudentRecord BlisStudentRecord[]
   bsemcStudentRecord BsemcStudentRecord[]
+  addedCourseRecord AddedCourseRecord[]
   class Class[]
   notification Notification[]
   recentActivity RecentActivity[]
@@ -92,6 +93,15 @@ model AddedCourse {
   yearLevel Int
   semester Int
   programId Int
+  addedCourseRecord AddedCourseRecord[]
+}
+model AddedCourseRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  addedCourse AddedCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 
@@ -151,6 +161,8 @@ model Specialization {
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+
 
 
 model Class {

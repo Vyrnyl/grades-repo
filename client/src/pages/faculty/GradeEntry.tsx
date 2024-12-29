@@ -25,7 +25,7 @@ const GradeEntry = () => {
   
   //Get Courses 
   const courses = useFetch('program/get-courses', 'GET');
-
+  
   //Get Handled Courses
   useEffect(() => {
     if(courses.data) setCourseList(courses.data as Course[]);

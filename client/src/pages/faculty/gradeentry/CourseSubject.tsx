@@ -35,10 +35,6 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
 
   const records = useFetch('grade/get-records', 'GET');
   const courses = useFetch('program/get-courses', 'GET');
-  // const handledPrograms = useFetch('faculty/get-specialization', 'POST', JSON.stringify({ userId: userInfo?.id }));
-  // const handledCourses = useFetch('faculty/get-handled', 'POST', JSON.stringify({ userId }));
-
-  // const [programs, setPrograms] = useState<Program[]>([]);
 
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [courseList, setCourseList] = useState<Course[]>([]);
@@ -51,9 +47,8 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   const [selectedBlock, setSelectedBlock] = useState<string>('A');
   const [selectedYearLevel, setSelectedYearLevel] = useState<string>('1st');
   const [selectedProgram, setSelectedProgram] = useState('BSIT');
-
-  // console.log(filteredStudents)
-
+  
+  
   //Set Record
   useEffect(() => {
 
@@ -104,7 +99,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           student.program.programCode == selectedProgram && 
           checkStudentCourse(student, courseCode)
       });
-      setFilteredStudents((filteredList));
+      setFilteredStudents(students);
     }
   }, [
       records.data, 

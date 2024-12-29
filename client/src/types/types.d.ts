@@ -45,7 +45,8 @@ type CourseType = {
     bscsCurriculum?: Course,
     bsisCurriculum?: Course,
     blisCurriculum?: Course,
-    bsemcCurriculum?: Course
+    bsemcCurriculum?: Course,
+    addedCourse?: Course
 }
 
 type StudentRecord = {
@@ -60,7 +61,8 @@ type StudentRecord = {
     bscsStudentRecord: CourseType[],
     bsisStudentRecord: CourseType[],
     blisStudentRecord: CourseType[],
-    bsemcStudentRecord: CourseType[]
+    bsemcStudentRecord: CourseType[],
+    addedCourseRecord: CourseType[]
 }
 
 

@@ -159,6 +159,9 @@ const getStudents = async () => {
                 },
                 bsemcStudentRecord: {
                     include: { bsemcCurriculum: true }
+                }, 
+                addedCourseRecord: {
+                    include: { addedCourse: true }
                 }
             },
             where: { role: 'student' }
@@ -195,6 +198,22 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
                         data: { grade }
                     });
                 }
+
+                //ADDED COURSE
+                const addedCourse = await prisma.addedCourse.findFirst({
+                    where: { courseCode },
+                    include: {
+                        addedCourseRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+                if(addedCourse) {
+                    update = await prisma.addedCourseRecord.update({
+                        where: { id: addedCourse?.addedCourseRecord[0].id },
+                        data: { grade }
+                    });
+                }
             } else if(programId === 2) {
                 record = await prisma.bscsCurriculum.findFirst({
                     where: { courseCode },
@@ -208,6 +227,22 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
                 if(record?.bscsStudentRecord) {
                     update = await prisma.bscsStudentRecord.update({
                         where: { id: record?.bscsStudentRecord[0].id },
+                        data: { grade }
+                    });
+                }
+
+                //ADDED COURSE
+                const addedCourse = await prisma.addedCourse.findFirst({
+                    where: { courseCode },
+                    include: {
+                        addedCourseRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+                if(addedCourse) {
+                    update = await prisma.addedCourseRecord.update({
+                        where: { id: addedCourse?.addedCourseRecord[0].id },
                         data: { grade }
                     });
                 }
@@ -227,6 +262,23 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
                         data: { grade }
                     });
                 }
+
+                //ADDED COURSE
+                const addedCourse = await prisma.addedCourse.findFirst({
+                    where: { courseCode },
+                    include: {
+                        addedCourseRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+                if(addedCourse) {
+                    update = await prisma.addedCourseRecord.update({
+                        where: { id: addedCourse?.addedCourseRecord[0].id },
+                        data: { grade }
+                    });
+                }
+
             } else if(programId === 4) {
                 record = await prisma.blisCurriculum.findFirst({
                     where: { courseCode },
@@ -243,6 +295,22 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
                         data: { grade }
                     });
                 }
+
+                //ADDED COURSE
+                const addedCourse = await prisma.addedCourse.findFirst({
+                    where: { courseCode },
+                    include: {
+                        addedCourseRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+                if(addedCourse) {
+                    update = await prisma.addedCourseRecord.update({
+                        where: { id: addedCourse?.addedCourseRecord[0].id },
+                        data: { grade }
+                    });
+                }
             } else if(programId === 5) {
                 record = await prisma.bsemcCurriculum.findFirst({
                     where: { courseCode },
@@ -256,6 +324,22 @@ const updateGrade = async (userId: number, programId: number, courseCode: string
                 if(record?.bsemcStudentRecord) {
                     update = await prisma.bsemcStudentRecord.update({
                         where: { id: record?.bsemcStudentRecord[0].id },
+                        data: { grade }
+                    });
+                }
+
+                //ADDED COURSE
+                const addedCourse = await prisma.addedCourse.findFirst({
+                    where: { courseCode },
+                    include: {
+                        addedCourseRecord: {
+                            where: { userId }
+                        }
+                    }
+                });
+                if(addedCourse) {
+                    update = await prisma.addedCourseRecord.update({
+                        where: { id: addedCourse?.addedCourseRecord[0].id },
                         data: { grade }
                     });
                 }

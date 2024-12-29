@@ -10,7 +10,7 @@ type Student = {
   period: string;
 };
 
-//HARD CODED
+//HARD CODED!!!
 
 const SetCourseList = (
   courseGradeList: CourseType[],
@@ -23,39 +23,47 @@ const SetCourseList = (
     let exyearLevel = 3;
     let exsemester = 2;
     let exprogramId = 1;
-    let ex: CourseType = {
+
+    let ex: CourseType[] = [{
       grade: 3.3,
       id: 1,
       userId: 2,
       courseId: 3,
+      semester: 2,
+      programId: 1,
 
       bsitCurriculum: {
-        courseCode: "EXM",
-        courseTitle: "Example Test Course",
+        courseCode: "EXM1",
+        courseTitle: "EXAMPLE TEST COURSE 1",
         id: 97,
         units: 3,
-      }
-    };
+        }
+      }, {
+        grade: 3.3,
+        id: 1,
+        userId: 2,
+        courseId: 3,
+        semester: 2,
+
+        bsitCurriculum: {
+          courseCode: "EXM2",
+          courseTitle: "Example Test Course 2",
+          id: 97,
+          units: 2,
+        }
+      },
+    ];
+
+
+    // console.log(courseGradeList);
+
+
 
     let firstYear = courseGradeList.slice(0, 16);
     let secondYear = courseGradeList.slice(16, 32);
     let thirdYear = courseGradeList.slice(32, 43);
     let fourthYear = courseGradeList.slice(43, 49);
 
-    console.log(thirdYear)
-
-    //TEST
-    // if (exyearLevel === 1) {
-    //     firstYear.push(ex);
-    // } else if (exyearLevel === 2) {
-    //     secondYear.push(ex);
-    // } else if (exyearLevel === 3) {
-    //    exsemester == 2 ? thirdYear.push(ex) : thirdYear.unshift(ex);
-    // } else if (exyearLevel === 4) {
-    //     fourthYear.push(ex);
-    // }
-
-    //
     if (student.yearLevel === 1) {
       let semesterCourses =
         semester === 1 ? firstYear.slice(0, 8) : firstYear.slice(8);
@@ -69,6 +77,16 @@ const SetCourseList = (
     if (student.yearLevel === 3) {
       let semesterCourses =
         semester === 1 ? thirdYear.slice(0, 5) : thirdYear.slice(5);
+
+      //TEST
+      ex.forEach(item => {
+        if(item.semester === 1 && semester === 1) {
+          semesterCourses.push(item);
+        } else if(item.semester === 2 && semester === 2) {
+          semesterCourses.push(item);
+        }
+      });
+
       setFilteredCourseList(semesterCourses);
     }
     if (student.yearLevel === 4) {
