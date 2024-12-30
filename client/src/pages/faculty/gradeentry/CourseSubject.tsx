@@ -26,7 +26,6 @@ type CourseSubject = {
 const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSubject) => {
 
 
-
   const token = localStorage.getItem('atoken');
   const { userInfo } = useUserStore();
   
@@ -99,7 +98,12 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           student.program.programCode == selectedProgram && 
           checkStudentCourse(student, courseCode)
       });
-      setFilteredStudents(students);
+
+      // let filteredList = students.filter(stud => {
+      //   return stud.bsisStudentRecord.some(s => s.bsisCurriculum?.courseCode === courseCode)
+      // });
+
+      setFilteredStudents(filteredList);
     }
   }, [
       records.data, 
@@ -110,6 +114,8 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
       filteredCourses,
       allBg
     ]);
+
+    // console.log(filteredStudents)
 
     
     // if(filteredStudents.length > 0) 
