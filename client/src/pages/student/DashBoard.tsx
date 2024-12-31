@@ -43,7 +43,6 @@ const DashBoard = () => {
           return true;
         };
       });
-      // console.log(list[index]);
     }
     
   }, [x, semester]);
@@ -56,7 +55,6 @@ const DashBoard = () => {
     index = gwaList.length - 2;
   }
   
-  // console.log(gwaList)
   
   //Set program
   useEffect(() => {

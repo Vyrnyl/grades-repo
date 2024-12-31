@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
+exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProgramList = async () => {
@@ -108,3 +108,28 @@ const deleteAddedCourse = async (id) => {
     }
 };
 exports.deleteAddedCourse = deleteAddedCourse;
+//ASSIGN NEW USER
+const assignNewUserCourse = async (userId, programId) => {
+    try {
+        const courses = await prisma.addedCourse.findMany({
+            where: { programId }
+        });
+        const courseIds = courses.map(course => course.id);
+        const record = await prisma.addedCourseRecord.findMany({ where: { userId, courseId: { in: courseIds } } });
+        if (record.length === 0) {
+            await prisma.addedCourseRecord.createMany({
+                data: courseIds.map(courseId => ({
+                    userId,
+                    courseId
+                }))
+            });
+        }
+        ;
+        return record;
+    }
+    catch (error) {
+        console.log(`Assign Course error: ${error}`);
+        return null;
+    }
+};
+exports.assignNewUserCourse = assignNewUserCourse;

@@ -16,6 +16,8 @@ const EnrolledRow = ({ course, sem } : { course: CourseType, sem: number }) => {
     grade: null
   });
 
+  // console.log(enrolledCourse)
+
   //Set Course
   useEffect(() => {
     if(course.bsitCurriculum) {
@@ -57,6 +59,14 @@ const EnrolledRow = ({ course, sem } : { course: CourseType, sem: number }) => {
       setEnrolledCourse({ 
         courseTitle: bsemcCurriculum.courseTitle,
         units: bsemcCurriculum.units,
+        grade: grade
+      })
+    };
+    if(course.addedCourse) {
+      let { addedCourse, grade } = course;
+      setEnrolledCourse({ 
+        courseTitle: addedCourse.courseTitle,
+        units: addedCourse.units,
         grade: grade
       })
     };

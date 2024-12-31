@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
+const programDataAccess_1 = require("./programDataAccess");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
 const createUser = async (value) => {
@@ -124,6 +125,8 @@ const updateUserData = async (userId, value) => {
                         data: studentCourses
                     });
                 }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
             }
             else if (value.programId === 2) {
                 const existingRecords = await prisma.bscsStudentRecord.findMany({
@@ -140,6 +143,8 @@ const updateUserData = async (userId, value) => {
                         data: studentCourses
                     });
                 }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
             }
             else if (value.programId === 3) {
                 const existingRecords = await prisma.bsisStudentRecord.findMany({
@@ -156,6 +161,8 @@ const updateUserData = async (userId, value) => {
                         data: studentCourses
                     });
                 }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
             }
             else if (value.programId === 4) {
                 const existingRecords = await prisma.blisStudentRecord.findMany({
@@ -172,6 +179,8 @@ const updateUserData = async (userId, value) => {
                         data: studentCourses
                     });
                 }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
             }
             else if (value.programId === 5) {
                 const existingRecords = await prisma.bsemcStudentRecord.findMany({
@@ -188,6 +197,8 @@ const updateUserData = async (userId, value) => {
                         data: studentCourses
                     });
                 }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
             }
         });
         return userUpdateDetails;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudentGrade = exports.getStudentRecords = exports.getStudentGrades = void 0;
+exports.getAddedCourseGrade = exports.updateStudentGrade = exports.getStudentRecords = exports.getStudentGrades = void 0;
 const gradeDataAccess_1 = require("../data/gradeDataAccess");
 const notificationDataAccess_1 = require("../data/notificationDataAccess");
 const getStudentGrades = async (req, res) => {
@@ -36,3 +36,12 @@ const updateStudentGrade = async (req, res) => {
     res.status(201).json(updateGradeDetails);
 };
 exports.updateStudentGrade = updateStudentGrade;
+//ADDED COURSE GRADES
+const getAddedCourseGrade = async (req, res) => {
+    const records = await (0, gradeDataAccess_1.getAddedCourseRecord)(req.body.userId);
+    if (!records) {
+        return res.status(500).json({ error: 'Failed to retrieve user grades' });
+    }
+    res.status(201).json(records);
+};
+exports.getAddedCourseGrade = getAddedCourseGrade;

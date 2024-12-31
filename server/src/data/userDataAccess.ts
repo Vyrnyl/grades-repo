@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NewUserData, StoreRefreshTokenResponse, UserUpdatePayload } from "../types/types";
+import { assignNewUserCourse } from "./programDataAccess";
 
 const prisma = new PrismaClient();
 
@@ -132,6 +133,10 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
                         data: studentCourses
                     });
                 }
+
+                //ADDED COURSE
+                await assignNewUserCourse(userId, value.programId);
+
             } else if(value.programId === 2) {
                 const existingRecords = await prisma.bscsStudentRecord.findMany({
                     where: {
@@ -149,6 +154,9 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
                         data: studentCourses
                     });
                 }
+
+                //ADDED COURSE
+                await assignNewUserCourse(userId, value.programId);
             } else if(value.programId === 3) {
                 const existingRecords = await prisma.bsisStudentRecord.findMany({
                     where: {
@@ -166,6 +174,9 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
                         data: studentCourses
                     });
                 }
+
+                //ADDED COURSE
+                await assignNewUserCourse(userId, value.programId);
             } else if(value.programId === 4) {
                 const existingRecords = await prisma.blisStudentRecord.findMany({
                     where: {
@@ -183,6 +194,9 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
                         data: studentCourses
                     });
                 }
+
+                //ADDED COURSE
+                await assignNewUserCourse(userId, value.programId);
             } else if(value.programId === 5) {
                 const existingRecords = await prisma.bsemcStudentRecord.findMany({
                     where: {
@@ -200,6 +214,9 @@ const updateUserData = async (userId: number, value: UserUpdatePayload) => {
                         data: studentCourses
                     });
                 }
+
+                //ADDED COURSE
+                await assignNewUserCourse(userId, value.programId);
             }
         });
 

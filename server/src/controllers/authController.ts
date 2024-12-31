@@ -6,6 +6,7 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from ".
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
 import { addAdminRecentActivity, addLoginActivity, addLoginSession, deleteLoginSession } from "../data/activityDataAccess";
+import { assignNewUserCourse } from "../data/programDataAccess";
 
 
 //SIGNUP
@@ -39,6 +40,9 @@ const signup = async (req: Request, res: Response) => {
         // console.log(newUserResult)
         return res.status(409).json({ error: 'Email already registered' });
     }
+
+    //Assign Addded Courses
+    await assignNewUserCourse(newUserResult.id, value.programId);
 
     //Set Recent Activity
     // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);

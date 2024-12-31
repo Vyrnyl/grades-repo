@@ -207,6 +207,12 @@ model Notification {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model ProfilePic {
+  id Int @id @default(autoincrement())
+  data Bytes
+  mimeType String
+}
+
 model RefreshToken {
   id Int @id @default(autoincrement())
   token String @unique @db.VarChar(300)

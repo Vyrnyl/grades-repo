@@ -74,6 +74,8 @@ const Dashboard = () => {
 
   let percentage = active.activeSessions / (students.length + faculties.length + 1) * 100;
 
+  // console.log(percentage < 0 ? 0 : percentage)
+
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
       <div className="bg-gree-300 h-[100%] flex flex-col justify-center">

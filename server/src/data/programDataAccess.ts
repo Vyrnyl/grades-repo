@@ -108,6 +108,35 @@ const deleteAddedCourse = async (id: number) => {
   }
 };
 
+
+//ASSIGN NEW USER
+const assignNewUserCourse = async (userId: number, programId: number) => {
+  try {
+    const courses = await prisma.addedCourse.findMany({
+      where: { programId }
+    });
+
+    const courseIds = courses.map(course => course.id);
+
+    const record = await prisma.addedCourseRecord.findMany({ where: { userId, courseId: { in: courseIds } } });
+    
+    if(record.length === 0) {
+      await prisma.addedCourseRecord.createMany({
+        data: courseIds.map(courseId => ({
+          userId,
+          courseId
+        }))
+      });
+    };
+
+    return record;
+  } catch (error) {
+    console.log(`Assign Course error: ${error}`);
+    return null;
+  }
+}
+
+
 export {
   getProgramList,
   getCoursesList,
@@ -115,4 +144,6 @@ export {
   getAddedCourses,
   updateAddedCourse,
   deleteAddedCourse,
+
+  assignNewUserCourse
 };

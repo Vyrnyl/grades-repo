@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudents = exports.updateGrade = exports.getRecords = exports.getGrades = void 0;
+exports.getAddedCourseRecord = exports.getStudents = exports.updateGrade = exports.getRecords = exports.getGrades = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getGrades = async (userId) => {
@@ -33,55 +33,6 @@ const getGrades = async (userId) => {
             where: { id: userId }
         });
         return students;
-        // const programId = program?.program?.id;
-        // let records: Grade[];
-        // if(programId === 1) {
-        //     records = await prisma.bsitStudentRecord.findMany({
-        //         where: { userId },
-        //         select: {
-        //             id: true,
-        //             userId: true,
-        //             courseId: true,
-        //             grade: true,
-        //             bsitCurriculum: { // Use brackets to define the dynamic key
-        //                 select: {
-        //                     units: true
-        //                 }
-        //             }
-        //         }
-        //     });
-        // } else if(programId === 2) {
-        //     records = await prisma.bscsStudentRecord.findMany({
-        //         where: { userId },
-        //         select: {
-        //             id: true,
-        //             userId: true,
-        //             courseId: true,
-        //             grade: true,
-        //             bscsCurriculum: {
-        //                 select: {
-        //                     units: true
-        //                 }
-        //             }
-        //         }
-        //     });
-        // } else if(programId === 3) {
-        //     records = await prisma.bsisStudentRecord.findMany({
-        //         where: { userId },
-        //         select: {
-        //             id: true,
-        //             userId: true,
-        //             courseId: true,
-        //             grade: true,
-        //             bsisCurriculum: {
-        //                 select: {
-        //                     units: true
-        //                 }
-        //             }
-        //         }
-        //     });
-        // } else return undefined;
-        // return records;
     }
     catch (error) {
         console.log(`Retrieval error: ${error}`);
@@ -307,38 +258,6 @@ const updateGrade = async (userId, programId, courseCode, grade) => {
             }
             else
                 return undefined;
-            // console.log(update);
-            // if(programId === 1) {
-            //     record = await prisma.bsitStudentRecord.findFirst({
-            //         where: { userId }
-            //     });
-            //     update = await prisma.bsitStudentRecord.update({
-            //         where: { id: record?.id, courseId },
-            //         data: {
-            //             grade
-            //         }
-            //     });
-            // } else if(programId === 2) {
-            //     record = await prisma.bscsStudentRecord.findFirst({
-            //         where: { userId, courseId }
-            //     });
-            //     update = await prisma.bscsStudentRecord.update({
-            //         where: { id: record?.id, courseId },
-            //         data: {
-            //             grade
-            //         }
-            //     });
-            // } else if(programId === 3) {
-            //     record = await prisma.bsisStudentRecord.findFirst({
-            //         where: { userId, courseId }
-            //     });
-            //     update = await prisma.bsisStudentRecord.update({
-            //         where: { id: record?.id, courseId },
-            //         data: {
-            //             grade
-            //         }
-            //     });
-            // } else return undefined;
             return { message: "Update Successfully" };
         });
         return updateResult;
@@ -349,3 +268,18 @@ const updateGrade = async (userId, programId, courseCode, grade) => {
     }
 };
 exports.updateGrade = updateGrade;
+//ADDED COURSE
+const getAddedCourseRecord = async (userId) => {
+    try {
+        const addedRecord = await prisma.addedCourseRecord.findMany({
+            where: { userId },
+            include: { addedCourse: true }
+        });
+        return addedRecord;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+};
+exports.getAddedCourseRecord = getAddedCourseRecord;

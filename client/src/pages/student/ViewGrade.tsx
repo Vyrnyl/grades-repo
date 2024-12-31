@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import PageContainer from '../../components/shared/components/PageContainer'
 import EnrolledRow from '../../components/student/EnrolledRow'
 import useFetch from '../../hooks/useFetch';
-import { CourseType, StudentRecord } from '../../types/types';
+import { AddedCourseRecord, CourseType, StudentRecord } from '../../types/types';
 import SetCourseList from '../../utils/student/SetCourseList';
 import useSemStore from '../../store/useSemStore';
+import useUserStore from '../../store/useUserStore';
 
 type Student = {
     studentId: string,
@@ -19,8 +20,12 @@ type Student = {
 
 const ViewGrade = () => {
 
-    const { data } = useFetch('grade/get-grades', 'GET');
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem('atoken');
 
+    const { userInfo } = useUserStore();
+
+    const { data } = useFetch('grade/get-grades', 'GET');
     
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
     const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
@@ -74,11 +79,40 @@ const ViewGrade = () => {
 
 
     //Course List
+
+    const [addedRecord, setAddedRecord] = useState<AddedCourseRecord[]>([]);
     useEffect(() => {
-        SetCourseList(courseGradeList, student, semester, setFilteredCourseList);
-    }, [courseGradeList, semester]);
+        // if(Array.isArray(addedCourseRecord.data)) setAddedRecord(addedCourseRecord.data);
+
+        const getAddedRecord = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/grade/get-added-record`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userInfo?.id })
+                });
+                const data = await res.json();
+                
+                if(res.ok && data) {
+                    if(Array.isArray(data)) setAddedRecord(data);
+                }
+
+            } catch(e) {
+                console.log(`Fetch Error${e}`)
+            }
+        };
+        getAddedRecord();
+
+    }, [userInfo]);
+
+    useEffect(() => {
+        SetCourseList(courseGradeList, student, semester, addedRecord, setFilteredCourseList);
+    }, [courseGradeList, semester, addedRecord]);
     
-    // console.log(filteredCourseList)
+    // console.log(addedRecord)
 
     //GWA
     let gwa = 0;
@@ -90,7 +124,8 @@ const ViewGrade = () => {
         "bscsCurriculum",
         "bsisCurriculum",
         "blisCurriculum",
-        "bsemcCurriculum"
+        "bsemcCurriculum",
+        "addedCourse"
     ] as (keyof CourseType)[];
     
     filteredCourseList.forEach((course) => {
@@ -104,7 +139,6 @@ const ViewGrade = () => {
     });
     
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
-
     
     return (
         <PageContainer className='px-12'>
