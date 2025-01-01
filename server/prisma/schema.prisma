@@ -38,6 +38,7 @@ model User {
   recentActivity RecentActivity[]
   handledCourse HandledCourse[]
   specialization Specialization[]
+  profilePic ProfilePic[]
 }
 
 model Program {
@@ -209,8 +210,10 @@ model Notification {
 
 model ProfilePic {
   id Int @id @default(autoincrement())
+  userId Int
   data Bytes
   mimeType String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model RefreshToken {

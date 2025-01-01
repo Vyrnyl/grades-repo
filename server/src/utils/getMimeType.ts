@@ -7,8 +7,7 @@ const getMimeType = (filePath: string): string => {
     if (ext === '.gif') return 'image/gif';
     if (ext === '.bmp') return 'image/bmp';
     if (ext === '.webp') return 'image/webp';
-    // Add more formats as needed
-    return 'application/octet-stream'; // Default MIME type for unknown formats
+    return 'application/octet-stream';
 }
 
 export default getMimeType
