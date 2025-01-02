@@ -126,21 +126,21 @@ const ManageStudents = () => {
           <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Manage Students</h1>
         </div>
         
-        <button className="bg-blue-400 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
+        <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
         mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Student</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
           <table className="w-full font-semibold text-white">
-            <thead className="bg-white sticky text-slate-800 top-0 z-10">
-                <tr>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Student ID</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">First Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Last Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Email</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Program</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Year</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Block</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Action</th>
+            <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
+                <tr className="text-white">
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Student ID</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">First Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Last Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Email</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Program</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Block</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700">

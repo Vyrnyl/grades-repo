@@ -21,7 +21,7 @@ type UserData = {
     sex: string,
     status: string,
     programId: number
-  }
+}
 
 type UserRowProps = {
     user: User,
@@ -35,17 +35,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
     const { id, studentId, firstName, lastName, email, yearLevel, block, role, sex, status, programId } = user;
     const [userData, setUserData] = useState<UserData>({
-        id,
-        studentId,
-        firstName,
-        lastName,
-        email,
-        role,
-        yearLevel,
-        block,
-        sex,
-        status,
-        programId
+        id, studentId, firstName, lastName, email, role,
+        yearLevel, block, sex, status, programId
     });
 
 
@@ -73,7 +64,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         setSelectedProgram(getProgramName(programId));
     }, [user]);
 
-
+    
     //
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
@@ -109,7 +100,6 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             status: updateData.status,
             programId
           }
-          console.log(updatedData);
 
         const updateUser = async () => {
     
@@ -208,7 +198,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                 <div className="bg-purpl-200 flex flex-col gap-4">
 
                                 <div className="bg-gree-300 flex flex-col">
-                                    <label className="font-semibold text-start">Faculty ID:</label>
+                                    <label className="font-semibold text-start">Student ID:</label>
                                     <Input 
                                         type="text" 
                                         className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
@@ -288,45 +278,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                 </div>
                             </div>
                         </form>
-
-                        // <div ref={ref} className='bg-white absolute px-[1rem] py-[1.5rem] z-10 left-[50%] top-[50%] 
-                        //     translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg'>
-                
-                        //     <FontAwesomeIcon className="absolute text-[1rem] right-[.8rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                        //         icon={faX} onClick={() => setIsOpen(!isOpen)}/>
-                    
-                        //     <h1 className="text-[1.5rem] font-bold text-slate-700 self-center mb-2 text-center">Edit</h1>
-                        //     <form onSubmit={handleUpdate} className='bg-gree-200 flex flex-col gap-4'>
-                    
-                        //         <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='studentId' 
-                        //         value={updateData.studentId} placeholder='Student ID' 
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                    
-                        //         <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
-                        //         placeholder='First Name'
-                        //         value={updateData.firstName.charAt(0) === '@' ? updateData.firstName.slice(1) : updateData.firstName}
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-
-                        //         <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='lastName' 
-                        //         placeholder='Last Name'
-                        //         value={updateData.lastName}
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                    
-                        //         <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='email' 
-                        //         value={updateData.email} placeholder='Email'
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-
-                        //         <Input type='number' max={5} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='yearLevel' 
-                        //         value={updateData.yearLevel || ''} placeholder='Year Level'
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-                                
-                        //         <Input type='text' max={2} className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='block' 
-                        //         value={updateData.block || ''} placeholder='Block'
-                        //         onChange={(e) => handleInputChange(e, setUpdateData)}/>
-
-                        //         <SaveButton className='w-[50%] self-center bg-blue-500 text-white'/>
-                        //     </form>
-                        // </div>
+                        
                     }
 
                     <FontAwesomeIcon className="text-blue-500 active:text-white" 

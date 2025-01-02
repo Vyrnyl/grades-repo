@@ -135,11 +135,11 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-gree-200 flex-[.3] flex justify-between flex-wrap">
-          <DashboardCard count={programs?.length || 0} label="Courses" icon={faChartColumn} onClick={() => setIsCourseOpen(!isCourseOpen)}/>
+          <DashboardCard count={programs?.length || 0} label="Programs" icon={faChartColumn} onClick={() => setIsCourseOpen(!isCourseOpen)}/>
           <DashboardCard count={students.length || 0} label="Students" icon={faUser} onClick={() => setIsStudentOpen(!isStudentOpen)}/>
           <DashboardCard count={faculties.length || 0} label="Faculty Members" icon={faUser} onClick={() => setIsFacultyOpen(!isFacultyOpen)}/>
         </div>
-
+              
         <div className="bg-cya-200 flex-[.6] flex justify-evenly items-end">
           <div className="bg-pin-200 border-2 border-slate-600 h-[90%] px-8
           rounded-[1rem] grid place-content-center relative">

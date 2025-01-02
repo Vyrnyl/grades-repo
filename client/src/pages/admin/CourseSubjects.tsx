@@ -53,9 +53,10 @@ const CourseSubjects = () => {
         ...addData, 
         programId: getProgramId(selectedProgram), 
         units: Number(selectedUnits), 
-        yearLevel: Number(selectedYearLevel), 
+        yearLevel: Number(selectedYearLevel.charAt(0)), 
         semester: Number(selectedSem.charAt(0))
       };
+      console.log(body)
 
       const addCourse = async () => {
 
@@ -74,7 +75,7 @@ const CourseSubjects = () => {
           setCourseList([...courseList, {...data, program: { programCode }}]);
           setIsAddOpen(false);
           setSelectedProgram('BS Information Technology');
-          setSelectedYearLevel('1');
+          setSelectedYearLevel('1st');
           setSelectedUnits('1');
           setSelectedSem('1st');
         };
@@ -113,20 +114,20 @@ const CourseSubjects = () => {
             <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Course Subjects</h1>
             </div>
             
-            <button className="bg-blue-400 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
+            <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
             mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Course</button>
     
             <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
             <table className="w-full font-semibold text-white">
-                <thead className="bg-white sticky text-slate-800 top-0 z-10">
-                    <tr>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Course Code</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">Course Title</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">Program</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Units</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Year Level</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Semester</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Option</th>
+                <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
+                    <tr className='text-white'>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Course Code</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Course Title</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Program</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Units</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year Level</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Semester</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Action</th>
                     </tr>
                 </thead>
                 <tbody className="text-gray-700 overflow-y-scroll">
@@ -159,7 +160,7 @@ const CourseSubjects = () => {
               <FontAwesomeIcon className="absolute text-[1.5rem] right-4
               top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
               <div className="bg-blu-200 ml-[-2rem] mb-4">
-                <p className="font-semibold">Add Student</p>
+                <p className="font-semibold">Add Course</p>
               </div>
 
               <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
@@ -214,7 +215,7 @@ const CourseSubjects = () => {
                     <label className="font-semibold">Year Level:</label>
                     <CustomSelect 
                         className="border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                        option={['1', '2', '3', '4']} 
+                        option={['1st', '2nd', '3rd', '4th']} 
                         setValue={setSelectedYearLevel}/>
                   </div>
                   <div className="bg-gree-300 flex flex-col">
