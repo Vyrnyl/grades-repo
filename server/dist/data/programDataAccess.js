@@ -83,10 +83,27 @@ const getAddedCourses = async () => {
 exports.getAddedCourses = getAddedCourses;
 const updateAddedCourse = async (body) => {
     try {
-        const updated = await prisma.addedCourse.updateMany({
+        const prev = await prisma.addedCourse.findUnique({ where: { id: body.id } });
+        const updated = await prisma.addedCourse.update({
             where: { id: body.id },
             data: body,
         });
+        const users = await prisma.user.findMany({
+            where: {
+                programId: updated.programId,
+                role: "student",
+            },
+        });
+        if (prev?.programId !== updated.programId) {
+            await prisma.addedCourseRecord.deleteMany({ where: { courseId: updated.id } });
+            let record = users.map((u) => ({
+                userId: u.id,
+                courseId: updated.id,
+            }));
+            await prisma.addedCourseRecord.createMany({
+                data: record,
+            });
+        }
         return updated;
     }
     catch (error) {

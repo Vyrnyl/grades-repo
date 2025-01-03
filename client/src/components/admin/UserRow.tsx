@@ -37,10 +37,12 @@ type Course = {
 
 type UserRowProps = {
     user: User,
-    setUsers: React.Dispatch<React.SetStateAction<[] | User[]>>
+    setUsers: React.Dispatch<React.SetStateAction<[] | User[]>>,
+    reload: boolean,
+    setReload: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const UserRow = ({ user, setUsers } : UserRowProps) => {
+const UserRow = ({ user, setUsers, reload, setReload } : UserRowProps) => {
     
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
@@ -75,7 +77,6 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         
-        // let fullName = updateData.fullName.split(' ');
 
         setIsOpen(!isOpen);
           const updatedData = {
@@ -182,13 +183,6 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         }
     }
 
-    //Program
-    // const [progCode, setProgcode] = useState('');
-    // useEffect(() => {
-    //     if(user.program) setProgcode(user.program.programCode);
-    // }, [user]);
-
-
     //UPDATE COURSE/PROGRAM HANDLED
 
     //SET handled from Server
@@ -201,7 +195,8 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
     
    
-    
+    // console.log(handledPrograms);
+    // console.log(handledCourses);
 
     //Handle Programs Edit
     useEffect(() => {
@@ -265,8 +260,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                     const fetchData = data as Program[];
                     setHandledPrograms(fetchData);
                     setProgramHandled(fetchData.map(item => ({ programCode: item.programCode })));
-
                     setFetchedData(fetchData);
+
+                    if(data.length === 0) setReload(prev => !prev);
                 }
                 
             } catch(error) {
@@ -290,8 +286,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                 if(res.ok && data) {
                     setHandledCourses(data);
                     setCourseHandled(data);
-
                     setFetchedCourses(data);
+
+                    if(data.length === 0) setReload(prev => !prev);
                 }
                 
             } catch(error) {
@@ -301,14 +298,15 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
         getHandledPrograms();
         getHandledCourses();
-    }, [user]);
+    }, [user, reload]);
 
+    
     
     //UPDATE ALL HANDLED
 
 
     //Style
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLFormElement>(null);
     HandleOutsideClick(ref, setIsOpen);
     
 
@@ -327,7 +325,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
-                        <form onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                        <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
                         px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
                             
                             <FontAwesomeIcon className="absolute text-[1.5rem] right-4

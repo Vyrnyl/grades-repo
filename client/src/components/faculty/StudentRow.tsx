@@ -90,7 +90,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         const updatedData = {
             id,
             studentId: updateData.studentId,
-            firstName: updateData.firstName.charAt(0) === '@' ? updateData.firstName : `@${updateData.firstName}`,
+            firstName: updateData.firstName,
             lastName: updateData.lastName,
             email: updateData.email,
             role: updateData.role,
@@ -164,14 +164,14 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     }, [user]);
 
     //Style
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLFormElement>(null);
     HandleOutsideClick(ref, setIsOpen);
     
 
     return (
         <tr className="bg-slate-100 hover:bg-slate-200 ">
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName.slice(1)}`}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{progCode}</td>
@@ -181,7 +181,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
 
-                        <form onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                        <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
                         px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
 
                             <FontAwesomeIcon className="absolute text-[1.5rem] right-4 
@@ -214,7 +214,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                         type="text" 
                                         className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                                         required={true}
-                                        value={updateData.firstName.charAt(0) === '@' ? updateData.firstName.slice(1) : updateData.firstName}
+                                        value={updateData.firstName}
                                         onChange={(e) => handleInputChange(e, setUpdateData)}
                                         name="firstName"
                                         />

@@ -7,7 +7,7 @@ import useFetch from "../hooks/useFetch"
 import { useEffect } from "react"
 import { User } from "../types/studentTypes"
 const FacultyLayout = () => {
-
+  
   const { setUserInfo } = useUserStore();
   const {  error, data } = useFetch('user/get-user', 'GET');
   

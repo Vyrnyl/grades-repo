@@ -47,15 +47,6 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'User is not authenticated' });
     }
 
-    // const { error, value } = validateUserUpdate(req.body);
-
-    // if(error) {
-    //     const err = validationErrorHandler(error);
-    //     return res.status(422).json(err);
-    // }
-    
-    // const { userId } = req.user;
-
     const value = req.body;
 
     try {
@@ -93,13 +84,13 @@ const updateUser = async (req: Request, res: Response) => {
             await addFacultyActivity(userId, 
                 `You updated your Faculty from ${userDetails?.studentId} to ${userUpdateDetails.studentId}.`);
         
-        // if(userDetails?.sex !== userUpdateDetails.sex)
-        //     await addFacultyActivity(userId, 
-        //         `Gender updated`);
-        
-        // if(userDetails?.phoneNumber !== userUpdateDetails.phoneNumber)
-        //     await addFacultyActivity(userId, 
-        //         `Phone Number updated`);
+        if((userDetails?.sex !== userUpdateDetails.sex) && userUpdateDetails.sex !== '')
+            await addFacultyActivity(userId, 
+                `Gender updated`);
+                
+        if(userDetails?.phoneNumber !== userUpdateDetails.phoneNumber && userUpdateDetails.phoneNumber !== '')
+            await addFacultyActivity(userId, 
+                `Phone Number updated`);
         
         if(userDetails?.email !== userUpdateDetails.email)
             await addFacultyActivity(userId, 

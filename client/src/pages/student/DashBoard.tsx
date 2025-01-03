@@ -110,11 +110,9 @@ const DashBoard = () => {
       <GWAStatus className='hidden'/>
 
       <div className='bg-cya-200 flex-[.2] flex justify-between pl-16'>
-        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName.charAt(0) == '@' ? 
-          userInfo.firstName.slice(1) : userInfo?.firstName}!</h1>
+        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName}!</h1>
         <div className='bg-gree-200 h-[8rem] w-[50%] flex items-end justify-end relative'>
-          <Profile onClick={() => setIsOpen(true)} className='bg-cya-200 mb-8' firstName={userInfo?.firstName.charAt(0) == '@' ? 
-          userInfo.firstName.slice(1) : userInfo?.firstName} lastName={userInfo?.lastName} yearLevel={userInfo?.yearLevel}
+          <Profile onClick={() => setIsOpen(true)} className='bg-cya-200 mb-8' firstName={userInfo?.firstName} lastName={userInfo?.lastName} yearLevel={userInfo?.yearLevel}
           imgSrc={imgSrc} isImageError={isImageError}/>
           
           {isOpen && <ProfilePic setIsOpen={setIsOpen} className='absolute bottom-[-15rem] right-[7rem]' hasPic={hasPic}/>}

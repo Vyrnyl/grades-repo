@@ -10,6 +10,7 @@ import yearSuffix from '../../utils/yearSuffix';
 import CustomSelect from '../faculty/CustomSelect';
 import getProgramId from '../../utils/getProgramId';
 import optionArray from '../../utils/optionArray';
+import getProgramName from '../../utils/getProgramName';
 
 
 type AddedCourse = {
@@ -18,7 +19,8 @@ type AddedCourse = {
     courseTitle: string,
     units: number,
     yearLevel: number,
-    semester: number
+    semester: number,
+    programId: number
 }
 
 const AddedCourseRow = ({ addedCourse, setCourseList }: { 
@@ -31,11 +33,9 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
 
     const { id, courseCode, courseTitle, programId, units, yearLevel, semester } = addedCourse;
     const [courseData, setCourseData] = useState<AddedCourse>
-    ({ id, courseCode, courseTitle, units, yearLevel, semester });
+    ({ id, courseCode, courseTitle, programId, units, yearLevel, semester });
     
     
-
-
 
 
 
@@ -60,12 +60,12 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
 
 
     
-
     //SET DROPDOWN VALUES
     useEffect(() => {
-        // setSelectedProgram(block);
-        // setSelectedYearLevel(`${yearLevel}${yearSuffix(yearLevel)}`);
-        // setSelectedProgram(getProgramName(programId));
+        setSelectedProgram(getProgramName(programId));
+        setSelectedUnits(String(units));
+        setSelectedYearLevel(`${yearLevel}${yearSuffix(yearLevel)}`);
+        setSelectedSem(`${semester}${yearSuffix(semester)}`);
     }, [addedCourse]);
 
     const [updateData, setUpdateData] = useState<Record<string, any>>({
@@ -84,7 +84,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
             yearLevel: Number(selectedYearLevel.charAt(0)),
             semester:  Number(selectedSem.charAt(0))
         }
-        console.log(updatedData);
+        console.log(courseData);
 
         const updateUser = async () => {
             
@@ -102,7 +102,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                 const data = await res.json();
         
                 if(res.ok && data) {
-                    // setCourseData(updatedData);
+                    setCourseData(updatedData);
                     setIsOpen(false);
                 }
         
@@ -110,7 +110,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                 console.log("Fetch error" + error);
             }
         }
-        // updateUser();
+        updateUser();
     }
 
 
@@ -133,7 +133,6 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
 
             if(res.ok && data) {
                 setCourseList(prev => prev.filter(u => u.id !== courseData.id));
-                // console.log(user)
             }
             
         } catch(error) {
@@ -143,22 +142,22 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
 
 
     //Style
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLFormElement>(null);
     HandleOutsideClick(ref, setIsOpen);
     return (
         <tr className='bg-slate-100 hover:bg-slate-200'>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseCode}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseTitle}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(addedCourse.programId)}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(courseData.programId)}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{courseData.units}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.yearLevel}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.yearLevel}${yearSuffix(courseData.yearLevel)}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.semester}${yearSuffix(courseData.semester)}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
 
                     {/* EDIT FORM */}
                     {isOpen && 
-                        <form onSubmit={handleUpdate} className="bg-slate-300 w-[32%] absolute z-10 flex flex-col pt-[.8rem] 
+                        <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 w-[32%] absolute z-10 flex flex-col pt-[.8rem] 
                         px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
 
                             <FontAwesomeIcon className="absolute text-[1.5rem] right-4 
@@ -200,6 +199,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                                         className=" border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
                                         option={optionArray(programArr, selectedProgram)}
                                         setValue={setSelectedProgram}
+                                        isSlate={true}
                                     />
                                 </div>
                                 <div className="bg-gree-300 flex flex-col">
@@ -208,6 +208,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                                         className=" border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
                                         option={optionArray(unitsArr, selectedUnits)}
                                         setValue={setSelectedUnits}
+                                        isSlate={true}
                                     />
                                 </div>
                                 <div className="bg-gree-300 flex flex-col">
@@ -216,6 +217,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                                         className=" border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
                                         option={optionArray(yearLevelArr, selectedYearLevel)}
                                         setValue={setSelectedYearLevel}
+                                        isSlate={true}
                                     />
                                 </div>
                                 <div className="bg-gree-300 flex flex-col">
@@ -224,6 +226,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList }: {
                                         className=" border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
                                         option={optionArray(semesterArr, selectedSem)}
                                         setValue={setSelectedSem}
+                                        isSlate={true}
                                     />
                                 </div>
 

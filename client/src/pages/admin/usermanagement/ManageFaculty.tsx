@@ -84,7 +84,7 @@ const ManageFaculty = () => {
         setCourseInput('');
       }
     }
-    // console.log(courseHandled)
+    
     
     //DELETE program
     const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
@@ -98,7 +98,6 @@ const ManageFaculty = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       
-      // let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
       
       let body = {
@@ -109,7 +108,7 @@ const ManageFaculty = () => {
         confirmPassword: pw,
         status: 'Active'
       };
-      // console.log(body)
+      
       const addUser = async () => {
 
         const res = await fetch(`${apiUrl}/auth/signup`, {
@@ -164,13 +163,12 @@ const ManageFaculty = () => {
               body: JSON.stringify({ data: courseData })
             });
             const data: any = await res.json();
-            // console.log(data)
+            
             if(res.ok && data) setCourseHandled([]);
           }
 
           addSpecialization();
           addCourses();
-
         };
 
 
@@ -178,11 +176,12 @@ const ManageFaculty = () => {
         if(data.error) {
           setError('Email already registered')
         } else setError('');
-        
+
       }
       addUser();
     }
 
+    const [reload, setReload] = useState(false);
 
 
 
@@ -232,8 +231,10 @@ const ManageFaculty = () => {
             <tbody className="text-gray-700">
               {entries.sort((a, b) => b.id - a.id).map((user) => <UserRow 
                 key={user.id}
-                user={user} 
+                user={user}
                 setUsers={setUsers}
+                reload={reload}
+                setReload={setReload}
               />)}
             </tbody>
           </table>
@@ -379,7 +380,7 @@ const ManageFaculty = () => {
                 }} type="button">Cancel</button>
 
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
-                 active:text-white" type="submit">Add</button>
+                 active:text-white" type="submit" >Add</button>
               </div>
             </div>
           </form>

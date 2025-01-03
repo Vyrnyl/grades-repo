@@ -25,7 +25,7 @@ const ManageStudents = () => {
     
     useEffect(() => {
       if(Array.isArray(data)) {
-          const list = data.filter((d) => d.role === 'student' && d.firstName.charAt(0) == '@');
+          const list = data.filter((d) => d.role === 'student');
           setUsers(list);
       }
     }, [data]);
@@ -58,7 +58,7 @@ const ManageStudents = () => {
 
       let body = {
         ...addData, 
-        firstName: `@${addData.firstName}`,
+        firstName: `${addData.firstName}`,
         programId,
         role: 'student',
         password: pw,

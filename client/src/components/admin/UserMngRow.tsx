@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { User } from '../../types/studentTypes'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons'
@@ -6,6 +6,7 @@ import Input from '../shared/components/Input'
 import CustomSelect from '../faculty/CustomSelect'
 import handleInputChange from '../../utils/handleInputChange'
 import optionArray from '../../utils/optionArray'
+import HandleOutsideClick from '../../utils/HandleOutsideClick'
 
 type UserData = {
     id: number,
@@ -138,6 +139,9 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState('');
 
+    const ref = useRef<HTMLFormElement>(null);
+    HandleOutsideClick(ref, setIsOpen);
+
     return (
     <tr key={user.id} className="bg-slate-100 hover:bg-slate-200">
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
@@ -173,7 +177,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
 
             {/* EDIT FORM */}
             {isOpen && 
-                <form onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
                 px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
 
                     <FontAwesomeIcon className="absolute text-[1.5rem] right-4 
@@ -250,6 +254,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                                 h-[2rem] border-[.01rem] rounded-sm ml-2" 
                                 option={optionArray(genderArr, selectedGender)}
                                 setValue={setSelectedGender}
+                                isSlate={true}
                             />
                         </div>
                         <div className="bg-gree-300 flex flex-col">
@@ -261,6 +266,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                                     optionArray(studentStatus, selectedStatus) : 
                                     optionArray(facultyStatus, selectedStatus)}
                                 setValue={(setSelectedStatus)}
+                                isSlate={true}
                             />
                         </div>
 

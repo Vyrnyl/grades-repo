@@ -68,7 +68,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   const [updateData, setUpdateData] = useState<Record<string, any>>({
     id,
     studentId,
-    firstName: `${student.firstName.charAt(0) === '@' ? student.firstName.slice(1) : student.firstName}`,
+    firstName: `${student.firstName}`,
     lastName: student.lastName,
     yearLevel: `${student.yearLevel}${yearSuffix(student.yearLevel)}` || '',
     block: student.block || '',
