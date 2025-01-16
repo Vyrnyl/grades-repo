@@ -18,6 +18,7 @@ const SidebarLinks = ({ children }: SidebarLinksProps) => {
     await fetch(`${apiUrl}/auth/logout`, {
       method: 'POST'
     });
+    window.location.reload();
   }
 
   return (

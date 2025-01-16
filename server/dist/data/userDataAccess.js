@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
+const programDataAccess_1 = require("./programDataAccess");
 const prisma = new client_1.PrismaClient();
 //Create and assign user to it's program curriculum
 const createUser = async (value) => {
@@ -108,33 +109,98 @@ const updateUserData = async (userId, value) => {
             },
             data: value
         });
-        // await prisma.$transaction(async () => {
-        //     if(value.programId === 1) {
-        //         const bsa = await prisma.bsaCurriculum.findMany();
-        //         const studentCourses = bsa.map(course => {
-        //             return { userId: value.id, courseId: course.id };
-        //         });
-        //         await prisma.bsaStudentRecord.createMany({
-        //             data: studentCourses
-        //         });
-        //     } else if(value.programId === 2) {
-        //         const bsba = await prisma.bsbaCurriculum.findMany();
-        //         const studentCourses = bsba.map(course => {
-        //             return { userId: value.id, courseId: course.id };
-        //         });
-        //         await prisma.bsbaStudentRecord.createMany({
-        //             data: studentCourses
-        //         });
-        //     } else if(value.programId === 3) {
-        //         const bsma = await prisma.bsbaCurriculum.findMany();
-        //         const studentCourses = bsma.map(course => {
-        //             return { userId: value.id, courseId: course.id };
-        //         });
-        //         await prisma.bsmaStudentRecord.createMany({
-        //             data: studentCourses
-        //         });
-        //     }
-        // });
+        await prisma.$transaction(async () => {
+            if (value.programId === 1) {
+                const existingRecords = await prisma.bsitStudentRecord.findMany({
+                    where: {
+                        userId: userId
+                    }
+                });
+                if (existingRecords.length === 0) {
+                    const bsitCourses = await prisma.bsitCurriculum.findMany();
+                    const studentCourses = bsitCourses.map(course => {
+                        return { userId: value.id, courseId: course.id };
+                    });
+                    await prisma.bsitStudentRecord.createMany({
+                        data: studentCourses
+                    });
+                }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
+            }
+            else if (value.programId === 2) {
+                const existingRecords = await prisma.bscsStudentRecord.findMany({
+                    where: {
+                        userId: userId
+                    }
+                });
+                if (existingRecords.length === 0) {
+                    const bscsCourses = await prisma.bscsCurriculum.findMany();
+                    const studentCourses = bscsCourses.map(course => {
+                        return { userId: value.id, courseId: course.id };
+                    });
+                    await prisma.bscsStudentRecord.createMany({
+                        data: studentCourses
+                    });
+                }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
+            }
+            else if (value.programId === 3) {
+                const existingRecords = await prisma.bsisStudentRecord.findMany({
+                    where: {
+                        userId: userId
+                    }
+                });
+                if (existingRecords.length === 0) {
+                    const bsisCourses = await prisma.bsisCurriculum.findMany();
+                    const studentCourses = bsisCourses.map(course => {
+                        return { userId: value.id, courseId: course.id };
+                    });
+                    await prisma.bsisStudentRecord.createMany({
+                        data: studentCourses
+                    });
+                }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
+            }
+            else if (value.programId === 4) {
+                const existingRecords = await prisma.blisStudentRecord.findMany({
+                    where: {
+                        userId: userId
+                    }
+                });
+                if (existingRecords.length === 0) {
+                    const blisCourses = await prisma.blisCurriculum.findMany();
+                    const studentCourses = blisCourses.map(course => {
+                        return { userId: value.id, courseId: course.id };
+                    });
+                    await prisma.blisStudentRecord.createMany({
+                        data: studentCourses
+                    });
+                }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
+            }
+            else if (value.programId === 5) {
+                const existingRecords = await prisma.bsemcStudentRecord.findMany({
+                    where: {
+                        userId: userId
+                    }
+                });
+                if (existingRecords.length === 0) {
+                    const bsemcCourses = await prisma.bsemcCurriculum.findMany();
+                    const studentCourses = bsemcCourses.map(course => {
+                        return { userId: value.id, courseId: course.id };
+                    });
+                    await prisma.bsemcStudentRecord.createMany({
+                        data: studentCourses
+                    });
+                }
+                //ADDED COURSE
+                await (0, programDataAccess_1.assignNewUserCourse)(userId, value.programId);
+            }
+        });
         return userUpdateDetails;
     }
     catch (error) {

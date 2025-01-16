@@ -26,7 +26,6 @@ type CourseSubject = {
 const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSubject) => {
 
 
-
   const token = localStorage.getItem('atoken');
   const { userInfo } = useUserStore();
   
@@ -35,10 +34,6 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
 
   const records = useFetch('grade/get-records', 'GET');
   const courses = useFetch('program/get-courses', 'GET');
-  // const handledPrograms = useFetch('faculty/get-specialization', 'POST', JSON.stringify({ userId: userInfo?.id }));
-  // const handledCourses = useFetch('faculty/get-handled', 'POST', JSON.stringify({ userId }));
-
-  // const [programs, setPrograms] = useState<Program[]>([]);
 
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [courseList, setCourseList] = useState<Course[]>([]);
@@ -51,7 +46,8 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   const [selectedBlock, setSelectedBlock] = useState<string>('A');
   const [selectedYearLevel, setSelectedYearLevel] = useState<string>('1st');
   const [selectedProgram, setSelectedProgram] = useState('BSIT');
-
+  
+  
   //Set Record
   useEffect(() => {
 
@@ -102,7 +98,12 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           student.program.programCode == selectedProgram && 
           checkStudentCourse(student, courseCode)
       });
-      setFilteredStudents((filteredList));
+
+      // let filteredList = students.filter(stud => {
+      //   return stud.bsisStudentRecord.some(s => s.bsisCurriculum?.courseCode === courseCode)
+      // });
+
+      setFilteredStudents(filteredList);
     }
   }, [
       records.data, 
@@ -113,6 +114,18 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
       filteredCourses,
       allBg
     ]);
+
+    useEffect(() => {
+      if(allBg) setAllBg(false);
+    }, [
+        selectedCourseCode, 
+        selectedYearLevel, 
+        selectedProgram,
+        selectedBlock, 
+        filteredCourses
+    ]);
+
+    // console.log(filteredStudents)
 
     
     // if(filteredStudents.length > 0) 

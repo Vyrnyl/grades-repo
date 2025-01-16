@@ -3,7 +3,8 @@ import { deleteUserData, getUserData, getUsersData, updateUserData } from "../da
 import { validateUserId, validateUserUpdate } from "../validators/userValidator";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import bcrypt from 'bcrypt';
-import { addFacultyActivity } from "../data/activityDataAccess";
+import { addFacultyActivity, deleteLoginSession } from "../data/activityDataAccess";
+import { checkEmail, checkUserEmail } from "../data/userUtils";
 
 
 const getUsers = async (req: Request, res: Response) => {
@@ -47,15 +48,6 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(401).json({ error: 'User is not authenticated' });
     }
 
-    // const { error, value } = validateUserUpdate(req.body);
-
-    // if(error) {
-    //     const err = validationErrorHandler(error);
-    //     return res.status(422).json(err);
-    // }
-    
-    // const { userId } = req.user;
-
     const value = req.body;
 
     try {
@@ -83,27 +75,27 @@ const updateUser = async (req: Request, res: Response) => {
     const setActivity = async () => {
         if(userDetails?.firstName !== userUpdateDetails.firstName)
             await addFacultyActivity(userId, 
-                `You updated your first name from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
+                `First name updated from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
         
         if(userDetails?.lastName !== userUpdateDetails.lastName)
             await addFacultyActivity(userId, 
-                `You updated your last name from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);
+                `Last name updated from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);
         
         if(userDetails?.studentId !== userUpdateDetails.studentId)
             await addFacultyActivity(userId, 
-                `You updated your Faculty from ${userDetails?.studentId} to ${userUpdateDetails.studentId}.`);
+                `School ID updated from ${userDetails?.studentId} to ${userUpdateDetails.studentId}.`);
         
-        // if(userDetails?.sex !== userUpdateDetails.sex)
-        //     await addFacultyActivity(userId, 
-        //         `Gender updated`);
-        
-        // if(userDetails?.phoneNumber !== userUpdateDetails.phoneNumber)
-        //     await addFacultyActivity(userId, 
-        //         `Phone Number updated`);
+        if((userDetails?.sex !== userUpdateDetails.sex) && userUpdateDetails.sex !== '')
+            await addFacultyActivity(userId, 
+                `Gender updated`);
+                
+        if(userDetails?.phoneNumber !== userUpdateDetails.phoneNumber && userUpdateDetails.phoneNumber !== '')
+            await addFacultyActivity(userId, 
+                `Phone Number updated`);
         
         if(userDetails?.email !== userUpdateDetails.email)
             await addFacultyActivity(userId, 
-                `You successfully updated your email address to ${userUpdateDetails.email}`);
+                `Email address updated to ${userUpdateDetails.email}`);
         
         if(value.password) {
             await addFacultyActivity(userId, 
@@ -137,8 +129,27 @@ const deleteUser = async (req: Request, res: Response) => {
     if(!deletedUser) {
         return res.status(400).json({ error: 'Deletion error' });
     }
+    await deleteLoginSession();
 
     res.status(200).json({ message: 'Deletion successful'});
 }
 
-export { getUsers, getUser, updateUser, deleteUser };
+
+const getEmail = async (req: Request, res: Response) => {
+
+    if(!req.body) {
+        return res.status(400).json({ error: 'Missing necessary data' });
+    }
+    
+    const { id, email } = req.body;
+    
+    const userDetails = await checkUserEmail(id, email);
+    
+    if(!userDetails) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    
+    res.status(200).json(userDetails);
+}
+
+export { getUsers, getUser, updateUser, deleteUser, getEmail };

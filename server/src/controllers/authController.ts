@@ -6,11 +6,12 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from ".
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
 import { addAdminRecentActivity, addLoginActivity, addLoginSession, deleteLoginSession } from "../data/activityDataAccess";
+import { assignNewUserCourse } from "../data/programDataAccess";
 
 
 //SIGNUP
 const signup = async (req: Request, res: Response) => {
-
+    
     const { error, value } = validateSignup(req.body);
     
     if(error) {
@@ -39,6 +40,9 @@ const signup = async (req: Request, res: Response) => {
         // console.log(newUserResult)
         return res.status(409).json({ error: 'Email already registered' });
     }
+
+    //Assign Addded Courses
+    await assignNewUserCourse(newUserResult.id, value.programId);
 
     //Set Recent Activity
     // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
@@ -95,9 +99,11 @@ const login = async (req: Request, res: Response) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await addLoginActivity(user.email, 'Successful');
-    await addLoginSession();
 
-    if(user.email !== 'admin@gmail.com') await addAdminRecentActivity(`User logged in with email: ${user.email}`);
+    if(user.email !== 'admin@gmail.com') {
+        await addLoginSession();
+        await addAdminRecentActivity(`User logged in with email: ${user.email}`);
+    }
     
     const payload = {
         userId: user.id,
@@ -139,7 +145,7 @@ const logout = async (req: Request, res: Response) => {
     if(!deleteSession) {
         return res.status(404).json({ error: 'Already logged out' });
     }
-
+    
 
    res.status(200).json({ message: 'Logout successful' });
 }   

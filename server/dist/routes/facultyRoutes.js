@@ -5,6 +5,8 @@ const facultyController_1 = require("../controllers/facultyController");
 const router = (0, express_1.Router)();
 router.post('/add-handled', facultyController_1.addHandled);
 router.post('/get-handled', facultyController_1.getHandled);
+router.put('/update-handled', facultyController_1.updateHandled);
 router.post('/add-specialization', facultyController_1.addFacultySpecialization);
 router.post('/get-specialization', facultyController_1.getFacultySpecialization);
+router.put('/update-specialization', facultyController_1.updateFacultySpecialization);
 exports.default = router;

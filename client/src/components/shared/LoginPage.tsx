@@ -104,8 +104,8 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
                             <FontAwesomeIcon className={`cursor-pointer absolute bottom-[1.1rem] right-[5rem]`} 
                              onClick={() => hidePassword({isHide, setIsHide, setInputType, setEyeIcon})} icon={eyeIcon}/>
                         </div>
-                        <span className='bg-blu-500 text-[.8rem] self-start ml-[4.5rem]
-                            cursor-pointer mb-2 text-purple-500 active:text-blue-500'>Forgot Password?</span>
+                        {/* <span className='bg-blu-500 text-[.8rem] self-start ml-[4.5rem]
+                            cursor-pointer mb-2 text-purple-500 active:text-blue-500'>Forgot Password?</span> */}
                         <button className='bg-purple-500 text-white w-[65%] h-[2.5rem] rounded-lg font-[500]
                          active:bg-slate-500 mb-2'>{isLoading ? 'Logging In...' : 'Log In'}</button>
                          <p className='text-[.8rem]'>Don't have an account? <span className='text-purple-500

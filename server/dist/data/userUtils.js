@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgram = exports.deleteRefreshToken = exports.storeRefreshToken = exports.checkEmail = void 0;
+exports.getProgram = exports.deleteRefreshToken = exports.storeRefreshToken = exports.checkUserEmail = exports.checkEmail = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //Check email in the Database
@@ -15,6 +15,20 @@ const checkEmail = async (email) => {
     }
 };
 exports.checkEmail = checkEmail;
+const checkUserEmail = async (id, email) => {
+    try {
+        const user = await prisma.user.findUnique({ where: { id } });
+        if (!user)
+            throw new Error('User not found');
+        if (user.email !== email)
+            return user;
+    }
+    catch (error) {
+        console.log('Email checking error');
+        return false;
+    }
+};
+exports.checkUserEmail = checkUserEmail;
 const storeRefreshToken = async (token) => {
     try {
         const refreshToken = await prisma.refreshToken.create({

@@ -185,7 +185,7 @@ const addLoginSession = async () => {
     try {
 
         const session = await prisma.sessions.findUnique({ where: { id: 1 }});
-
+        
         if(session) await prisma.sessions.update({
             where: { id: 1 },
             data: { activeSessions: session.activeSessions + 1 }
@@ -215,7 +215,7 @@ const deleteLoginSession = async () => {
 
         const session = await prisma.sessions.findUnique({ where: { id: 1 }});
 
-        if(session) await prisma.sessions.update({
+        if(session && session?.activeSessions > 0) await prisma.sessions.update({
             where: { id: 1 },
             data: { activeSessions: session.activeSessions - 1 }
         });

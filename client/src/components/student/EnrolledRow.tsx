@@ -16,6 +16,8 @@ const EnrolledRow = ({ course, sem } : { course: CourseType, sem: number }) => {
     grade: null
   });
 
+  // console.log(enrolledCourse)
+
   //Set Course
   useEffect(() => {
     if(course.bsitCurriculum) {
@@ -60,6 +62,14 @@ const EnrolledRow = ({ course, sem } : { course: CourseType, sem: number }) => {
         grade: grade
       })
     };
+    if(course.addedCourse) {
+      let { addedCourse, grade } = course;
+      setEnrolledCourse({ 
+        courseTitle: addedCourse.courseTitle,
+        units: addedCourse.units,
+        grade: grade
+      })
+    };
 
   }, [course]);
 
@@ -77,7 +87,8 @@ const EnrolledRow = ({ course, sem } : { course: CourseType, sem: number }) => {
         <td className='px-2 py-2 text-start pl-8 border-2 border-slate-500'>{enrolledCourse.courseTitle}</td>
         <td className='px-2 py-2 text-center border-2 border-slate-500'>{enrolledCourse.units}</td>
         <td className='px-2 py-2 text-center border-2 border-slate-500'>{sem == 1 ? '1st' : '2nd'}</td>
-        <td className='px-2 py-2 text-center border-2 border-slate-500'>{enrolledCourse.grade == 0 ? '' : enrolledCourse.grade || ''}</td>
+        <td className='px-2 py-2 text-center border-2 border-slate-500'>{enrolledCourse.grade == 0 ? '' : 
+        (enrolledCourse.grade && (Number.isInteger(Number(enrolledCourse.grade)) ? `${enrolledCourse.grade}.0` : enrolledCourse.grade)) || ''}</td>
         <td className='px-2 py-2 text-center border-2 border-slate-500'>{status}</td>
     </tr>
   )

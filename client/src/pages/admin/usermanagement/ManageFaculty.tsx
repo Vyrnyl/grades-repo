@@ -26,14 +26,14 @@ const ManageFaculty = () => {
     
     useEffect(() => {
       if(Array.isArray(data)) {
-          const list = data.filter((d) => d.role === 'faculty' && d.program);
+          const list = data.filter((d) => d.role === 'faculty');
           setUsers(list);
       }
     }, [data]);
     
     
     //Add
-    const [error, setError] = useState('');
+    const [isEmailExist, setIsEmailExist] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [addData, setAddData] = useState<AddData>({
       studentId: '',
@@ -53,6 +53,7 @@ const ManageFaculty = () => {
     
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [courseInput, setCourseInput] = useState<string>('');
+    
     
 
     //SET Programs
@@ -77,13 +78,13 @@ const ManageFaculty = () => {
 
 
     //SET Courses
-    const handelAddCourse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handelAddCourse = () => {
       if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
         setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
         setCourseInput('');
       }
     }
-    // console.log(courseHandled)
+    
     
     //DELETE program
     const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
@@ -96,10 +97,15 @@ const ManageFaculty = () => {
     //SUBMIT
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
+      setIsEmailExist(false);
       
-      // let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
       
+      if(pw.split(' ').length > 1) {
+        let secName = pw.split(' ')[1];
+        pw = `${pw.split(' ')[0]}${secName.charAt(0).toLocaleLowerCase()}${secName.slice(1)}`;
+      }
+
       let body = {
         ...addData, 
         programId: 1,
@@ -108,7 +114,7 @@ const ManageFaculty = () => {
         confirmPassword: pw,
         status: 'Active'
       };
-      // console.log(body)
+      
       const addUser = async () => {
 
         const res = await fetch(`${apiUrl}/auth/signup`, {
@@ -120,7 +126,7 @@ const ManageFaculty = () => {
           body: JSON.stringify(body)
         });
         const data = await res.json();
-
+        
         if(res.ok && data) {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
           setUsers([...users, {...data, program: { programCode }}]);
@@ -151,7 +157,7 @@ const ManageFaculty = () => {
           let courseData = courseHandled.map(item => {
             return {...item, userId: data.id}
           });
-
+          
           //Add Courses
           const addCourses = async () => {
             const res = await fetch(`${apiUrl}/faculty/add-handled`, {
@@ -163,26 +169,26 @@ const ManageFaculty = () => {
               body: JSON.stringify({ data: courseData })
             });
             const data: any = await res.json();
-            // console.log(data)
+            
             if(res.ok && data) setCourseHandled([]);
           }
 
           addSpecialization();
           addCourses();
 
+          window.location.reload();
         };
-
-
+        
 
         if(data.error) {
-          setError('Email already registered')
-        } else setError('');
-        
+          setIsEmailExist(true);
+        }
+
       }
       addUser();
     }
 
-
+    const [reload, setReload] = useState(false);
 
 
     //Paginition
@@ -212,26 +218,29 @@ const ManageFaculty = () => {
           <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Manage Faculty</h1>
         </div>
         
-        <button className="bg-blue-400 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
+        <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
         mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Faculty</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
           <table className="w-full font-semibold text-white">
-            <thead className="bg-white sticky text-slate-800 top-0 z-10">
-                <tr>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Faculty ID</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">First Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Last Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Email</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Program</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Action</th>
+            <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
+                <tr className="text-white">
+                    <th className="px-4 py-4 text-center border-l-2 border-blue-500 min-w-[5rem]">Faculty ID</th>
+                    <th className="px-4 py-4 text-center min-w-[8rem]">First Name</th>
+                    <th className="px-4 py-4 text-center min-w-[5rem]">Last Name</th>
+                    <th className="px-4 py-4 text-center min-w-[5rem]">Email</th>
+                    <th className="px-4 py-4 text-center min-w-[5rem]">Area Of Specialization</th>
+                    <th className="px-4 py-4 text-center min-w-[5rem]">Course Subjects Handled</th>
+                    <th className="px-4 py-4 text-center border-r-2 border-blue-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700">
               {entries.sort((a, b) => b.id - a.id).map((user) => <UserRow 
                 key={user.id}
-                user={user} 
+                user={user}
                 setUsers={setUsers}
+                reload={reload}
+                setReload={setReload}
               />)}
             </tbody>
           </table>
@@ -262,6 +271,7 @@ const ManageFaculty = () => {
               setIsAddOpen(false); 
               setProgramHandled([]);
               setCourseHandled([]);
+              setIsEmailExist(false);
             }}/>
 
             <div className="bg-blu-200 ml-[-2rem] mb-4">
@@ -309,12 +319,12 @@ const ManageFaculty = () => {
                       onChange={handleAddData}
                       name="email"
                     />
-                    <p className="text-[.8rem] text-red-500 ml-2">{error || ''}</p>
+                  {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2">Email already registered!</p>}
                 </div>
-                <div className="bg-gree-300 flex flex-col max-w-[15rem]">
+                <div className={`bg-gree-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
                   <label className="font-semibold">Area of Specialization:</label>
                   <CustomSelect 
-                    className=" border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                    className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                     option={[
                       'BS Information Technology', 
                       'BS Computer Science', 
@@ -377,7 +387,7 @@ const ManageFaculty = () => {
                 }} type="button">Cancel</button>
 
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
-                 active:text-white" type="submit">Add</button>
+                 active:text-white" type="submit" >Add</button>
               </div>
             </div>
           </form>

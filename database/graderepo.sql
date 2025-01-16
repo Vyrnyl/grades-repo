@@ -24,11 +24,11 @@ use graderepo;
 
 -- insert into users(firstName, lastName, email, password, role, yearLevel, programId)values 
 -- ('John', 'Doe', 'john.doe@example.com', 'hashed_password_1', 'student', 1, 1),
--- ('Liane', 'Moth', 'lianem33h16@example.com', 'hashed_password_4', 'student', 2, 2),
--- ('Vernel', 'Patriarca', '33triarca15@gmail.com', 'vernel69', 'student', 1, 3);
+-- ('Liane', 'Moth', 'lianemh16@example.com', 'hashed_password_4', 'student', 2, 2),
+-- ('Vernel', 'Patriarca', 'triarca15@gmail.com', 'vernel69', 'student', 1, 3);
 
 
--- create table bsaCurricu33m(
+-- create table bsaCurricum(
 -- 	id int primary key auto_increment,
 --     courseCode varchar(50),
 --     courseTitle varchar(50)
@@ -183,35 +183,35 @@ use graderepo;
 --     ('OB 101', 'Organizational Behavior');
 
 -- CREATE TABLE bsaStudentRecords(
--- 	id int primary key auto_i33rement,
+-- 	id int primary key auto_irement,
 --     studentId int,
 --     courseId int,
---     gr33e int,
---     foreign key (studentId) references users(id) on delete cas33de,
+--     gre int,
+--     foreign key (studentId) references users(id) on delete casde,
 --     foreign key (courseId) references bsaCurriculum(id) on delete cascade
 -- );
 
 -- CREATE TABLE bsaStudentRecords(
--- 	id int primary key auto_i33rement,
+-- 	id int primary key auto_irement,
 --     studentId int,
 --     courseId int,
---     gr33e int,
---     foreign key (studentId) references users(id) on delete cas33de,
+--     gre int,
+--     foreign key (studentId) references users(id) on delete casde,
 --     foreign key (courseId) references bsbaCurriculum(id) on delete cascade
 -- );
 
 -- CREATE TABLE bsmaStudentRecords(
--- 	id int primary key auto_i33rement,
+-- 	id int primary key auto_irement,
 --     studentId int,
 --     courseId int,
---     gr33e int,
---     foreign key (studentId) references users(id) on delete cas33de,
+--     gre int,
+--     foreign key (studentId) references users(id) on delete casde,
 --     foreign key (courseId) references bsmaCurriculum(id) on delete cascade
 -- );
 
 
 -- INSERT INTO bsmaStudentRecords (studentId, courseId)
--- SELEC333, id FROM bsm33urriculum;
+-- SELEC3, id FROM bsmurriculum;
 
 
 
@@ -229,114 +229,121 @@ use graderepo;
 [
   {
     "studentId": "2021-02167",
-    "firstName": "S33ng",
+    "firstName": "Shang",
     "lastName": "Gem",
     "email": "shang@gmail.com",
     "password": "shang123",
     "role": "student",
-    "confirmPassword": "shang123",33  "programId": 1,
-    "status": "Enrolled"
-  },
-  {
-    "studentId": "2021-02168",
-    "firstName": "M33a",
-    "lastName": "Cruz",
-    "email": "mika@gmail.com",
-    "password": "mika123",
-    "role": "student",
-    "confirmPassword": "mika123",
-33 "programId": 2,
+    "confirmPassword": "shang123",
+    "programId": 1,
     "status": "Enrolled"
   },
    {
-    "studentId": "2021-02170",
-    "firstName": "L33a",
-    "lastName": "Smith",
-    "email": "lara@gmail.com",
-    "password": "lara123",
-    "role": "student",
-    "confirmPassword": "lara123",
-33 "programId": 3,
-    "status": "Enrolled"
-  },
-  {
-    "studentId": "2021-02169",
-    "firstName": "J33n",
-    "lastName": "Doe",
-    "email": "john@gmail.com",
-    "password": "john123",
-    "role": "student",
-    "confirmPassword": "john123",
-33 "programId": 3,
-    "status": "Unenrolled"
-  },
-  {
-    "studentId": "2021-02171",
-    "firstName": "J33es",
-    "lastName": "Brown",
-    "email": "james@gmail.com",
-    "password": "james123",
-    "role": "student",
-    "confirmPassword": "james123",33  "programId": 2,
-    "status": "Enrolled"
-  },
-  {
-    "studentId": "2021-02172",
-    "firstName": "S33hia",
+    "studentId": "2021-02168",
+    "firstName": "Kai",
     "lastName": "Lee",
-    "email": "sophia@gmail.com",
-    "password": "sophia123",
+    "email": "kai.lee@gmail.com",
+    "password": "kai123",
     "role": "student",
-    "confirmPassword": "sophia123",33   "programId": 3,
-    "status": "Unenrolled"
-  },
-  {
-    "studentId": "2021-02173",
-    "firstName": "J33e",
-    "lastName": "Wilson",
-    "email": "jake@gmail.com",
-    "password": "jake123",
-    "role": "student",
-    "confirmPassword": "jake123",
-33 "programId": 1,
+    "confirmPassword": "kai123",
+    "programId": 1,
     "status": "Enrolled"
   },
   {
-    "studentId": "2021-02174",
-    "firstName": "L33y",
+    "studentId": "2021-03167",
+    "firstName": "Jay",
+    "lastName": "Park",
+    "email": "jay@gmail.com",
+    "password": "jay123",
+    "role": "student",
+    "confirmPassword": "jay123",
+    "programId": 2,
+    "status": "Enrolled"
+  },
+  {
+    "studentId": "2021-03168",
+    "firstName": "Mia",
+    "lastName": "Wang",
+    "email": "mia@gmail.com",
+    "password": "mia123",
+    "role": "student",
+    "confirmPassword": "mia123",
+    "programId": 2,
+    "status": "Enrolled"
+  },
+  {
+    "studentId": "2021-04167",
+    "firstName": "Liam",
+    "lastName": "Chen",
+    "email": "liam@gmail.com",
+    "password": "liam123",
+    "role": "student",
+    "confirmPassword": "liam123",
+    "programId": 3,
+    "status": "Enrolled"
+  },
+  {
+    "studentId": "2021-04168",
+    "firstName": "Nina",
     "lastName": "Kim",
-    "email": "lucy@gmail.com",
-    "password": "lucy123",
+    "email": "nina@gmail.com",
+    "password": "nina123",
     "role": "student",
-    "confirmPassword": "lucy123",
-33 "programId": 2,
-    "status": "Unenrolled"
-  },
-  {
-    "studentId": "2021-02175",
-    "firstName": "T33",
-    "lastName": "Clark",
-    "email": "tom@gmail.com",
-    "password": "tom123",
-    "role": "student",
-    "confirmPassword": "tom123",
-33"programId": 3,
+    "confirmPassword": "nina123",
+    "programId": 3,
     "status": "Enrolled"
   },
   {
-    "studentId": "2021-02176",
-    "firstName": "E33a",
-    "lastName": "Martinez",
+    "studentId": "2021-05167",
+    "firstName": "Chris",
+    "lastName": "Tan",
+    "email": "chris@gmail.com",
+    "password": "chris123",
+    "role": "student",
+    "confirmPassword": "chris123",
+    "programId": 4,
+    "status": "Enrolled"
+  },
+  {
+    "studentId": "2021-05168",
+    "firstName": "Ella",
+    "lastName": "Xu",
     "email": "ella@gmail.com",
     "password": "ella123",
     "role": "student",
     "confirmPassword": "ella123",
-33 "programId": 1,
-    "status": "Unenrolled"
+    "programId": 4,
+    "status": "Enrolled"
   },
   {
+    "studentId": "2021-06167",
+    "firstName": "Mark",
+    "lastName": "Lim",
+    "email": "mark@gmail.com",
+    "password": "mark123",
+    "role": "student",
+    "confirmPassword": "mark123",
+    "programId": 5,
+    "status": "Enrolled"
+  },
+  {
+    "studentId": "2021-06168",
+    "firstName": "Sophie",
+    "lastName": "Ng",
+    "email": "sophie@gmail.com",
+    "password": "sophie123",
+    "role": "student",
+    "confirmPassword": "sophie123",
+    "programId": 5,
+    "status": "Enrolled"
+  }
+
+
+
+   {
     "studentId": "2145",
-    "firstName": "Anna",33  "lastName": "Nguyen",
+    "firstName": "Anna",
+    "lastName": "Nguyen",
     "email": "anna@gmail.com",
     "password": "anna123",
     "role": "faculty",
@@ -344,55 +351,59 @@ use graderepo;
     "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Ben",
-33 "lastName": "Perez",
-    "email": "ben@gmail.com",
-    "password": "ben123",
+    "studentId": "2146",
+    "firstName": "Brian",
+    "lastName": "Smith",
+    "email": "brian@gmail.com",
+    "password": "brian123",
     "role": "faculty",
-    "confirmPassword": "ben123",
-    "status": "Inactive"
-  },
-  {
-    "studentId": "2145",
-    "firstName": "Cathy",33   "lastName": "Garcia",
-    "email": "cathy@gmail.com",
-    "password": "cathy123",
-    "role": "faculty",
-    "confirmPassword": "cathy123",
+    "confirmPassword": "brian123",
     "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Daniel"33    "lastName": "Jones",
-    "email": "daniel@gmail.com",
-    "password": "daniel123",
+    "studentId": "2147",
+    "firstName": "Claire",
+    "lastName": "Davis",
+    "email": "claire@gmail.com",
+    "password": "claire123",
     "role": "faculty",
-    "confirmPassword": "daniel123",
-    "status": "Inactive"
-  },
-  {
-    "studentId": "2145",
-    "firstName": "Eva",
-33 "lastName": "Hernandez",
-    "email": "eva@gmail.com",
-    "password": "eva123",
-    "role": "faculty",
-    "confirmPassword": "eva123",
+    "confirmPassword": "claire123",
     "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Frank",33   "lastName": "Martinez",
+    "studentId": "2148",
+    "firstName": "David",
+    "lastName": "Lee",
+    "email": "david@gmail.com",
+    "password": "david123",
+    "role": "faculty",
+    "confirmPassword": "david123",
+    "status": "Active"
+  },
+  {
+    "studentId": "2149",
+    "firstName": "Emily",
+    "lastName": "Johnson",
+    "email": "emily@gmail.com",
+    "password": "emily123",
+    "role": "faculty",
+    "confirmPassword": "emily123",
+    "status": "Active"
+  },
+  {
+    "studentId": "2150",
+    "firstName": "Frank",
+    "lastName": "Miller",
     "email": "frank@gmail.com",
     "password": "frank123",
     "role": "faculty",
     "confirmPassword": "frank123",
-    "status": "Inactive"
+    "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Grace",33   "lastName": "Wilson",
+    "studentId": "2151",
+    "firstName": "Grace",
+    "lastName": "Wilson",
     "email": "grace@gmail.com",
     "password": "grace123",
     "role": "faculty",
@@ -400,84 +411,88 @@ use graderepo;
     "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Hank",33  "lastName": "Moore",
-    "email": "hank@gmail.com",
-    "password": "hank123",
+    "studentId": "2152",
+    "firstName": "Henry",
+    "lastName": "Garcia",
+    "email": "henry@gmail.com",
+    "password": "henry123",
     "role": "faculty",
-    "confirmPassword": "hank123",
-    "status": "Inactive"
-  },
-  {
-    "studentId": "2145",
-    "firstName": "Ivy",
-33 "lastName": "Scott",
-    "email": "ivy@gmail.com",
-    "password": "ivy123",
-    "role": "faculty",
-    "confirmPassword": "ivy123",
+    "confirmPassword": "henry123",
     "status": "Active"
   },
   {
-    "studentId": "2145",
-    "firstName": "Jack",33  "lastName": "Young",
+    "studentId": "2153",
+    "firstName": "Isla",
+    "lastName": "Martinez",
+    "email": "isla@gmail.com",
+    "password": "isla123",
+    "role": "faculty",
+    "confirmPassword": "isla123",
+    "status": "Active"
+  },
+  {
+    "studentId": "2154",
+    "firstName": "Jack",
+    "lastName": "Brown",
     "email": "jack@gmail.com",
     "password": "jack123",
     "role": "faculty",
     "confirmPassword": "jack123",
-    "status": "Inactive"
+    "status": "Active"
   }
 ]
 
 
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 1;
-UPDATE bscsstudentrecord SET grade = 1.6 WHERE userId = 33 AND courseId = 2;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 3;
-UPDATE bscsstudentrecord SET grade = 1.1 WHERE userId = 33 AND courseId = 4;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 5;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 6;
-UPDATE bscsstudentrecord SET grade = 1.5 WHERE userId = 33 AND courseId = 7;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 8;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 1;
+UPDATE bsisstudentrecord SET grade = 1.6 WHERE userId = 37 AND courseId = 2;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 3;
+UPDATE bsisstudentrecord SET grade = 1.1 WHERE userId = 37 AND courseId = 4;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 5;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 6;
+UPDATE bsisstudentrecord SET grade = 1.5 WHERE userId = 37 AND courseId = 7;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 8;
 
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 9;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 10;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 11;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 12;
-UPDATE bscsstudentrecord SET grade = 1.4 WHERE userId = 33 AND courseId = 13;
-UPDATE bscsstudentrecord SET grade = 1.2 WHERE userId = 33 AND courseId = 14;
-UPDATE bscsstudentrecord SET grade = 1.6 WHERE userId = 33 AND courseId = 15;
-UPDATE bscsstudentrecord SET grade = 1.5 WHERE userId = 33 AND courseId = 16;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 17;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 18;
-UPDATE bscsstudentrecord SET grade = 1.4 WHERE userId = 33 AND courseId = 19;
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 20;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 21;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 22;
-UPDATE bscsstudentrecord SET grade = 1.1 WHERE userId = 33 AND courseId = 23;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 24;
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 25;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 26;
-UPDATE bscsstudentrecord SET grade = 1.5 WHERE userId = 33 AND courseId = 27;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 28;
-UPDATE bscsstudentrecord SET grade = 1.2 WHERE userId = 33 AND courseId = 29;
-UPDATE bscsstudentrecord SET grade = 1.4 WHERE userId = 33 AND courseId = 30;
-UPDATE bscsstudentrecord SET grade = 1.5 WHERE userId = 33 AND courseId = 31;
-UPDATE bscsstudentrecord SET grade = 1.6 WHERE userId = 33 AND courseId = 32;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 33;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 34;
-UPDATE bscsstudentrecord SET grade = 1.1 WHERE userId = 33 AND courseId = 35;
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 36;
-UPDATE bscsstudentrecord SET grade = 1.6 WHERE userId = 33 AND courseId = 37;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 38;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 39;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 40;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 9;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 10;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 11;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 12;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 13;
+UPDATE bsisstudentrecord SET grade = 1.2 WHERE userId = 37 AND courseId = 14;
+UPDATE bsisstudentrecord SET grade = 1.6 WHERE userId = 37 AND courseId = 15;
+UPDATE bsisstudentrecord SET grade = 1.5 WHERE userId = 37 AND courseId = 16;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 17;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 18;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 19;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 20;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 21;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 22;
+UPDATE bsisstudentrecord SET grade = 1.1 WHERE userId = 37 AND courseId = 23;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 24;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 25;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 26;
+UPDATE bsisstudentrecord SET grade = 1.5 WHERE userId = 37 AND courseId = 27;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 28;
+UPDATE bsisstudentrecord SET grade = 1.2 WHERE userId = 37 AND courseId = 29;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 30;
+UPDATE bsisstudentrecord SET grade = 1.5 WHERE userId = 37 AND courseId = 31;
+UPDATE bsisstudentrecord SET grade = 1.6 WHERE userId = 37 AND courseId = 32;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 33;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 34;
+UPDATE bsisstudentrecord SET grade = 1.1 WHERE userId = 37 AND courseId = 35;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 36;
+UPDATE bsisstudentrecord SET grade = 1.6 WHERE userId = 37 AND courseId = 37;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 38;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 39;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 40;
 
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 41;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 42;
-UPDATE bscsstudentrecord SET grade = 1.5 WHERE userId = 33 AND courseId = 43;
-UPDATE bscsstudentrecord SET grade = 1.9 WHERE userId = 33 AND courseId = 44;
-UPDATE bscsstudentrecord SET grade = 1.8 WHERE userId = 33 AND courseId = 45;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 46;
-UPDATE bscsstudentrecord SET grade = 1.3 WHERE userId = 33 AND courseId = 47;
-UPDATE bscsstudentrecord SET grade = 1.7 WHERE userId = 33 AND courseId = 48;
-UPDATE bscsstudentrecord SET grade = 1.4 WHERE userId = 33 AND courseId = 49;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 41;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 42;
+UPDATE bsisstudentrecord SET grade = 1.5 WHERE userId = 37 AND courseId = 43;
+UPDATE bsisstudentrecord SET grade = 1.9 WHERE userId = 37 AND courseId = 44;
+UPDATE bsisstudentrecord SET grade = 1.8 WHERE userId = 37 AND courseId = 45;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 46;
+UPDATE bsisstudentrecord SET grade = 1.3 WHERE userId = 37 AND courseId = 47;
+UPDATE bsisstudentrecord SET grade = 1.7 WHERE userId = 37 AND courseId = 48;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 49;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 50;
+UPDATE bsisstudentrecord SET grade = 1.4 WHERE userId = 37 AND courseId = 51;

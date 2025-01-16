@@ -14,6 +14,21 @@ const checkEmail = async (email: string) => {
     }
 };
 
+const checkUserEmail = async (id: number, email: string) => {
+    try {
+        
+        const user = await prisma.user.findUnique({ where: { id }});
+
+        if(!user) throw new Error('User not found');
+
+        if(user.email !== email) return user;
+
+    } catch(error) {
+        console.log('Email checking error');
+        return false;
+    }
+}
+
 const storeRefreshToken = async (token: string): Promise<StoreRefreshTokenResponse> => {
     try {
         const refreshToken = await prisma.refreshToken.create({
@@ -54,4 +69,4 @@ const getProgram = async (programId: number) => {
     }
 }
 
-export { checkEmail, storeRefreshToken, deleteRefreshToken, getProgram };
+export { checkEmail, checkUserEmail, storeRefreshToken, deleteRefreshToken, getProgram };

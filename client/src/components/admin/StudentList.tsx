@@ -35,12 +35,12 @@ const StudentList = React.forwardRef<HTMLDivElement, StudentListProps>(({ handle
                 <table className="w-full font-semibold text-white">
                     <thead className="bg-blue-500 sticky top-0 z-10">
                         <tr>
-                            <th className="p-4 text-center">Student ID</th>
-                            <th className="p-4 text-center">Name</th>
-                            <th className="p-4 text-center">Year Level/Block</th>
-                            <th className="p-4 text-center">Course</th>
-                            <th className="p-4 text-center">Status</th>
-                            <th className="p-4 text-center">Action</th>
+                            <th className="p-4 text-center border- border-blue-500">Student ID</th>
+                            <th className="p-4 text-center border- border-blue-500">Name</th>
+                            <th className="p-4 text-center border- border-blue-500">Year Level/Block</th>
+                            <th className="p-4 text-center border- border-blue-500">Course</th>
+                            <th className="p-4 text-center border- border-blue-500">Status</th>
+                            <th className="p-4 text-center border- border-blue-500">Action</th>
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">

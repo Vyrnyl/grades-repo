@@ -7,6 +7,7 @@ import Input from '../../components/shared/components/Input';
 import { AddedCourseType } from '../../types/types';
 import AddedCourseRow from '../../components/student/AddedCourseRow';
 import getProgramId from '../../utils/getProgramId';
+import fetchData from '../../utils/admin/fetchData';
 
 type AddData = {
     courseCode: string,
@@ -21,15 +22,12 @@ const CourseSubjects = () => {
     //Course List
     const courses = useFetch('program/get-added-courses', 'GET');
     const [courseList, setCourseList] = useState<AddedCourseType[]>([]);
-
+    const [allCourse, setAllCourse] = useState<AddedCourseType[]>([]);
+    
     //Set List
     useEffect(() => {
         if(courses.data) setCourseList(courses.data as AddedCourseType[]);
     }, [courses.data]);
-
-
-    console.log(courseList)
-
     
     //Add
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -42,6 +40,10 @@ const CourseSubjects = () => {
     const [selectedUnits, setSelectedUnits] = useState('1');
     const [selectedSem, setSelectedSem] = useState('1st');
 
+    const [reload, setReload] = useState(false);
+    const [isCourseExist, setIsCourseExist] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+
     const handleAddData = (e: React.ChangeEvent<HTMLInputElement>) => {
       setAddData({...addData, [e.target.name]: e.target.value});
     }
@@ -49,11 +51,13 @@ const CourseSubjects = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
 
+      setIsAdding(true);
+
       const body = {
         ...addData, 
         programId: getProgramId(selectedProgram), 
         units: Number(selectedUnits), 
-        yearLevel: Number(selectedYearLevel), 
+        yearLevel: Number(selectedYearLevel.charAt(0)), 
         semester: Number(selectedSem.charAt(0))
       };
 
@@ -72,24 +76,44 @@ const CourseSubjects = () => {
         if(res.ok && data) {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
           setCourseList([...courseList, {...data, program: { programCode }}]);
-          setIsAddOpen(false);
           setSelectedProgram('BS Information Technology');
-          setSelectedYearLevel('1');
+          setSelectedYearLevel('1st');
           setSelectedUnits('1');
           setSelectedSem('1st');
+
+          setTimeout(() => {
+            setIsAdding(false);
+            setIsAddOpen(false);
+            setReload(prev => !prev);
+          }, 300);
         };
         
       }
-      addCourse();
+
+      if(allCourse.some(item => item.courseCode === body.courseCode)) {
+        setTimeout(() => {
+          setIsCourseExist(true);
+          setIsAddOpen(false);
+        }, 500);
+      } else addCourse();
     }
 
+    //Set All CourseCode to check for existing
+    useEffect(() => {
+      const getCourses = async () => {
+        const data = await fetchData('program/get-courses');
+      
+        if(Array.isArray(data)) setAllCourse(data);
+      }
+      getCourses();
+    }, [courses.data, reload]);
+    
+    
 
     //Paginition
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(6);
     
-    // let x = users.reverse();
-    // console.log(x)
     let entries = courseList.slice(start, end);
     
     const handleNext = () => {
@@ -113,25 +137,30 @@ const CourseSubjects = () => {
             <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Course Subjects</h1>
             </div>
             
-            <button className="bg-blue-400 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
+            <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
             mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Course</button>
-    
+
             <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
             <table className="w-full font-semibold text-white">
-                <thead className="bg-white sticky text-slate-800 top-0 z-10">
-                    <tr>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Course Code</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">Course Title</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">Program</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Units</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Year Level</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Semester</th>
-                        <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Option</th>
+                <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
+                    <tr className='text-white'>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Course Code</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Course Title</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Program</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Units</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year Level</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Semester</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Action</th>
                     </tr>
                 </thead>
                 <tbody className="text-gray-700 overflow-y-scroll">
                     {entries.sort((a, b) => b.id - a.id).map(course => {
-                      return <AddedCourseRow key={course.id} addedCourse={course} setCourseList={setCourseList}/>
+                      return <AddedCourseRow 
+                        key={course.id} 
+                        addedCourse={course} 
+                        setCourseList={setCourseList}
+                        setReload={setReload}
+                        />
                     })}
                 </tbody>
             </table>
@@ -159,7 +188,7 @@ const CourseSubjects = () => {
               <FontAwesomeIcon className="absolute text-[1.5rem] right-4
               top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
               <div className="bg-blu-200 ml-[-2rem] mb-4">
-                <p className="font-semibold">Add Student</p>
+                <p className="font-semibold">Add Course</p>
               </div>
 
               <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
@@ -191,7 +220,7 @@ const CourseSubjects = () => {
                   <div className="bg-gree-300 flex flex-col">
                     <label className="font-semibold">Program:</label>
                     <CustomSelect 
-                        className="border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                        className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                         option={[
                           'BS Information Technology', 
                           'BS Computer Science', 
@@ -205,7 +234,7 @@ const CourseSubjects = () => {
                   <div className="bg-gree-300 flex flex-col">
                     <label className="font-semibold">Units:</label>
                     <CustomSelect 
-                        className="border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                        className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                         option={['1', '2', '3', '4', '5', '6']} 
                         setValue={setSelectedUnits}/>
                   </div>
@@ -213,14 +242,14 @@ const CourseSubjects = () => {
                   <div className="bg-gree-300 flex flex-col">
                     <label className="font-semibold">Year Level:</label>
                     <CustomSelect 
-                        className="border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                        option={['1', '2', '3', '4']} 
+                        className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                        option={['1st', '2nd', '3rd', '4th']} 
                         setValue={setSelectedYearLevel}/>
                   </div>
                   <div className="bg-gree-300 flex flex-col">
                     <label className="font-semibold">Semester:</label>
                     <CustomSelect 
-                        className="border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                        className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                         option={['1st', '2nd']} 
                         setValue={setSelectedSem}/>
                   </div>
@@ -232,10 +261,24 @@ const CourseSubjects = () => {
                     <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-2 py-[.5rem] 
                     active:text-white" type="button" onClick={() => setIsAddOpen(false)}>Cancel</button>
                     <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
-                    active:text-white" type="submit">Add</button>
+                    active:text-white" type="submit">{isAdding ? 'Adding' : 'Add'}</button>
                 </div>
               </div>
             </form>
+            }
+
+            {isCourseExist && 
+              <div className='bg-slate-300 z-10 absolute px-4 py-4 left-[50%] top-[50%] 
+              translate-y-[-50%] translate-x-[-50%] flex flex-col gap-4 rounded-lg border-2 border-slate-400'>
+                <h1 className='text-red-500 font-semibold text-[1rem] text-center'>Course Subject {addData.courseCode} already exist!</h1>
+                <div className='bg-cya-300 flex gap-4 justify-center'>
+                  <button className='bg-blue-500 text-white px-2 py-[.2rem] rounded-md font-semibold'
+                    onClick={() => {
+                      setIsCourseExist(false);
+                      setIsAdding(false);
+                    }}>Okay</button>
+                </div>
+              </div>
             }
         </div>
     )

@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import useGwaListStore from '../../store/useGwaListStore';
 import GWAStatus from './GWAStatus';
 import useSemStore from '../../store/useSemStore';
-import profPic from '../../assets/images/profilepic/profpic.jpg';
 import useGradeListStore from '../../store/useGradeListStore';
+import ProfilePic from '../../components/shared/components/ProfilePic';
 
 type GwaList = { 
   sem: string; 
@@ -17,6 +17,9 @@ type GwaList = {
 
 const DashBoard = () => {
   
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('atoken');
+
   const { userInfo } = useUserStore();
   const [programCode, setProgramCode] = useState('');
 
@@ -43,7 +46,6 @@ const DashBoard = () => {
           return true;
         };
       });
-      // console.log(list[index]);
     }
     
   }, [x, semester]);
@@ -56,12 +58,54 @@ const DashBoard = () => {
     index = gwaList.length - 2;
   }
   
-  console.log(gwaList)
   
   //Set program
   useEffect(() => {
     if(userInfo?.program) setProgramCode(userInfo.program.programCode);
   }, [userInfo]);
+
+
+
+
+  //Style
+  const [isOpen, setIsOpen] = useState(false);
+  
+  //ProfilePic
+
+  //GET IMAGE
+  const [imgSrc, setImgSrc] = useState('');
+  const [isImageError, setIsImageError] = useState(false);
+  const [hasPic, setHasPic] = useState(false);
+
+  useEffect(() => {
+    const getProfilePic = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/image/get-image`, {
+          method: 'POST',
+          headers: {
+            'Authorization': token ? token : '',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: userInfo?.id || 0 })
+        });
+        const data = await res.json();
+        
+        if(!res.ok && data.error) {
+          setIsImageError(true);
+        } else {
+          const src = `data:${data.mimeType};base64,${data.image}`;
+          setImgSrc(src);
+          setIsImageError(false);
+          setHasPic(true);
+        }
+      } catch(e) {
+        console.log('Get error')
+      }
+    }
+    getProfilePic();
+  }, [userInfo, isOpen]);
+
+
 
   return (
     <div className='bg-slat-100 h-[100%] w-[80%] flex flex-col justify-center'>
@@ -69,11 +113,16 @@ const DashBoard = () => {
       <GWAStatus className='hidden'/>
 
       <div className='bg-cya-200 flex-[.2] flex justify-between pl-16'>
-        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName.charAt(0) == '@' ? 
-          userInfo.firstName.slice(1) : userInfo?.firstName}!</h1>
-        <div className='bg-gree-200 h-[8rem] w-[50%] flex items-end justify-end'>
-          <Profile className='mb-8' firstName={userInfo?.firstName.charAt(0) == '@' ? 
-          userInfo.firstName.slice(1) : userInfo?.firstName} lastName={userInfo?.lastName} yearLevel={userInfo?.yearLevel}/>
+        <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName}!</h1>
+        <div className='bg-gree-200 h-[8rem] w-[50%] flex items-end justify-end relative'>
+          <Profile onClick={() => setIsOpen(true)} 
+          className='bg-cya-200 mb-8' 
+          firstName={userInfo?.firstName} 
+          lastName={userInfo?.lastName} 
+          yearLevel={userInfo?.yearLevel}
+          imgSrc={imgSrc} isImageError={isImageError}/>
+          
+          {isOpen && <ProfilePic setIsOpen={setIsOpen} className='absolute bottom-[-15rem] right-[7rem]' hasPic={hasPic}/>}
         </div>
       </div>
       
@@ -82,9 +131,9 @@ const DashBoard = () => {
           <h1 className='font-sans text-[2rem] text-center pr-20'>Academic Remarks</h1>
           <div className='bg-gree-200 flex flex-col items-center pt-10'>
             <div className="bg-slate-300 h-[18rem] w-[18rem] grid place-content-center rounded-full mb-2">
-              {userInfo?.email.slice(0, 8) !== 'maricris' ? 
-                <FontAwesomeIcon className=" text-[8rem] text-slate-600" icon={faUser}/> : 
-                <img src={profPic} alt="ProfilePic" className='h-[100%] w-[100%] rounded-full'/>
+              {!isImageError ? 
+                <img src={imgSrc} alt="" className='h-[18rem] w-[18] rounded-full object-cover'/> :
+                <FontAwesomeIcon className=" text-[8rem] text-slate-600" icon={faUser}/>
               }
               
             </div>

@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import PageContainer from '../../components/shared/components/PageContainer'
 import EnrolledRow from '../../components/student/EnrolledRow'
 import useFetch from '../../hooks/useFetch';
-import { CourseType, StudentRecord } from '../../types/types';
+import { AddedCourseRecord, CourseType, StudentRecord } from '../../types/types';
 import SetCourseList from '../../utils/student/SetCourseList';
 import useSemStore from '../../store/useSemStore';
+import useUserStore from '../../store/useUserStore';
 
 type Student = {
     studentId: string,
@@ -19,6 +20,11 @@ type Student = {
 
 const ViewGrade = () => {
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem('atoken');
+
+    const { userInfo } = useUserStore();
+
     const { data } = useFetch('grade/get-grades', 'GET');
     
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
@@ -26,18 +32,26 @@ const ViewGrade = () => {
     const [filteredCourseList, setFilteredCourseList] = useState<CourseType[]>([]);
     // const [semester, setSemester] = useState(1);
     const { semester, setSemester } = useSemStore();
-
+    
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
             setStudentData(data);
-            if(data[0].bsitStudentRecord.length > 0) setCourseGradeList(data[0].bsitStudentRecord);
-            if(data[0].bscsStudentRecord.length > 0) setCourseGradeList(data[0].bscsStudentRecord);
-            if(data[0].bsisStudentRecord.length > 0) setCourseGradeList(data[0].bsisStudentRecord);
-            if(data[0].blisStudentRecord.length > 0) setCourseGradeList(data[0].blisStudentRecord);
-            if(data[0].bsemcStudentRecord.length > 0) setCourseGradeList(data[0].bsemcStudentRecord);
+            if (data[0].bsitStudentRecord.length > 0 && data[0].program.programCode === 'BSIT') {
+                setCourseGradeList(data[0].bsitStudentRecord);
+            } else if (data[0].bscsStudentRecord.length > 0 && data[0].program.programCode === 'BSCS') {
+                setCourseGradeList(data[0].bscsStudentRecord);
+            } else if (data[0].bsisStudentRecord.length > 0 && data[0].program.programCode === 'BSIS') {
+                setCourseGradeList(data[0].bsisStudentRecord);
+            } else if (data[0].blisStudentRecord.length > 0 && data[0].program.programCode === 'BLIS') {
+                setCourseGradeList(data[0].blisStudentRecord);
+            } else if (data[0].bsemcStudentRecord.length > 0 && data[0].program.programCode === 'BSEMC') {
+                setCourseGradeList(data[0].bsemcStudentRecord);
+            }
         }
+        
     }, [data]);
+    
 
     let student: Student = {
         studentId: '',
@@ -65,9 +79,38 @@ const ViewGrade = () => {
 
 
     //Course List
+
+    const [addedRecord, setAddedRecord] = useState<AddedCourseRecord[]>([]);
     useEffect(() => {
-        SetCourseList(courseGradeList, student, semester, setFilteredCourseList);
-    }, [courseGradeList, semester]);
+        // if(Array.isArray(addedCourseRecord.data)) setAddedRecord(addedCourseRecord.data);
+
+        const getAddedRecord = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/grade/get-added-record`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userInfo?.id })
+                });
+                const data = await res.json();
+                
+                if(res.ok && data) {
+                    if(Array.isArray(data)) setAddedRecord(data);
+                }
+
+            } catch(e) {
+                console.log(`Fetch Error${e}`)
+            }
+        };
+        getAddedRecord();
+
+    }, [userInfo]);
+
+    useEffect(() => {
+        SetCourseList(courseGradeList, student, semester, addedRecord, setFilteredCourseList);
+    }, [courseGradeList, semester, addedRecord]);
     
     //GWA
     let gwa = 0;
@@ -79,7 +122,8 @@ const ViewGrade = () => {
         "bscsCurriculum",
         "bsisCurriculum",
         "blisCurriculum",
-        "bsemcCurriculum"
+        "bsemcCurriculum",
+        "addedCourse"
     ] as (keyof CourseType)[];
     
     filteredCourseList.forEach((course) => {
@@ -93,7 +137,6 @@ const ViewGrade = () => {
     });
     
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
-
     
     return (
         <PageContainer className='px-12'>
@@ -107,7 +150,10 @@ const ViewGrade = () => {
                     <p>ID No: {student.studentId}</p>
                 </div>
                 <div className='bg-pin-200 flex flex-col gap-2'>
-                    <p>Program/Block/Year: {`${student.programCode}/${student.block || ''}/${student.yearLevel || ''}`}</p>
+                    <p>Program/Block/Year: {`
+                        ${student.programCode}
+                        ${student.block ? `/${student.block}` : ''}
+                        ${student.yearLevel ? `/${student.yearLevel}` : ''}`}</p>
                     <p>Period: {student.period}</p>
                 </div>
 
@@ -141,7 +187,7 @@ const ViewGrade = () => {
                             <td className='border-b-2 border-slate-500'></td>
                             <td className='border-b-2 border-slate-500'></td>
                             <td className='px-2 py-2 text-center font-bold 
-                            border-b-2 border-r-2 border-slate-500'>GWA: {gwa}</td>
+                            border-b-2 border-r-2 border-slate-500'>GWA: {(Number.isInteger(Number(gwa)) ? `${gwa}.0` : gwa)}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -22,10 +22,10 @@ const GradeEntry = () => {
   const [courseList, setCourseList] = useState<Course[]>([]);
   const [handledCourse, setHandledCourse] = useState<HandledCourse[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
-
+  
   //Get Courses 
   const courses = useFetch('program/get-courses', 'GET');
-
+  
   //Get Handled Courses
   useEffect(() => {
     if(courses.data) setCourseList(courses.data as Course[]);
@@ -63,15 +63,14 @@ const GradeEntry = () => {
     }
   });
   
-  
 
   //Style
 
   return (
     <PageContainer className='px-6 pt-10 relative'>
       <div className='bg-cya-200 max-h-[98%] flex flex-wrap gap-6 pl-[6rem] overflow-y-auto'>
-        {handledCourses.map((item) => {
-          return <CourseCode key={item.id} data={item}/>
+        {handledCourses.map((item, i) => {
+          return <CourseCode key={i} data={item}/>
         })}
       </div>
       

@@ -25,14 +25,14 @@ const ManageStudents = () => {
     
     useEffect(() => {
       if(Array.isArray(data)) {
-          const list = data.filter((d) => d.role === 'student' && d.firstName.charAt(0) == '@');
+          const list = data.filter((d) => d.role === 'student');
           setUsers(list);
       }
     }, [data]);
     
     
     //Add
-    const [error, setError] = useState('');
+    const [isEmailExist, setIsEmailExist] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [addData, setAddData] = useState<AddData>({
       studentId: '',
@@ -52,13 +52,19 @@ const ManageStudents = () => {
 
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
+      setIsEmailExist(false);
 
       let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
 
+      if(pw.split(' ').length > 1) {
+        let secName = pw.split(' ')[1];
+        pw = `${pw.split(' ')[0]}${secName.charAt(0).toLocaleLowerCase()}${secName.slice(1)}`;
+      }
+      
       let body = {
         ...addData, 
-        firstName: `@${addData.firstName}`,
+        firstName: `${addData.firstName}`,
         programId,
         role: 'student',
         password: pw,
@@ -79,7 +85,6 @@ const ManageStudents = () => {
         });
         const data = await res.json();
 
-        // console.log(data)
 
         if(res.ok && data) {
           let programCode = selectedProgram.replace(/\s+/g, '').split('').filter(char => char === char.toUpperCase()).join('');
@@ -88,8 +93,9 @@ const ManageStudents = () => {
           setSelectedProgram('BS Information Technology');
           setSelectedYearLevel('1');
           setSelectedBlock('A');
+          setIsEmailExist(false);
         };
-        if(data.error) setError('Email already registered');
+        if(data.error) setIsEmailExist(true);
         // console.log(data)
       }
       addUser();
@@ -126,21 +132,21 @@ const ManageStudents = () => {
           <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Manage Students</h1>
         </div>
         
-        <button className="bg-blue-400 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
+        <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
         mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Student</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
           <table className="w-full font-semibold text-white">
-            <thead className="bg-white sticky text-slate-800 top-0 z-10">
-                <tr>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Student ID</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[8rem]">First Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Last Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Email</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Program</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Year</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Block</th>
-                    <th className="px-4 py-4 text-center border-2 border-slate-500 min-w-[5rem]">Action</th>
+            <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
+                <tr className="text-white">
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Student ID</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">First Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Last Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Email</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Program</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Block</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700">
@@ -174,7 +180,10 @@ const ManageStudents = () => {
           px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
     
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
-            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
+            top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => {
+              setIsAddOpen(false);
+              setIsEmailExist(false);
+            }}/>
             <div className="bg-blu-200 ml-[-2rem] mb-4">
               <p className="font-semibold">Add Student</p>
             </div>
@@ -220,7 +229,7 @@ const ManageStudents = () => {
                       onChange={handleAddData}
                       name="email"
                     />
-                    <p className="text-[.8rem] text-red-500 ml-2">{error || ''}</p>
+                    {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2">Email already registered!</p>}
                 </div>
                 <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">Program:</label>
@@ -254,7 +263,10 @@ const ManageStudents = () => {
             <div className="bg-gree-200 flex justify-end items-start mt-6 mb-8">
               <div className="bg-re-200 flex gap-4">
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-2 py-[.5rem] 
-                 active:text-white" type="button" onClick={() => setIsAddOpen(false)}>Cancel</button>
+                 active:text-white" type="button" onClick={() => {
+                  setIsAddOpen(false);
+                  setIsEmailExist(false);
+                 }}>Cancel</button>
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
                  active:text-white" type="submit">Add</button>
               </div>

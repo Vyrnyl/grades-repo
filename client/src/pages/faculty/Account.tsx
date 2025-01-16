@@ -1,155 +1,212 @@
-import PageContainer from "../../components/shared/components/PageContainer"
-import InputFieldWrapper from "../../components/shared/components/InputFieldWrapper"
-import Input from "../../components/shared/components/Input"
-import HalfInput from "../../components/shared/components/HalfInput"
-import SelectInput from "../../components/shared/components/SelectInput"
-import SaveButton from "../../components/shared/components/SaveButton"
-import { useEffect, useState } from "react"
-import useUserStore from "../../store/useUserStore"
-import handleInputChange from "../../utils/handleInputChange"
-import handleSelectChange from "../../utils/handleSelectChange"
+import PageContainer from "../../components/shared/components/PageContainer";
+import InputFieldWrapper from "../../components/shared/components/InputFieldWrapper";
+import Input from "../../components/shared/components/Input";
+import HalfInput from "../../components/shared/components/HalfInput";
+import SelectInput from "../../components/shared/components/SelectInput";
+import SaveButton from "../../components/shared/components/SaveButton";
+import { useEffect, useState } from "react";
+import useUserStore from "../../store/useUserStore";
+import handleInputChange from "../../utils/handleInputChange";
+import handleSelectChange from "../../utils/handleSelectChange";
+import useFetch from "../../hooks/useFetch";
+import { User } from "../../types/studentTypes";
 
 type AccountInfoType = {
-  fullName: string,
-  studentId: string,
-  gender: string,
-  email: string,
-  phoneNumber: string,
-  password: string
-}
-
+  firstName: string;
+  lastName: string;
+  studentId: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  sex: string;
+};
 
 const Account = () => {
-
-
   const apiUrl = import.meta.env.VITE_API_URL;
-  const token = localStorage.getItem('atoken');
+  const token = localStorage.getItem("atoken");
 
-  const { userInfo } = useUserStore();
+  const { userInfo, setUserInfo } = useUserStore();
 
   const [accountInfo, setAccountInfo] = useState<AccountInfoType>({
-    fullName: '',
-    studentId: '',
-    gender: '',
-    email: '',
-    phoneNumber: '',
-    password: ''
+    firstName: "",
+    lastName: "",
+    studentId: "",
+    sex: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
   });
-  
+
   //SetAccInfo
   useEffect(() => {
-
     setAccountInfo({
-      fullName: `${userInfo?.firstName} ${userInfo?.lastName || ""}`,
+      firstName: userInfo?.firstName || "",
+      lastName: userInfo?.lastName || "",
       studentId: userInfo?.studentId || "",
-      gender: userInfo?.sex || "",
+      sex: userInfo?.sex || "",
       email: userInfo?.email || "",
       phoneNumber: userInfo?.phoneNumber || "",
-      password: ''
+      password: "",
     });
   }, [userInfo]);
-  
-  
+
   //SaveData
+  const [isEmailExist, setIsEmailExist] = useState(false);
   const [isSave, setIsSave] = useState(false);
-  const [save, setSave] = useState('Saving');
+  const [save, setSave] = useState("Saving");
+
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSave(true);
+    setIsEmailExist(false);
 
-    let fullName = accountInfo.fullName.split(' ');
     const updateUser = async () => {
-
       const updatedData = {
         id: userInfo?.id,
         studentId: accountInfo.studentId,
-        firstName: fullName[0],
-        lastName: fullName[fullName.length - 1],
+        firstName: accountInfo.firstName,
+        lastName: accountInfo.lastName,
         email: accountInfo.email,
         phoneNumber: accountInfo.phoneNumber,
         password: accountInfo.password,
-        sex: accountInfo.gender
-      }
-      
+        sex: accountInfo.sex,
+      };
+
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Authorization': token ? token : '',
-            'Content-Type': 'application/json'
-        },
-          body: JSON.stringify(updatedData)
+            Authorization: token ? token : "",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
         });
 
         const data = await res.json();
-        if(res.ok && data) {
-          setSave('Saved!');
+        if (res.ok && data) {
+          const { id, ...data } = updatedData;
+          setAccountInfo(data);
+          setSave("Saved!");
+          setIsEmailExist(false);
           setTimeout(() => {
             setIsSave(false);
           }, 700);
         }
-
-      } catch(error) {
+        if(data.error) {
+          setIsEmailExist(true);
+          setIsSave(false);
+        }
+        
+      } catch (error) {
         console.log("Fetch error" + error);
       }
-    }
+    };
     updateUser();
-}
-  
+  };
 
+  const { error, data } = useFetch("user/get-user", "GET");
+
+  useEffect(() => {
+    if (!error && data) {
+      setUserInfo(data as User);
+    }
+  }, [data]);
   return (
     <PageContainer className="relative">
       <div className="bg-re-200 flex-[.2] ml-[5rem] w-[65%] flex items-end">
-          <h1 className="text-[2rem] font-bold text-slate-800">Account</h1>
-        </div>
-        <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
-          <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-[1.6rem] pb-7">
-            <InputFieldWrapper label="Name">
-              <Input type="text" name='fullName' value={accountInfo.fullName} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
-            </InputFieldWrapper>
+        <h1 className="text-[2rem] font-bold text-slate-800">Account</h1>
+      </div>
+      <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
+        <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-y-[3.5rem] gap-x-[2rem] pb-7">
+          <InputFieldWrapper label="First Name">
+            <Input
+              type="text"
+              name="firstName"
+              value={accountInfo.firstName}
+              onChange={(e) => handleInputChange(e, setAccountInfo)}
+              className="w-[20rem] border-[.1rem]"
+            />
+          </InputFieldWrapper>
 
+          <InputFieldWrapper label="Last Name">
+            <Input
+              type="text"
+              name="lastName"
+              value={accountInfo.lastName}
+              onChange={(e) => handleInputChange(e, setAccountInfo)}
+              className="w-[20rem] border-[.1rem]"
+            />
+          </InputFieldWrapper>
+
+          <InputFieldWrapper label="Phone Number">
+            <Input
+              type="text"
+              name="phoneNumber"
+              value={accountInfo.phoneNumber}
+              onChange={(e) => handleInputChange(e, setAccountInfo)}
+              className="w-[20rem] border-[.1rem]"
+            />
+          </InputFieldWrapper>
+
+          <div className="bg-re-200 flex gap-x-[2rem]">
             <InputFieldWrapper label="Faculty ID">
-              <HalfInput type="text" name='studentId' value={accountInfo.studentId} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)}/>
+              <HalfInput
+                type="text"
+                name="studentId"
+                value={accountInfo.studentId}
+                onChange={(e) => handleInputChange(e, setAccountInfo)}
+              />
             </InputFieldWrapper>
 
-            <InputFieldWrapper label="">
-              <SelectInput name='gender' value={accountInfo.gender} 
-              onChange={(e) => handleSelectChange(e, setAccountInfo)}/>
-            </InputFieldWrapper>
-          </div>
-
-          <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row items-center">
-            <InputFieldWrapper label="Email address">
-              <Input type="text" name='email' value={accountInfo.email} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
-            </InputFieldWrapper>
-
-            <InputFieldWrapper label="Phone Number">
-              <Input type="text" name='phoneNumber' value={accountInfo.phoneNumber} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
-            </InputFieldWrapper>
-
-            <InputFieldWrapper label="Password">
-              <Input type="password" name='password' value={accountInfo.password} 
-              onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
+            <InputFieldWrapper label="Gender">
+              <SelectInput
+                name="sex"
+                value={accountInfo.sex}
+                onChange={(e) => handleSelectChange(e, setAccountInfo)}
+              />
             </InputFieldWrapper>
           </div>
-        </form>
-        <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
-          <SaveButton className="bg-slate-500" onClick={handleUpdate}/>
-
-          {isSave && 
-            <div className="bg-white h-[4rem] px-4 flex items-center absolute left-[50%] top-[50%] 
-            translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg z-10">
-              <h1 className="text-[1.2rem] font-semibold text-slate-700 ">{save}</h1>
-            </div>
-          }
         </div>
-        
-    </PageContainer>
-  )
-}
 
-export default Account
+        <div className="bg-blu-500 flex-[.7] grid grid-cols-2 grid-flow-row mt-4">
+          <InputFieldWrapper label="Email address">
+            <Input
+              type="text"
+              name="email"
+              value={accountInfo.email}
+              onChange={(e) => handleInputChange(e, setAccountInfo)}
+              className="w-[20rem] border-[.1rem]"
+            />
+            {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2">Email already registered!</p>}
+          </InputFieldWrapper>
+
+          <InputFieldWrapper label="Password">
+            <Input
+              type="password"
+              name="password"
+              value={accountInfo.password}
+              onChange={(e) => handleInputChange(e, setAccountInfo)}
+              className="w-[20rem] border-[.1rem]"
+            />
+          </InputFieldWrapper>
+        </div>
+      </form>
+      <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
+        <SaveButton className="bg-slate-400" onClick={handleUpdate} />
+
+        {isSave && (
+          <div
+            className="bg-white h-[4rem] px-4 flex items-center absolute left-[50%] top-[50%] 
+            translate-y-[-50%] translate-x-[-50%] card-shadow rounded-lg z-10"
+          >
+            <h1 className="text-[1.2rem] font-semibold text-slate-700 ">
+              {save}
+            </h1>
+          </div>
+        )}
+      </div>
+    </PageContainer>
+  );
+};
+
+export default Account;

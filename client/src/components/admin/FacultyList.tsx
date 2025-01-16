@@ -34,12 +34,12 @@ const   FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOp
         <table className="w-full font-semibold text-white">
             <thead className="bg-blue-500 sticky top-0">
                 <tr>
-                    <th className="p-4 text-center">Faculty ID</th>
-                    <th className="p-4 text-center">Name</th>
+                    <th className="p-4 text-center border- border-blue-500">Faculty ID</th>
+                    <th className="p-4 text-center border- border-blue-500">Name</th>
                     {/* <th className="p-4 text-center">College</th> */}
-                    <th className="p-4 text-center">Email</th>
-                    <th className="p-4 text-center">Status</th>
-                    <th className="p-4 text-center">Action</th>
+                    <th className="p-4 text-center border- border-blue-500">Email</th>
+                    <th className="p-4 text-center border- border-blue-500">Status</th>
+                    <th className="p-4 text-center border- border-blue-500">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700">

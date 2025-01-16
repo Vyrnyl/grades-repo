@@ -11,6 +11,7 @@ const tokenService_1 = require("../services/tokenService");
 const validationErrorHandler_1 = __importDefault(require("../utils/validationErrorHandler"));
 const passwordUtils_1 = require("../utils/passwordUtils");
 const activityDataAccess_1 = require("../data/activityDataAccess");
+const programDataAccess_1 = require("../data/programDataAccess");
 //SIGNUP
 const signup = async (req, res) => {
     const { error, value } = (0, authValidator_1.validateSignup)(req.body);
@@ -34,6 +35,8 @@ const signup = async (req, res) => {
         // console.log(newUserResult)
         return res.status(409).json({ error: 'Email already registered' });
     }
+    //Assign Addded Courses
+    await (0, programDataAccess_1.assignNewUserCourse)(newUserResult.id, value.programId);
     //Set Recent Activity
     // await addAdminRecentActivity(`New user registered with email: ${newUserResult.email}`);
     // await addLoginSession();
@@ -76,9 +79,10 @@ const login = async (req, res) => {
         return res.status(404).json({ error: 'Invalid email or password' });
     }
     await (0, activityDataAccess_1.addLoginActivity)(user.email, 'Successful');
-    await (0, activityDataAccess_1.addLoginSession)();
-    if (user.email !== 'admin@gmail.com')
+    if (user.email !== 'admin@gmail.com') {
+        await (0, activityDataAccess_1.addLoginSession)();
         await (0, activityDataAccess_1.addAdminRecentActivity)(`User logged in with email: ${user.email}`);
+    }
     const payload = {
         userId: user.id,
         firstName: user.firstName,

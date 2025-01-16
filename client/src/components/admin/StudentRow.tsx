@@ -1,9 +1,13 @@
 import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '../../types/studentTypes';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { deleteUser } from './utils';
 import EditForm from './EditForm';
+import getProgramId from '../../utils/getProgramId';
+import getProgramName from '../../utils/getProgramName';
+import yearSuffix from '../../utils/yearSuffix';
+import HandleOutsideClick from '../../utils/HandleOutsideClick';
 
 type StudentData = {
   id: number,
@@ -38,6 +42,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   } = student;
 
 
+
   let program = '';
   if(student?.program) {
     const { programName } = student.program;
@@ -46,6 +51,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     if(programName.split(' ')[2].charAt(0) === 'L') 
       program = `BL ${programName.split('and')[1]}`;
   }
+  
 
   const [studentData, setStudentData] = useState<StudentData>({
     id,
@@ -56,39 +62,41 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     block,
     program,
     status
-  }); 
+  });
 
   //Update
   const [isOpen, setIsOpen] = useState(false);
   const [updateData, setUpdateData] = useState<Record<string, any>>({
     id,
     studentId,
-    fullName: `${student.firstName.charAt(0) === '@' ? student.firstName.slice(1) : student.firstName} ${student.lastName}`,
-    yearBlock: `${student.yearLevel || ''}${student.block || ''}`,
-    // programId: String(programId),
+    firstName: `${student.firstName}`,
+    lastName: student.lastName,
+    yearLevel: `${student.yearLevel}${yearSuffix(student.yearLevel)}` || '',
+    block: student.block || '',
+    programId: program,
     status
   });
+  
   
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     
-    let fullName = updateData.fullName.split(' ');
-    let yearBlock = updateData.yearBlock.split('');
+    // let fullName = updateData.fullName.split(' ');
+    // let yearBlock = updateData.yearBlock.split('');
 
     const updateUser = async () => {
-
       setIsOpen(!isOpen);
       const updatedData = {
         id,
         studentId: updateData.studentId,
-        firstName: student?.firstName.charAt(0) === '@' ?  `@${fullName[0]}` : fullName[0],
-        lastName: fullName[fullName.length - 1],
-        yearLevel: Number(yearBlock[0]),
-        block: yearBlock[1],
-        // programId: Number(updateData.programId),
+        firstName: student?.firstName.charAt(0) === '@' ?  `@${updateData.firstName}` : updateData.firstName,
+        lastName: updateData.lastName,
+        yearLevel: typeof updateData.yearLevel == 'string' ? Number(updateData.yearLevel.charAt(0)) : updateData.yearLevel,
+        block: updateData.block,
+        programId: getProgramId(updateData.programId),
         status: updateData.status
       }
-      console.log(updateData);
+      // console.log(updatedData)
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
           method: 'PUT',
@@ -102,7 +110,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
         const data = await res.json();
 
         if(res.ok && data) {
-          setStudentData({...updatedData, program});
+          setStudentData({...updatedData, program: getProgramName(data.programId)});
         }
 
       } catch(error) {
@@ -115,6 +123,9 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
 
   //Delete User
   const [isDelete, setIsDelete] = useState(false);
+
+  const ref = useRef<HTMLDivElement>(null);
+  HandleOutsideClick(ref, setIsDelete);
   
   return (
     <tr className="bg-slate-100 hover:bg-slate-200 border-b-2 border-l-2 border-r-2 border-slate-500">
@@ -142,7 +153,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
                   icon={faTrashCan} onClick={() => setIsDelete(!isDelete)}/>
 
                 {isDelete && 
-                  <div className='bg-slate-300 absolute px-8 py-10 left-[50%] top-[50%] 
+                  <div ref={ref} className='bg-slate-300 absolute px-8 py-10 left-[50%] top-[50%] 
                     translate-y-[-50%] translate-x-[-50%] flex flex-col gap-4 rounded-lg'>
                     <h1 className='text-slate-700 font-semibold text-[1.2rem] text-center'>Are you sure?</h1>
                     <div className='bg-cya-300 flex gap-4'>

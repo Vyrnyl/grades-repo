@@ -48,20 +48,25 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
         password: '',
         confirmPassword: ''
     });
+
     
+    const [signingUp, setSigningUp] = useState(false);
     const registerUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSigningUp(true);
 
         const signup = await register(signupInfo);
 
         if(signup.error) {
             setInfoError({ error: signup.error });
             setInputError([]);
+            setSigningUp(false);
         }
         if(signup.validationError) {
             setInputError(signup.validationError);
+            setSigningUp(false);
         }
-        console.log(signup)
+        
         const userInfo = tokenInfo();
         setUserRole(userInfo.role);
 
@@ -150,7 +155,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
                             })} icon={confirmPasswordEyeIcon}/>
                         </div>
                         <button className='bg-purple-500 text-white w-[65%] h-[2.5rem] rounded-lg font-[500]
-                         active:bg-slate-500 mb-2'>Sign Up</button>
+                         active:bg-slate-500 mb-2'>{signingUp ? 'Signing Up' : 'Sign Up'}</button>
                          <p className='text-[.8rem]'>Already have an account? <span className='text-purple-500
                             cursor-pointer active:text-blue-500' onClick={() => navigate('/login')}>Login</span></p>
                     </form>

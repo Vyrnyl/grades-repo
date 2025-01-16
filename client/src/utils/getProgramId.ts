@@ -23,4 +23,4 @@ const getProgramId = (selected: string) => {
       return programId;
 }
 
-export default getProgramId;;
+export default getProgramId;

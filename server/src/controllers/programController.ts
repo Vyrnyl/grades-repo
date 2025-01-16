@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addAddedCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, updateAddedCourse } from "../data/programDataAccess";
+import { addAddedCourse, assignNewUserCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, updateAddedCourse } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -53,7 +53,6 @@ const getAddedCourse = async (req: Request, res: Response) => {
     if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
 
     res.status(200).json(courses);
-
 }
 
 const updateCourse = async (req: Request, res: Response) => {

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { getGrades, getRecords, getStudents, updateGrade } from "../data/gradeDataAccess";
+import { getAddedCourseRecord, getGrades, getRecords, getStudents, updateGrade } from "../data/gradeDataAccess";
 import { addNotificationData } from "../data/notificationDataAccess";
 
 const getStudentGrades = async (req: Request, res: Response) => {
-
+    
     if(!req.user) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -48,4 +48,21 @@ const updateStudentGrade = async (req: Request, res: Response) => {
     res.status(201).json(updateGradeDetails);
 };
 
-export { getStudentGrades, getStudentRecords, updateStudentGrade };
+
+
+
+//ADDED COURSE GRADES
+const getAddedCourseGrade = async (req: Request, res: Response) => {
+
+    const records = await getAddedCourseRecord(req.body.userId);
+
+    if(!records) {
+        return res.status(500).json({ error: 'Failed to retrieve user grades' });
+    }
+
+    res.status(201).json(records);
+}
+
+
+
+export { getStudentGrades, getStudentRecords, updateStudentGrade, getAddedCourseGrade };

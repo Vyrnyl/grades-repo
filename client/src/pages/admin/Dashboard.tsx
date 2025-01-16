@@ -12,10 +12,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Program, User } from "../../types/studentTypes"
 import PieChart from "../../components/admin/PieChart"
 import PercentageCircle from "../../components/admin/PercentageCircle"
+import ProfilePic from "../../components/shared/components/ProfilePic"
 
 const Dashboard = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem('atoken');
+
   const { userInfo } = useUserStore();
 
   //Count
@@ -74,26 +77,73 @@ const Dashboard = () => {
 
   let percentage = active.activeSessions / (students.length + faculties.length + 1) * 100;
 
+  // console.log(percentage < 0 ? 0 : percentage)
+
+
+
+  
+  //Profile
+  const [isOpen, setIsOpen] = useState(false);
+
+
+   //GET IMAGE
+   const [imgSrc, setImgSrc] = useState('');
+   const [isImageError, setIsImageError] = useState(false);
+   const [hasPic, setHasPic] = useState(false);
+ 
+   useEffect(() => {
+     const getProfilePic = async () => {
+       try {
+        const res = await fetch(`${apiUrl}/image/get-image`, {
+          method: 'POST',
+          headers: {
+            'Authorization': token ? token : '',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: userInfo?.id || 0 })
+        });
+        const data = await res.json();
+        
+        if(!res.ok && data.error) {
+          setIsImageError(true);
+        } else {
+          const src = `data:${data.mimeType};base64,${data.image}`;
+          setImgSrc(src);
+          setIsImageError(false);
+          setHasPic(true);
+        }
+       } catch(e) {
+        console.log('Get error')
+      }
+     }
+     getProfilePic();
+  }, [userInfo, isOpen]);
+
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
       <div className="bg-gree-300 h-[100%] flex flex-col justify-center">
 
         <div className='bg-cya-200 flex-[.2] flex justify-between'>
           <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome {userInfo?.firstName}!</h1>
-          <div className="bg-gree-200 pt-[1rem] flex gap-2">
-            <div className="bg-slate-300 h-[4rem] w-[4rem] grid place-content-center rounded-full">
-              <FontAwesomeIcon className="text-[2.5rem] text-slate-600" icon={faUser}/>
+          <div className="bg-gree-200 pt-[1rem] flex gap-2 relative">
+            <div onClick={() => setIsOpen(true)} className="bg-slate-300 h-[4rem] w-[4rem] grid place-content-center rounded-full">
+              {hasPic ? <img src={imgSrc} alt="" className='h-[4rem] w-[4rem] rounded-full object-cover' /> :
+                <FontAwesomeIcon className=" text-[2.5rem] text-slate-600" icon={faUser}/>
+              }
             </div>
             <p className="text-[1.1rem] mt-[1.2rem] text-slate-700 font-bold">{`${userInfo?.firstName || ''}`}</p>
+              
+            {isOpen && <ProfilePic className="absolute left-[-15.2rem] top-[3rem] z-10" 
+            setIsOpen={setIsOpen} hasPic={hasPic}/>}
           </div>
         </div>
 
         <div className="bg-gree-200 flex-[.3] flex justify-between flex-wrap">
-          <DashboardCard count={programs?.length || 0} label="Courses" icon={faChartColumn} onClick={() => setIsCourseOpen(!isCourseOpen)}/>
+          <DashboardCard count={programs?.length || 0} label="Programs" icon={faChartColumn} onClick={() => setIsCourseOpen(!isCourseOpen)}/>
           <DashboardCard count={students.length || 0} label="Students" icon={faUser} onClick={() => setIsStudentOpen(!isStudentOpen)}/>
           <DashboardCard count={faculties.length || 0} label="Faculty Members" icon={faUser} onClick={() => setIsFacultyOpen(!isFacultyOpen)}/>
         </div>
-
+              
         <div className="bg-cya-200 flex-[.6] flex justify-evenly items-end">
           <div className="bg-pin-200 border-2 border-slate-600 h-[90%] px-8
           rounded-[1rem] grid place-content-center relative">

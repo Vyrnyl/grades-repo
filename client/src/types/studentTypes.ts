@@ -21,7 +21,7 @@ type Program = {
     programName: string
 }
   
-  type User = {
+type User = {
     id: number,
     firstName: string,
     lastName: string,
@@ -38,6 +38,6 @@ type Program = {
     program: Program,
     createdAt: string,
     updatedAt: string
-  }
+}
 
 export { Grades, Program, User };

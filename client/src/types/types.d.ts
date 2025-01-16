@@ -45,7 +45,8 @@ type CourseType = {
     bscsCurriculum?: Course,
     bsisCurriculum?: Course,
     blisCurriculum?: Course,
-    bsemcCurriculum?: Course
+    bsemcCurriculum?: Course,
+    addedCourse?: Course
 }
 
 type StudentRecord = {
@@ -60,7 +61,8 @@ type StudentRecord = {
     bscsStudentRecord: CourseType[],
     bsisStudentRecord: CourseType[],
     blisStudentRecord: CourseType[],
-    bsemcStudentRecord: CourseType[]
+    bsemcStudentRecord: CourseType[],
+    addedCourseRecord: CourseType[]
 }
 
 
@@ -74,4 +76,25 @@ type AddedCourseType = {
     programId: number
 }
 
-export { CourseData, CourseInfo, CourseType, StudentRecord, Course, Grade, AddedCourseType };
+
+
+//ADDED COURSE
+type AddedCourse = {
+    id: number,
+    courseCode: string,
+    courseTitle: string,
+    units: number,
+    yearLevel: number,
+    semester: number,
+    programId: number
+  }
+  
+  type AddedCourseRecord = {
+    id: number; 
+    userId: number; 
+    courseId: number; 
+    grade: number | null,
+    addedCourse?: AddedCourse
+  }
+
+export { CourseData, CourseInfo, CourseType, StudentRecord, Course, Grade, AddedCourseType, AddedCourseRecord };

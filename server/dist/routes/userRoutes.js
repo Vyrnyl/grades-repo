@@ -7,4 +7,5 @@ router.get('/get-users', userController_1.getUsers);
 router.get('/get-user', userController_1.getUser);
 router.put('/update-user', userController_1.updateUser);
 router.delete('/delete-user', userController_1.deleteUser);
+// router.post('/check-email', getEmail);
 exports.default = router;

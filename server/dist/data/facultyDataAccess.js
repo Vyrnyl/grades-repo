@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSpecialization = exports.addSpecialization = exports.getHandledCourse = exports.addHandledCourse = void 0;
+exports.updateSpecialization = exports.getSpecialization = exports.addSpecialization = exports.updateHandledCourse = exports.getHandledCourse = exports.addHandledCourse = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //COURSES
@@ -28,10 +28,29 @@ const getHandledCourse = async (userId) => {
     }
 };
 exports.getHandledCourse = getHandledCourse;
+const updateHandledCourse = async (data, userId) => {
+    try {
+        const deleted = await prisma.handledCourse.deleteMany({ where: { userId } });
+        // if(!deleted) return null;
+        if (data.length === 0) {
+            return true;
+        }
+        const result = await prisma.handledCourse.createMany({ data });
+        return result;
+    }
+    catch (error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+};
+exports.updateHandledCourse = updateHandledCourse;
 //PROGRAMS
 const addSpecialization = async (data) => {
     try {
         const result = await prisma.specialization.createMany({ data });
+        if (data.length === 0) {
+            return true;
+        }
         return result;
     }
     catch (error) {
@@ -53,3 +72,17 @@ const getSpecialization = async (userId) => {
     }
 };
 exports.getSpecialization = getSpecialization;
+const updateSpecialization = async (data, userId) => {
+    try {
+        const deleted = await prisma.specialization.deleteMany({ where: { userId } });
+        // if(!deleted) return null;
+        // console.log(deleted)
+        const result = await prisma.specialization.createMany({ data });
+        return result;
+    }
+    catch (error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+};
+exports.updateSpecialization = updateSpecialization;
