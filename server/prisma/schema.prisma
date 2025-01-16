@@ -1,0 +1,222 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String @unique
+  phoneNumber String?
+  password String
+  sex String?
+  role String
+  studentId String?
+  yearLevel Int?
+  block String?
+  programId Int?
+  status String?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  program Program? @relation(fields: [programId], references: [id])
+  bsitStudentRecord BsitStudentRecord[]
+  bscsStudentRecord BscsStudentRecord[]
+  bsisStudentRecord BsisStudentRecord[]
+  blisStudentRecord BlisStudentRecord[]
+  bsemcStudentRecord BsemcStudentRecord[]
+  addedCourseRecord AddedCourseRecord[]
+  class Class[]
+  notification Notification[]
+  recentActivity RecentActivity[]
+  handledCourse HandledCourse[]
+  specialization Specialization[]
+  profilePic ProfilePic[]
+}
+
+model Program {
+  id Int @id @default(autoincrement())
+  programCode String
+  programName String
+  users User[]
+}
+
+
+model BsitCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  bsitStudentRecord BsitStudentRecord[]
+}
+model BscsCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  bscsStudentRecord BscsStudentRecord[]
+}
+model BsisCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  bsisStudentRecord BsisStudentRecord[]
+}
+model BlisCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  blisStudentRecord BlisStudentRecord[]
+}
+model BsemcCurriculum {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int @default(3)
+  bsemcStudentRecord BsemcStudentRecord[]
+}
+
+
+model AddedCourse {
+  id Int @id @default(autoincrement())
+  courseCode String
+  courseTitle String
+  units Int
+  yearLevel Int
+  semester Int
+  programId Int
+  addedCourseRecord AddedCourseRecord[]
+}
+model AddedCourseRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  addedCourse AddedCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+
+model BsitStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsitCurriculum BsitCurriculum @relation(fields: [courseId], references: [id])
+}
+model BscsStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bscsCurriculum BscsCurriculum @relation(fields: [courseId], references: [id])
+}
+model BsisStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsisCurriculum BsisCurriculum @relation(fields: [courseId], references: [id])
+}
+model BlisStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  blisCurriculum BlisCurriculum @relation(fields: [courseId], references: [id])
+}
+model BsemcStudentRecord {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseId Int
+  grade Decimal? @db.Decimal(3, 1)
+  user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
+  bsemcCurriculum BsemcCurriculum @relation(fields: [courseId], references: [id])
+}
+
+//FACULTY
+model HandledCourse {
+  id Int @id @default(autoincrement())
+  courseCode String
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+model Specialization {
+  id Int @id @default(autoincrement())
+  programCode String
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+
+
+model Class {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseCode String
+  courseTitle String
+  day String
+  time String
+  room String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LoginActivity {
+  id Int @id @default(autoincrement())
+  studentId String
+  firstName String
+  lastName String
+  email String
+  role String
+  status String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Sessions {
+  id Int @id @default(autoincrement())
+  activeSessions Int
+}
+
+model RecentActivity {
+  id Int @id @default(autoincrement())
+  userId Int
+  content String @db.Text
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  userId Int
+  content String @db.Text
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProfilePic {
+  id Int @id @default(autoincrement())
+  userId Int
+  data Bytes
+  mimeType String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  token String @unique @db.VarChar(300)
+}
