@@ -26,11 +26,15 @@ const courseUnit = (userInfo: User | null, records: Grades[], j: number) => {
 }
 
 const computeGwa = (list: CourseType[]) => {
+
     let gwa = 0;
     let totalUnits= 0;
     let weightedSum = 0;
 
+    
+
     list.forEach(item => {
+
         if(item.grade && item.bsitCurriculum?.units) {
             weightedSum += item.bsitCurriculum?.units * item.grade;
             totalUnits += item.bsitCurriculum.units;
@@ -52,6 +56,14 @@ const computeGwa = (list: CourseType[]) => {
             totalUnits += item.bsemcCurriculum.units;
         }
     });
+
+    // assignedCourses.map(course => {
+    //     if(course.addedCourse) {
+    //         totalUnits += course.addedCourse?.units;
+    //         weightedSum += Number(course.grade) * course.addedCourse?.units;
+    //     }
+    // });
+
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
     
     return gwa;

@@ -39,6 +39,7 @@ model User {
   handledCourse HandledCourse[]
   specialization Specialization[]
   profilePic ProfilePic[]
+  assignedCourse AssignedCourse[]
 }
 
 model Program {
@@ -104,6 +105,12 @@ model AddedCourseRecord {
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   addedCourse AddedCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
+model AssignedCourse {
+  id Int @id @default(autoincrement())
+  userId Int
+  courseCode String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
 
 model BsitStudentRecord {
@@ -162,7 +169,6 @@ model Specialization {
   userId Int
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
 
 
 

@@ -22,7 +22,7 @@ const PercentageCircle = ({ active, inactive} : { active: number, inactive: numb
             datasets: [
               {
                 label: 'Users',
-                data: [active, inactive - active],
+                data: [active, inactive - active - 1],
                 backgroundColor: [
                   'rgba(36, 201, 127, 0.6)',
                   'rgba(162, 166, 162, 0.6)',

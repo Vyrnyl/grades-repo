@@ -50,6 +50,13 @@ const updateUser = async (req, res) => {
     catch (error) {
         console.error("Error hashing password:", error);
     }
+    //Check ID
+    const user = await (0, userDataAccess_1.getUserData)(value.id);
+    const userIdExist = await (0, userDataAccess_1.checkUserId)(value.studentId);
+    if (user?.studentId !== value.studentId) {
+        if (userIdExist?.message)
+            return res.status(409).json({ error: 'UserID already exist!' });
+    }
     const { userId } = req.user;
     const userDetails = await (0, userDataAccess_1.getUserData)(userId);
     const userUpdateDetails = await (0, userDataAccess_1.updateUserData)(value.id, value);

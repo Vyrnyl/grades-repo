@@ -108,7 +108,6 @@ const ManageStudents = () => {
     const [end, setEnd] = useState(7);
     
     let x = users.reverse();
-    // console.log(x)
     let entries = x.slice(start, end);
     
     const handleNext = () => {
@@ -124,16 +123,20 @@ const ManageStudents = () => {
       }
     }
 
+
+
     return (
       <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
-      rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
+      rounded-lg px-10 py-6 shadow-pageComponentShadow relative z-0'>
         
+        {/* {isListOpen && <StudentCoursePage setIsListOpen={setIsListOpen}/>} */}
+
         <div className="bg-gree-300 flex flex-[10%]">
           <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Manage Students</h1>
         </div>
         
         <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
-        mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Student</button>
+        mb-4 text-white active:scale-[103%]" onClick={() => setIsAddOpen(prev => !prev)}>Add Student</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
           <table className="w-full font-semibold text-white">

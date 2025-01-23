@@ -103,6 +103,15 @@ CREATE TABLE `AddedCourseRecord` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `AssignedCourse` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` INTEGER NOT NULL,
+    `courseCode` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `BsitStudentRecord` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
@@ -253,6 +262,9 @@ ALTER TABLE `AddedCourseRecord` ADD CONSTRAINT `AddedCourseRecord_userId_fkey` F
 
 -- AddForeignKey
 ALTER TABLE `AddedCourseRecord` ADD CONSTRAINT `AddedCourseRecord_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `AddedCourse`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AssignedCourse` ADD CONSTRAINT `AssignedCourse_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BsitStudentRecord` ADD CONSTRAINT `BsitStudentRecord_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

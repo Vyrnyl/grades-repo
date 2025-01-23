@@ -46,7 +46,6 @@ const checkStudentCourse = (student: StudentRecord, courseCode: string) => {
         });
     }
     
-    
     return isExist;
 
 }

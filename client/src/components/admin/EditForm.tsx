@@ -14,12 +14,14 @@ type EditFormProps = {
     isOpen: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     updateData: Record<string, any>,
-    setUpdateData: React.Dispatch<React.SetStateAction<Record<string, any>>>
+    setUpdateData: React.Dispatch<React.SetStateAction<Record<string, any>>>,
+    isExist: boolean
 }
 
 
-const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData } : EditFormProps) => {
+const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData, isExist } : EditFormProps) => {
 
+  console.log(isExist)
 
   //Style
   const ref = useRef<HTMLDivElement>(null);
@@ -38,6 +40,8 @@ const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData }
             <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='studentId' 
             value={updateData.studentId} placeholder='Student ID' 
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
+            {isExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
+              UserID already exist!</p>}
 
             <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
             placeholder='First Name'

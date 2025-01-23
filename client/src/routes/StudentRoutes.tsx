@@ -16,7 +16,7 @@ const StudentRoutes = () => {
             <Route path='/account' element={<Account/>}/>
             {/* <Route path='/notification' element={<Notification/>}/> */}
             <Route path='/view-grade' element={<ViewGrade/>}/>
-            <Route path='/gwastatus' element={<GWAStatus/>}/>
+            <Route path='/gwastatus' element={<GWAStatus className=""/>}/>
         </Route>
         <Route path='*' element={<NotFound/>}/>
     </Routes>

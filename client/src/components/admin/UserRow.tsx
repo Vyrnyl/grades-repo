@@ -42,7 +42,7 @@ type UserRowProps = {
     setReload: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const UserRow = ({ user, setUsers, reload, setReload } : UserRowProps) => {
+const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
@@ -304,8 +304,6 @@ const UserRow = ({ user, setUsers, reload, setReload } : UserRowProps) => {
         getHandledPrograms();
         getHandledCourses();
     }, []);
-    // console.log(reload)
-
     
     //UPDATE ALL HANDLED
 

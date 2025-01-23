@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
+exports.updateStudentAssignedCourse = exports.getStudentAssignedCourse = exports.assignStudentCourse = exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProgramList = async () => {
@@ -172,3 +172,45 @@ const assignNewUserCourse = async (userId, programId) => {
     }
 };
 exports.assignNewUserCourse = assignNewUserCourse;
+//ASSIGN STUDENT COURSE
+const assignStudentCourse = async (assignedCourses) => {
+    try {
+        const assign = await prisma.assignedCourse.createMany({
+            data: assignedCourses
+        });
+        if (!assign)
+            return null;
+        return assign;
+    }
+    catch (error) {
+        console.log(`Assign Course error: ${error}`);
+        return null;
+    }
+};
+exports.assignStudentCourse = assignStudentCourse;
+const getStudentAssignedCourse = async (userId) => {
+    try {
+        const assignedCourses = await prisma.assignedCourse.findMany({ where: { userId } });
+        return assignedCourses;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+};
+exports.getStudentAssignedCourse = getStudentAssignedCourse;
+const updateStudentAssignedCourse = async (userId, assignedCourses) => {
+    try {
+        // if(assignedCourses.length === 0) return null;
+        await prisma.assignedCourse.deleteMany({ where: { userId } });
+        const assign = await prisma.assignedCourse.createMany({
+            data: assignedCourses
+        });
+        return assign;
+    }
+    catch (error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+};
+exports.updateStudentAssignedCourse = updateStudentAssignedCourse;

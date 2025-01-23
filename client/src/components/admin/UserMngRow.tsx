@@ -14,7 +14,7 @@ type UserData = {
     firstName: string,
     lastName: string,
     email: string,
-    phoneNumber: string,
+    role: string,
     sex: string,
     status: string
 }
@@ -31,10 +31,10 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     const token = localStorage.getItem('atoken');
 
 
-    const { id, studentId, firstName, lastName, email, sex, phoneNumber, status } = user;
+    const { id, studentId, firstName, lastName, email, sex, status, role } = user;
 
     const [userData, setUserData] = useState<UserData>({
-        id, studentId, firstName, lastName, email, phoneNumber, sex, status
+        id, studentId, firstName, lastName, email, role, sex, status
     });
 
 
@@ -50,7 +50,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     const [selectedStatus, setSelectedStatus] = useState('');
 
     const [updateData, setUpdateData] = useState<Record<string, any>>({
-        id, studentId, firstName, lastName, email, phoneNumber, sex, status
+        id, studentId, firstName, lastName, email, role, sex, status
     });
     
 
@@ -74,7 +74,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
             firstName: updateData.firstName,
             lastName: updateData.lastName,
             email: updateData.email,
-            phoneNumber: updateData.phoneNumber,
+            role: updateData.role,
             sex: selectedGender === null || selectedGender === '' ? genderArr[0] : selectedGender,
             status: selectedStatus === null || selectedStatus === '' ? 
             (user.role === 'student' ? studentStatus[0] : facultyStatus[0])  : selectedStatus
@@ -153,7 +153,8 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
         userData.firstName.slice(1) : userData.firstName} ${user.lastName}`}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.email}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.sex}</td>
-        <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.phoneNumber}</td>
+        <td className="px-4 py-4 text-center border-2 border-slate-500">
+            {`${userData.role.charAt(0).toUpperCase()}${userData.role.slice(1)}`}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.status}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{user.createdAt.split('T')[0]}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">
@@ -161,9 +162,9 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
 
             <FontAwesomeIcon className="text-blue-500 active:text-white"
                 icon={faPenToSquare} onClick={() => setIsOpen(true)}/>
-            <FontAwesomeIcon className="text-red-500 active:text-white" 
-            icon={faTrashCan} onClick={() => setIsDelete(true)} />
-
+            <FontAwesomeIcon className="text-red-500 active:text-white"
+                icon={faTrashCan} onClick={() => setIsDelete(true)} />
+            
 
             {isDelete && 
                 <div ref={delRef} className='bg-slate-300 absolute px-8 py-10 left-[50%] top-[50%] 
@@ -246,7 +247,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                             {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2 text-start">
                                 Email already registered!</p>}
                         </div>
-                        <div className={`bg-gree-300 flex flex-col ${isEmailExist && 'mt-[-1rem]'}`}>
+                        {/* <div className={`bg-gree-300 flex flex-col ${isEmailExist && 'mt-[-1rem]'}`}>
                             <label className="font-semibold text-start">Phone Number:</label>
                             <Input 
                                 type="text" 
@@ -255,7 +256,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                                 value={updateData.phoneNumber || ''}
                                 onChange={(e) => handleInputChange(e, setUpdateData)}
                             />
-                        </div>
+                        </div> */}
                         <div className="bg-gree-300 flex flex-col">
                             <label className="font-semibold text-start">Gender:</label>
                             <CustomSelect

@@ -9,4 +9,7 @@ router.post('/add-added-course', programController_1.addCourse);
 router.get('/get-added-courses', programController_1.getAddedCourse);
 router.put('/update-added-course', programController_1.updateCourse);
 router.delete('/delete-added-course', programController_1.deleteCourse);
+router.post('/add-assigned-courses', programController_1.assignCourses);
+router.post('/get-assigned-courses', programController_1.getStudentCourses);
+router.put('/update-assigned-courses', programController_1.updateStudentCourses);
 exports.default = router;

@@ -7,6 +7,7 @@ import { AddedCourseRecord, CourseType, StudentRecord } from '../../types/types'
 import SetCourseList from '../../utils/student/SetCourseList';
 import useSemStore from '../../store/useSemStore';
 import useUserStore from '../../store/useUserStore';
+import useAssignedCourses from '../../store/useAssignedCourses';
 
 type Student = {
     studentId: string,
@@ -79,7 +80,6 @@ const ViewGrade = () => {
 
 
     //Course List
-
     const [addedRecord, setAddedRecord] = useState<AddedCourseRecord[]>([]);
     useEffect(() => {
         // if(Array.isArray(addedCourseRecord.data)) setAddedRecord(addedCourseRecord.data);
@@ -112,31 +112,91 @@ const ViewGrade = () => {
         SetCourseList(courseGradeList, student, semester, addedRecord, setFilteredCourseList);
     }, [courseGradeList, semester, addedRecord]);
     
+
+
+
+    //ASSIGNED COURSES
+    const [enrolledCourses, setEnrolledCourses] = useState<{ userId: number, courseCode: string }[]>([]);
+    // const [assignedCourses, setAssignedCourse] = useState<(AddedCourseRecord)[]>([]);
+    const { assignedCourses, setAssignedCourses } = useAssignedCourses();
+
+
+    useEffect(() => {
+        const getAssignedCourses = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/program/get-assigned-courses`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userInfo?.id })
+                });
+                const data = await res.json();
+
+                if(Array.isArray(data)) {
+                    if(data.length > 0)
+                    setEnrolledCourses(data.map(({ id, ...rest }) => rest));
+                }
+                
+
+            } catch(e) {
+                console.log('Fetch Error')
+            }
+        }
+        getAssignedCourses();
+
+    }, [userInfo]);
+
+    //Filter AddedRecord to Assigned Courses
+    useEffect(() => {
+        let courses = enrolledCourses.map(element => {
+            let course = addedRecord.find(course => course.addedCourse?.courseCode === element.courseCode);
+            return course;
+        });
+        
+        const filteredRecords = courses.filter(
+            (record): record is AddedCourseRecord => record !== undefined
+          );
+          setAssignedCourses(filteredRecords);
+    }, [enrolledCourses]);
+    
+    
+
     //GWA
     let gwa = 0;
     let totalUnits= 0;
     let weightedSum = 0;
-
-    const curriculumKeys = [
-        "bsitCurriculum",
-        "bscsCurriculum",
-        "bsisCurriculum",
-        "blisCurriculum",
-        "bsemcCurriculum",
-        "addedCourse"
-    ] as (keyof CourseType)[];
     
-    filteredCourseList.forEach((course) => {
-        curriculumKeys.forEach((key) => {
-            const curriculum = course[key];
-            if (course.grade && typeof curriculum === "object" && curriculum?.units) {
-                weightedSum += curriculum.units * course.grade;
-                totalUnits += curriculum.units;
-            }
-        });
+    assignedCourses.map(course => {
+        if(course.addedCourse && course.grade) {
+            totalUnits += course.addedCourse?.units;
+            weightedSum += Number(course.grade) * course.addedCourse?.units;
+        }
     });
     
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
+    
+    //OLD GWA CALC
+    // const curriculumKeys = [
+    //     "bsitCurriculum",
+    //     "bscsCurriculum",
+    //     "bsisCurriculum",
+    //     "blisCurriculum",
+    //     "bsemcCurriculum",
+    //     "addedCourse"
+    // ] as (keyof CourseType)[];
+    
+    // filteredCourseList.forEach((course) => {
+    //     curriculumKeys.forEach((key) => {
+    //         const curriculum = course[key];
+    //         if (course.grade && typeof curriculum === "object" && curriculum?.units) {
+    //             weightedSum += curriculum.units * course.grade;
+    //             totalUnits += curriculum.units;
+    //         }
+    //     });
+    // });
+    
     
     return (
         <PageContainer className='px-12'>
@@ -175,7 +235,7 @@ const ViewGrade = () => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
-                        {filteredCourseList.map((course, i) => 
+                        {assignedCourses.map((course, i) => 
                             <EnrolledRow 
                                 key={i}
                                 course={course}

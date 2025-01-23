@@ -75,7 +75,7 @@ const Dashboard = () => {
     }
   }, [session.data, data]);
 
-  let percentage = active.activeSessions / (students.length + faculties.length + 1) * 100;
+  let percentage = active.activeSessions / (students.length + faculties.length) * 100;
 
   // console.log(percentage < 0 ? 0 : percentage)
 
@@ -119,6 +119,8 @@ const Dashboard = () => {
      getProfilePic();
   }, [userInfo, isOpen]);
 
+  console.log()
+  
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
       <div className="bg-gree-300 h-[100%] flex flex-col justify-center">
@@ -149,7 +151,7 @@ const Dashboard = () => {
           rounded-[1rem] grid place-content-center relative">
             <h1 className="absolute text-[1.5rem] font-semibold text-slate-700 top-[-2.5rem]">Active Users</h1>
             <span className="absolute text-[4rem] font-semibold text-slate-700 
-            top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">{percentage.toFixed()}%</span>
+            top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">{(percentage || percentage === 0) ? percentage.toFixed() : 0}%</span>
             <PercentageCircle active={active.activeSessions} inactive={(students.length + faculties.length + 1) || 0}/>
           </div>
           <div className="bg-gree-200 border-2 border-slate-600 px-[4rem] h-[100%]

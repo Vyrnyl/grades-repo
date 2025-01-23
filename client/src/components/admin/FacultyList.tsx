@@ -11,7 +11,7 @@ type FacultyProps = {
     handleOpenCard: () => void;
 }
 
-const   FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOpenCard }, ref) => {
+const FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOpenCard }, ref) => {
 
     const { data } = useFetch('user/get-users', 'GET');
     const [faculties, setFaculties] = useState<User[] | []>([]);

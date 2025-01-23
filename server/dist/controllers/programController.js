@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
+exports.updateStudentCourses = exports.getStudentCourses = exports.assignCourses = exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
 const programDataAccess_1 = require("../data/programDataAccess");
 const getPrograms = async (req, res) => {
     if (!req.user) {
@@ -60,3 +60,40 @@ const deleteCourse = async (req, res) => {
     res.json({ message: "Deletion successful" });
 };
 exports.deleteCourse = deleteCourse;
+//ASSIGNED COURSE
+const assignCourses = async (req, res) => {
+    const { courses } = req.body;
+    if (!courses) {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+    const assign = await (0, programDataAccess_1.assignStudentCourse)(courses);
+    if (!assign) {
+        return res.status(404).json({ error: 'Failed to add' });
+    }
+    res.status(200).json({ message: 'Courses Added!' });
+};
+exports.assignCourses = assignCourses;
+const getStudentCourses = async (req, res) => {
+    const { userId } = req.body;
+    if (!userId) {
+        return res.status(422).json({ message: "Req body error" });
+    }
+    const assignedCourses = await (0, programDataAccess_1.getStudentAssignedCourse)(userId);
+    if (!assignedCourses) {
+        return res.status(500).json({ error: "Failed to retrieve" });
+    }
+    res.status(200).json(assignedCourses);
+};
+exports.getStudentCourses = getStudentCourses;
+const updateStudentCourses = async (req, res) => {
+    const { userId, courses } = req.body;
+    if (!courses) {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+    const assign = await (0, programDataAccess_1.updateStudentAssignedCourse)(userId, courses);
+    if (!assign) {
+        return res.status(404).json({ error: 'Failed to add' });
+    }
+    res.status(200).json({ message: "Courses Updated!" });
+};
+exports.updateStudentCourses = updateStudentCourses;

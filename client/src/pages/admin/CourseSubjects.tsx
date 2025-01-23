@@ -7,7 +7,7 @@ import Input from '../../components/shared/components/Input';
 import { AddedCourseType } from '../../types/types';
 import AddedCourseRow from '../../components/student/AddedCourseRow';
 import getProgramId from '../../utils/getProgramId';
-import fetchData from '../../utils/admin/fetchData';
+// import fetchData from '../../utils/admin/fetchData';
 
 type AddData = {
     courseCode: string,
@@ -22,7 +22,7 @@ const CourseSubjects = () => {
     //Course List
     const courses = useFetch('program/get-added-courses', 'GET');
     const [courseList, setCourseList] = useState<AddedCourseType[]>([]);
-    const [allCourse, setAllCourse] = useState<AddedCourseType[]>([]);
+    // const [allCourse, setAllCourse] = useState<AddedCourseType[]>([]);
     
     //Set List
     useEffect(() => {
@@ -60,7 +60,7 @@ const CourseSubjects = () => {
         yearLevel: Number(selectedYearLevel.charAt(0)), 
         semester: Number(selectedSem.charAt(0))
       };
-
+      
       const addCourse = async () => {
 
         const res = await fetch(`${apiUrl}/program/add-added-course`, {
@@ -90,7 +90,7 @@ const CourseSubjects = () => {
         
       }
 
-      if(allCourse.some(item => item.courseCode === body.courseCode)) {
+      if(courseList.some(item => item.courseCode === body.courseCode)) {
         setTimeout(() => {
           setIsCourseExist(true);
           setIsAddOpen(false);
@@ -99,36 +99,36 @@ const CourseSubjects = () => {
     }
 
     //Set All CourseCode to check for existing
-    useEffect(() => {
-      const getCourses = async () => {
-        const data = await fetchData('program/get-courses');
-      
-        if(Array.isArray(data)) setAllCourse(data);
-      }
-      getCourses();
-    }, [courses.data, reload]);
-    
+    // useEffect(() => {
+    //   const getCourses = async () => {
+    //     const data = await fetchData('program/get-courses');
+        
+    //     if(Array.isArray(data)) setAllCourse(data);
+    //   }
+    //   getCourses();
+    // }, [courses.data, reload]);
     
 
     //Paginition
     const [start, setStart] = useState(0);
-    const [end, setEnd] = useState(6);
+    const [end, setEnd] = useState(7);
     
-    let entries = courseList.slice(start, end);
+    let x = courseList.reverse();
+    let entries = x.slice(start, end);
     
     const handleNext = () => {
-      if(entries.length % 6 === 0) {
-        setStart(prev => prev + 6);
-        setEnd(prev => prev + 6);
+      if(entries.length % 7 === 0) {
+        setStart(prev => prev + 7);
+        setEnd(prev => prev + 7);
       }
     }
     const handlePrev = () => {
       if(start >= 6){
-        setStart(prev => prev - 6);
-        setEnd(prev => prev - 6);
+        setStart(prev => prev - 7);
+        setEnd(prev => prev - 7);
       }
     }
-
+    
     return (
         <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
         rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
@@ -138,7 +138,7 @@ const CourseSubjects = () => {
             </div>
             
             <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
-            mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Course</button>
+            mb-4 active:scale-[103%] text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Course</button>
 
             <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
             <table className="w-full font-semibold text-white">
@@ -150,13 +150,13 @@ const CourseSubjects = () => {
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Units</th>
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year Level</th>
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Semester</th>
-                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Action</th>
+                        <th className="px-4 py-4 text-center border-2 border-blue-500 w-[5rem]">Action</th>
                     </tr>
                 </thead>
                 <tbody className="text-gray-700 overflow-y-scroll">
                     {entries.sort((a, b) => b.id - a.id).map(course => {
                       return <AddedCourseRow 
-                        key={course.id} 
+                        key={course.courseCode} 
                         addedCourse={course} 
                         setCourseList={setCourseList}
                         setReload={setReload}

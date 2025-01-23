@@ -109,7 +109,8 @@ const getStudents = async () => {
                 }, 
                 addedCourseRecord: {
                     include: { addedCourse: true }
-                }
+                },
+                assignedCourse: true
             },
             where: { role: 'student' }
         });

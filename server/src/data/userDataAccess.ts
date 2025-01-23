@@ -105,6 +105,7 @@ const getUserData = async (userId: number) => {
 const updateUserData = async (userId: number, value: UserUpdatePayload) => {
    
     try {
+        
         const userUpdateDetails = await prisma.user.update({
             where:{
                 id: userId
@@ -241,7 +242,23 @@ const deleteUserData = async (userId: number) => {
         console.log(`Delete error: ${error}`);
         return undefined;
     }
-
 }
 
-export { createUser, getUsersData, getUserData, updateUserData, deleteUserData };
+//Check UserID Exist
+const checkUserId = async (studentId: string) => {
+
+
+    try {
+        const userIdExist = await prisma.user.findFirst({ where: { studentId }});
+
+        if(!userIdExist) {
+            return userIdExist;
+        }
+        return { message: 'User ID alredy exist!' };
+    } catch(error) {
+        console.log(`Error: ${error}`);
+        return undefined;
+    }
+}
+
+export { createUser, getUsersData, getUserData, updateUserData, deleteUserData, checkUserId };

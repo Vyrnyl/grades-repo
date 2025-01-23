@@ -219,7 +219,7 @@ const ManageFaculty = () => {
         </div>
         
         <button className="bg-blue-500 rounded-md self-end font-semibold text-[1.1rem] px-6 py-[.5rem] 
-        mb-4 active:text-white" onClick={() => setIsAddOpen(prev => !prev)}>Add Faculty</button>
+        mb-4 text-white active:scale-[103%]" onClick={() => setIsAddOpen(prev => !prev)}>Add Faculty</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
           <table className="w-full font-semibold text-white">
@@ -354,6 +354,7 @@ const ManageFaculty = () => {
                       type="text" 
                       className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
                       onChange={(e) => setCourseInput(e.target.value)}
+                      
                       value={courseInput}
                     />
                     <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 

@@ -47,7 +47,6 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   const [selectedYearLevel, setSelectedYearLevel] = useState<string>('1st');
   const [selectedProgram, setSelectedProgram] = useState('BSIT');
   
-  
   //Set Record
   useEffect(() => {
 
@@ -78,10 +77,24 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   }, [records.data, courses.data, courseList, userInfo]);
 
 
-  //Handle All
-  const [allBg, setAllBg] = useState(false);
+
+
+  //ASSIGNED COURSES
+  //Get/Set assigned courses
+  // const assignedCourses = useFetch('program/get-assigned-courses', 'POST', JSON.stringify({ userId: user.id }));
+  // const [selectedCourses, setSelectedCourses] = useState<{ userId: number, courseCode: string }[]>([]);
+  
+  // useEffect(() => {
+  //   if(Array.isArray(assignedCourses.data)) {
+  //     if(assignedCourses.data.length > 0)
+  //       setSelectedCourses(assignedCourses.data.map(({ id, ...rest}) => rest));
+  //   }
+  // }, [assignedCourses.data]);
+
 
   //Set Course Title/Filter Students
+  const [allBg, setAllBg] = useState(false);
+
   useEffect(() => {
     let course = filteredCourses.find((course) => course.courseCode == selectedCourseCode);
     if(course) {
@@ -98,12 +111,10 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           student.program.programCode == selectedProgram && 
           checkStudentCourse(student, courseCode)
       });
-
-      // let filteredList = students.filter(stud => {
-      //   return stud.bsisStudentRecord.some(s => s.bsisCurriculum?.courseCode === courseCode)
-      // });
-
-      setFilteredStudents(filteredList);
+      
+      let assigned = filteredList.filter(x => x.assignedCourse.some(y => y.courseCode === courseCode));
+      
+      setFilteredStudents(assigned);
     }
   }, [
       records.data, 
@@ -114,7 +125,9 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
       filteredCourses,
       allBg
     ]);
-
+    
+    
+    
     useEffect(() => {
       if(allBg) setAllBg(false);
     }, [
@@ -125,11 +138,8 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
         filteredCourses
     ]);
 
-    // console.log(filteredStudents)
-
     
-    // if(filteredStudents.length > 0) 
-    //   console.log(filteredStudents.filter(student => programs.some(prog => prog.programCode === student.program.programCode)));
+
 
 
   //Set Default CourseCode
@@ -141,13 +151,6 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   }, [filteredCourses, courseCode, programs]);
   
   
-
-  // if(filteredStudents[0]) 
-  //   console.log(checkStudentCourse(filteredStudents[0], courseCode));
-
-
-  //Selected Course Edit
-  // const index = filteredCourses.indexOf(filteredCourses.find(x => x.courseCode == selectedCourseCode) as Course);
 
   //Style
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -172,27 +175,11 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           <ul className='bg-gree-200 flex text-[.95rem] font-semibold text-slate-700 h-[3rem]'>
             <li className='flex text-center items-center px-6 border-l-2 border-y-2
             border-slate-500'>
-              {!isEditOpen && `Course Code: ${selectedCourseCode}` 
-              // <CustomSelect 
-              //   className='h-[2.7rem] w-[8.4rem]' 
-              //   setValue={setSelectedCourseCode}
-              //   option={filteredCourses.map((course) => course.courseCode)}
-              //   selectedItem={index}/>
-              }
+              {!isEditOpen && `Course Code: ${selectedCourseCode}`}
             </li>
             
             <li className='flex text-center items-center justify-center
              px-10 border-x-2 border-y-2 border-slate-500'>Course Title: {selectedCourseTitle}</li>
-
-            {/* <li className='flex text-center items-center justify-center px-8 
-             border-x-2 border-y-2 border-slate-500 gap-4'>
-              {isEditOpen ? 
-                <FontAwesomeIcon className="text-blue-500 active:text-white" 
-                icon={faSave} onClick={() => setIsEditOpen(!isEditOpen)}/> :
-                <FontAwesomeIcon className="text-blue-500 active:text-white" 
-                  icon={faPenToSquare} onClick={() => setIsEditOpen(!isEditOpen)}/>
-              }
-            </li> */}
           </ul>
       </div>
 

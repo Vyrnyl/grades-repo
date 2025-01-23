@@ -30,7 +30,7 @@ const CourseCode = ({ data }: CourseCodeType) => {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [handledPrograms, setHandledPrograms] = useState<Program[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  
   //Get Programs
   useEffect(() => {
     const getPrograms = async () => {
@@ -80,7 +80,7 @@ const CourseCode = ({ data }: CourseCodeType) => {
           </span>
         </div>
       </div>
-
+      
       {isOpen && (
         <CourseSubject
           className="absolute top-0 left-0"

@@ -11,7 +11,7 @@ type StudentGradeRowProps = {
   setCloseEdit: (value: React.SetStateAction<boolean>) => void;
 };
 
-//HARDCODED
+//EXTREMELY HARDCODED
 const StudentGradeRow = ({
   student,
   courseId,
@@ -153,7 +153,6 @@ const StudentGradeRow = ({
     if (editGrade && Number(editGrade) <= 3 && Number(editGrade) >= 0) save();
   };
 
-  // console.log(grade)
 
   //Style
   const [isEdit, setIsEdit] = useState(false);
@@ -161,7 +160,6 @@ const StudentGradeRow = ({
     if (closeEdit) setIsEdit(false);
   }, [closeEdit]);
 
-  console.log()
   
   return (
     <tr className="bg-slate-100 hover:bg-slate-200 ">

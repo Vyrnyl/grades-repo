@@ -16,7 +16,7 @@ type Student = {
 };
 
 const GWAStatus = ({ className } : { className: string }) => {
-
+    
     const { data } = useFetch('grade/get-grades', 'GET');
 
     const [studentData, setStudentData] = useState<StudentRecord[]>([]);
@@ -24,7 +24,7 @@ const GWAStatus = ({ className } : { className: string }) => {
     // const [gwaList, setGwaList] = useState<{ sem: string, gwa: number, status: string }[]>([]);
     const { gwaList, setGwaList } = useGwaListStore();
     
-    // console.log(gwaList)
+    
     //Set list
     useEffect(() => {
         if(Array.isArray(data)) {
@@ -58,9 +58,11 @@ const GWAStatus = ({ className } : { className: string }) => {
         student.yearLevel = studentData[0].yearLevel;
         student.programCode = studentData[0].program.programCode;
     }
-
+    
     //Course List
     SetGwaList(courseGradeList, setGwaList, student);
+
+    console.log(gwaList);
     
     return (
         <PageContainer className={`${className} px-16`}>
@@ -87,6 +89,7 @@ const GWAStatus = ({ className } : { className: string }) => {
                     </thead>
                     <tbody className="text-gray-700">
                         {gwaList.map((gwaInfo, i) => {
+
                             return ((i + 1) % 2 == 0 || i == 0) ? <GwaRow key={i} gwaInfo={gwaInfo}/> :
                             <Fragment key={i}>
                                 <tr className='h-4'></tr>

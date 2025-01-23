@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
+exports.checkUserId = exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const programDataAccess_1 = require("./programDataAccess");
 const prisma = new client_1.PrismaClient();
@@ -224,3 +224,18 @@ const deleteUserData = async (userId) => {
     }
 };
 exports.deleteUserData = deleteUserData;
+//Check UserID Exist
+const checkUserId = async (studentId) => {
+    try {
+        const userIdExist = await prisma.user.findFirst({ where: { studentId } });
+        if (!userIdExist) {
+            return userIdExist;
+        }
+        return { message: 'User ID alredy exist!' };
+    }
+    catch (error) {
+        console.log(`Error: ${error}`);
+        return undefined;
+    }
+};
+exports.checkUserId = checkUserId;

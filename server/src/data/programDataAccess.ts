@@ -185,6 +185,56 @@ const assignNewUserCourse = async (userId: number, programId: number) => {
 }
 
 
+//ASSIGN STUDENT COURSE
+const assignStudentCourse = async (assignedCourses: {userId: number, courseCode: string}[]) => {
+  try {
+
+    const assign = await prisma.assignedCourse.createMany({
+      data: assignedCourses
+    });
+
+    if(!assign) return null;
+
+    return assign;
+
+  } catch(error) {
+    console.log(`Assign Course error: ${error}`);
+    return null;
+  }
+}
+
+const getStudentAssignedCourse = async (userId: number) => {
+  try {
+
+    const assignedCourses = await prisma.assignedCourse.findMany({ where: { userId }});
+
+    return assignedCourses;
+
+  } catch(error) {
+    console.log(`Retrieval error: ${error}`);
+    return null;
+  }
+}
+
+const updateStudentAssignedCourse = async (userId: number, assignedCourses: {userId: number, courseCode: string}[]) => {
+  try {
+
+    // if(assignedCourses.length === 0) return null;
+    
+    await prisma.assignedCourse.deleteMany({ where: { userId } });
+    
+    const assign = await prisma.assignedCourse.createMany({
+      data: assignedCourses
+    });
+
+    return assign;
+  } catch(error) {
+    console.log(`Update error: ${error}`);
+    return null;
+  }
+}
+
+
 export {
   getProgramList,
   getCoursesList,
@@ -193,5 +243,9 @@ export {
   updateAddedCourse,
   deleteAddedCourse,
 
-  assignNewUserCourse
+  assignNewUserCourse,
+
+  assignStudentCourse,
+  getStudentAssignedCourse,
+  updateStudentAssignedCourse
 };

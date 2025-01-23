@@ -62,7 +62,8 @@ type StudentRecord = {
     bsisStudentRecord: CourseType[],
     blisStudentRecord: CourseType[],
     bsemcStudentRecord: CourseType[],
-    addedCourseRecord: CourseType[]
+    addedCourseRecord: CourseType[],
+    assignedCourse: any[]
 }
 
 

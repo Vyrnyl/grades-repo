@@ -27,10 +27,9 @@ const SetGwaList = (courseGradeList: CourseType[], setGwaList: React.Dispatch<Re
         let yr = student.studentId.split('-')[0];
         let studYear = Number(student.studentId.split('-')[0]);
         
-        // console.log(list);
         let sem = 2;
         
-        let gwaList = list.map((item, i) => {
+        let gwaList = list.map((item) => {
             let semesterGwa = computeGwa(item);
             let status = gwaStatus(semesterGwa);
             if(sem == 2) {
@@ -43,6 +42,7 @@ const SetGwaList = (courseGradeList: CourseType[], setGwaList: React.Dispatch<Re
             return { sem: y, gwa: semesterGwa, status }
         });
 
+        
         if(gwaList.length > 0) {
             let glist: { sem: string, gwa: number, status: string }[] = [];
             let gradeList: CourseType[][] = [];

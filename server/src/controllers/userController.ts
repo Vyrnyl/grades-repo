@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteUserData, getUserData, getUsersData, updateUserData } from "../data/userDataAccess";
+import { checkUserId, deleteUserData, getUserData, getUsersData, updateUserData } from "../data/userDataAccess";
 import { validateUserId, validateUserUpdate } from "../validators/userValidator";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import bcrypt from 'bcrypt';
@@ -61,6 +61,15 @@ const updateUser = async (req: Request, res: Response) => {
     }
     
 
+    //Check ID
+    const user = await getUserData(value.id);
+    const userIdExist = await checkUserId(value.studentId);
+    
+    if(user?.studentId !== value.studentId) {
+        if(userIdExist?.message) return res.status(409).json({ error: 'UserID already exist!' });
+    }
+    
+
     const { userId } = req.user;
     
     const userDetails = await getUserData(userId);
@@ -71,12 +80,13 @@ const updateUser = async (req: Request, res: Response) => {
     }
 
     
+    
     //Set Activity
     const setActivity = async () => {
         if(userDetails?.firstName !== userUpdateDetails.firstName)
             await addFacultyActivity(userId, 
                 `First name updated from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
-        
+                
         if(userDetails?.lastName !== userUpdateDetails.lastName)
             await addFacultyActivity(userId, 
                 `Last name updated from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);

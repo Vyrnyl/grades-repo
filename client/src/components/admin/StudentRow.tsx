@@ -78,6 +78,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   });
   
   
+  const [isUserIdExist, setIsUserIdExist] = useState(false);
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -85,7 +86,8 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     // let yearBlock = updateData.yearBlock.split('');
 
     const updateUser = async () => {
-      setIsOpen(!isOpen);
+      // setIsOpen(!isOpen);
+      setIsUserIdExist(false);
       const updatedData = {
         id,
         studentId: updateData.studentId,
@@ -109,9 +111,13 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
 
         const data = await res.json();
 
-        if(res.ok && data) {
+        if(res.ok && res.status !== 409) {
           setStudentData({...updatedData, program: getProgramName(data.programId)});
-        }
+          setIsOpen(false);
+          setIsUserIdExist(false);
+        } else setTimeout(() => {
+          setIsUserIdExist(true);
+        }, 300);
 
       } catch(error) {
         console.log("Fetch error" + error);
@@ -144,6 +150,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
                     setIsOpen={setIsOpen}
                     updateData={updateData}
                     setUpdateData={setUpdateData}
+                    isExist={isUserIdExist}
                   />
                 }
                 
