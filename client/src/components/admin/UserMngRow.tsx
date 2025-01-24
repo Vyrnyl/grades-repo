@@ -64,9 +64,12 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
 
     //SUBMIT UPDATE
     const [isEmailExist, setIsEmailExist] = useState(false);
+    const [isUserIdExist, setIsUserIdExist] = useState(false);
+
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         setIsEmailExist(false);
+        setIsUserIdExist(false);
         
         const updatedData = {
             id,
@@ -78,8 +81,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
             sex: selectedGender === null || selectedGender === '' ? genderArr[0] : selectedGender,
             status: selectedStatus === null || selectedStatus === '' ? 
             (user.role === 'student' ? studentStatus[0] : facultyStatus[0])  : selectedStatus
-          }
-        //   console.log(updatedData);
+        }
 
         const updateUser = async () => {
           
@@ -99,7 +101,9 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
               setUserData(updatedData);
               setIsOpen(false);
             }
-            if(data.error) setIsEmailExist(true);
+
+            if(res.status === 409) setIsUserIdExist(true);
+            if(data.error && res.status !== 409) setIsEmailExist(true);
     
           } catch(error) {
             console.log("Fetch error" + error);
@@ -138,7 +142,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
 
     //Style
     const [isOpen, setIsOpen] = useState(false);
-    const [error, setError] = useState('');
+    // const [error, setError] = useState('');
 
     const ref = useRef<HTMLFormElement>(null);
     HandleOutsideClick(ref, setIsOpen);
@@ -212,6 +216,9 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                                 onChange={(e) => handleInputChange(e, setUpdateData)}
                             />
                         </div>
+                        {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                        ml-2 text-start mt-[-1rem]">UserID already exist!</p>}
+
                         <div className="bg-gree-300 flex flex-col">
                             <label className="font-semibold text-start">First Name:</label>
                             <Input 

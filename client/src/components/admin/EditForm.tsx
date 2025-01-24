@@ -21,8 +21,6 @@ type EditFormProps = {
 
 const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData, isExist } : EditFormProps) => {
 
-  console.log(isExist)
-
   //Style
   const ref = useRef<HTMLDivElement>(null);
   HandleOutsideClick(ref, setIsOpen);

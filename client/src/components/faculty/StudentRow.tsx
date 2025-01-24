@@ -89,9 +89,12 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
     //SUBMIT UPDATE
     const [isEmailExist, setIsEmailExist] = useState(false);
+    const [isUserIdExist, setIsUserIdExist] = useState(false);
+
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         setIsEmailExist(false);
+        setIsUserIdExist(false);
         
         const updatedData = {
             id,
@@ -124,7 +127,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
               setUserData(updatedData);
               setIsOpen(false);
             }
-            if(data.error) setIsEmailExist(true);
+
+            if(res.status === 409) setIsUserIdExist(true);
+            if(data.error && res.status !== 409) setIsEmailExist(true);
     
           } catch(error) {
             console.log("Fetch error" + error);
@@ -216,6 +221,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             name="studentId"
                                             />
                                     </div>
+                                    {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                                    ml-2 text-start mt-[-1rem]">UserID already exist!</p>}
+
                                     <div className="bg-gree-300 flex flex-col">
                                         <label className="font-semibold text-start">First Name:</label>
                                         <Input 

@@ -52,6 +52,8 @@ const Account = () => {
 
   //SaveData
   const [isEmailExist, setIsEmailExist] = useState(false);
+  const [isUserIdExist, setIsUserIdExist] = useState(false);
+  
   const [isSave, setIsSave] = useState(false);
   const [save, setSave] = useState("Saving");
 
@@ -59,6 +61,7 @@ const Account = () => {
     e.preventDefault();
     setIsSave(true);
     setIsEmailExist(false);
+    setIsUserIdExist(false);
 
     const updateUser = async () => {
       const updatedData = {
@@ -92,7 +95,13 @@ const Account = () => {
             setIsSave(false);
           }, 700);
         }
-        if(data.error) {
+
+        if(res.status === 409) {
+          setIsUserIdExist(true);
+          setIsSave(false);
+        }
+
+        if(data.error && res.status !== 409) {
           setIsEmailExist(true);
           setIsSave(false);
         }
@@ -148,7 +157,7 @@ const Account = () => {
             />
           </InputFieldWrapper>
 
-          <div className="bg-re-200 flex gap-x-[2rem]">
+          <div className="bg-re-200 flex gap-x-[2rem] relative">
             <InputFieldWrapper label="Faculty ID">
               <HalfInput
                 type="text"
@@ -156,8 +165,10 @@ const Account = () => {
                 value={accountInfo.studentId}
                 onChange={(e) => handleInputChange(e, setAccountInfo)}
               />
+              {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+              ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">UserID already exist!</p>}
             </InputFieldWrapper>
-
+            
             <InputFieldWrapper label="Gender">
               <SelectInput
                 name="sex"

@@ -115,9 +115,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
           setStudentData({...updatedData, program: getProgramName(data.programId)});
           setIsOpen(false);
           setIsUserIdExist(false);
-        } else setTimeout(() => {
-          setIsUserIdExist(true);
-        }, 300);
+        } else setIsUserIdExist(true);
 
       } catch(error) {
         console.log("Fetch error" + error);

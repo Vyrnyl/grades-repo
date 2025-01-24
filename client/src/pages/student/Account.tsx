@@ -62,6 +62,8 @@ const Account = () => {
 
   //SaveData
   const [isEmailExist, setIsEmailExist] = useState(false);
+  const [isUserIdExist, setIsUserIdExist] = useState(false);
+
   const [isSave, setIsSave] = useState(false);
   const [save, setSave] = useState('Saving');
 
@@ -69,6 +71,7 @@ const Account = () => {
     e.preventDefault();
     setIsSave(true);
     setIsEmailExist(false);
+    setIsUserIdExist(false);
 
     const updatedData = {
       id: userInfo?.id,
@@ -112,7 +115,13 @@ const Account = () => {
             setIsSave(false);
           }, 700);
         }
-        if(data.error) {
+
+        if(res.status === 409) {
+          setIsUserIdExist(true);
+          setIsSave(false);
+        }
+
+        if(data.error && res.status !== 409) {
           setIsEmailExist(true);
           setIsSave(false);
         }
@@ -149,11 +158,13 @@ const Account = () => {
               onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
             </InputFieldWrapper>
 
-            <div className="bg-re-200 flex gap-[.7rem]">
+            <div className="bg-re-200 flex gap-[.7rem] relative">
               <InputFieldWrapper label="Student ID">
                 <HalfInput type="text" name='studentId' value={accountInfo.studentId} 
                 onChange={(e) => handleInputChange(e, setAccountInfo)}/>
               </InputFieldWrapper>
+              {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+              ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">UserID already exist!</p>}
 
               <InputFieldWrapper label="Gender">
                 <SelectInput name='sex' value={accountInfo.sex} 
@@ -188,10 +199,11 @@ const Account = () => {
 
           <div className="bg-blu-500 flex-[.7] flex flex-wrap gap-x-[2rem]">
             <div className="bg-cya-200 flex flex-col gap-[2rem]">
-              <InputFieldWrapper label="Email address">
+              <InputFieldWrapper label="Email address" className="bg-cya-200 relative">
                 <Input type="text" name='email' value={accountInfo.email} 
                 onChange={(e) => handleInputChange(e, setAccountInfo)} className="w-[20rem] border-[.1rem]"/>
-                {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2">Email already registered!</p>}
+                {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2 absolute bottom-[-1.1rem]">
+                  Email already registered!</p>}
               </InputFieldWrapper>
 
               <InputFieldWrapper label="Phone Number">

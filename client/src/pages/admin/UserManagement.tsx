@@ -20,8 +20,8 @@ const UserManagement = () => {
 
 
   //Edit Form
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [error, setError] = useState('');
+  // const [isAddOpen, setIsAddOpen] = useState(false);
+  // const [error, setError] = useState('');
 
   return (
       <div className='bg-cya-100 h-[98%] flex flex-col flex-[80%] 
