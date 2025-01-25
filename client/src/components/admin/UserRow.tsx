@@ -33,7 +33,12 @@ type Course = {
     createdAt: string,
     updatedAt: string
 }
-  
+
+type ProgramYear = {
+    id: number,
+    userId: number,
+    programYearBlock: string
+}
 
 type UserRowProps = {
     user: User,
@@ -58,7 +63,6 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
         sex,
         status
     });
-
 
 
     //Update
@@ -90,6 +94,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             status: updateData.status
         }
 
+
         const updateUser = async () => {
     
           try {
@@ -116,17 +121,16 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             let programCodeData = removeObjectDuplicate(programHandled.map(item => {
                 return {...item, userId: user.id}
             }));
-            console.log(programCodeData);
             
             const handledRes = await fetch(`${apiUrl}/faculty/update-specialization`, {
                 method: 'PUT',
                 headers: {
                   'Authorization': token ? token : '',
                   'Content-Type': 'application/json'
-              },
-                body: JSON.stringify({ data: programCodeData, userId: updatedData.id })
-              });
-              
+                },
+                    body: JSON.stringify({ data: programCodeData, userId: updatedData.id })
+                });
+                
             const handledData = await handledRes.json();
             
             if(handledRes.ok && handledData) 
@@ -151,7 +155,25 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             if(handledCourseRes.ok && handledCourseData) 
                 setHandledCourses(courseHandled as Course[]);
 
+
+            //UPDATE ProgramYearBlock
+            let programYearBlockData = programYearHandled.map(({ id, ...rest }) => rest);
             
+            const handleProgramYearRes = await fetch(`${apiUrl}/faculty/update-program-year`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': token ? token : '',
+                  'Content-Type': 'application/json'
+              },
+                body: JSON.stringify({ data: programYearBlockData, userId: updatedData.id })
+              });
+              
+            const programYearData = await handleProgramYearRes.json();
+            
+              
+            if(handleProgramYearRes.ok && programYearData) 
+                setHandledProgramYear(programYearHandled as ProgramYear[]);
+                
           } catch(error) {
             console.log("Fetch error" + error);
           }
@@ -194,53 +216,16 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     //SET handled from Server
     const [handledPrograms, setHandledPrograms] = useState<Program[]>([]);
     const [handledCourses, setHandledCourses] = useState<Course[]>([]);
+    const [handledProgramYear, setHandledProgramYear] = useState<ProgramYear[]>([]);
 
     //Edit Hanlded
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
+    const [selectedProgramYr, setSelectedProgramYr] = useState('BSIT-1-A');
+
     const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
+    const [programYearHandled, setProgramYearHandled] = useState<{ id?: Number, programYearBlock: string, userId?: number }[]>([]);
     
-
-    //Handle Programs Edit
-    useEffect(() => {
-        const setPrograms = () => {
-            setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
-        }
-        
-        const handleClick = (event: MouseEvent) => {
-            const target = event.target as HTMLElement;
-            if (target.closest(".selected")) {
-                setPrograms();
-            }
-        };
-
-        document.addEventListener("click", handleClick);
-
-        return () => {
-            document.removeEventListener("click", handleClick);
-        };
-    }, [selectedProgram]);
-
-    //Handle Edit Courses
-    const [courseInput, setCourseInput] = useState<string>('');
-
-    const handelAddCourse = () => {
-        if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
-            setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
-            setCourseInput('');
-        }
-    }
-
-
-    //DELETE Program
-    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
-        setProgramHandled(prev => {
-            return prev.filter(prog => prog.programCode !== item.programCode)
-        });
-    }
-    
-
-
     //GET/SET ALL HANDLED
     const [fetchedData, setFetchedData] = useState<Program[]>([]);
     const [fetchedCourses, setFetchedCourses] = useState<Course[]>([]);
@@ -291,10 +276,34 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                     setHandledCourses(data);
                     setCourseHandled(data);
                     setFetchedCourses(data);
-
+                    
                     // if(data.length === 0) setReload(prev => !prev);
                 }
-                // console.log(data)
+                
+            } catch(error) {
+                console.log('Request Error');
+            }
+        }
+
+        const getHandledProgramYear = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/faculty/get-program-year`, {
+                    method: 'POST',
+                    headers: {
+                    'Authorization': token ? token : '',
+                    'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify({ userId: user.id })
+                });
+                
+                const data = await res.json();
+    
+                if(res.ok && data) {
+                    setHandledProgramYear(data);
+                    setProgramYearHandled(data);
+                    
+                    // if(data.length === 0) setReload(prev => !prev);
+                }
                 
             } catch(error) {
                 console.log('Request Error');
@@ -303,9 +312,99 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
 
         getHandledPrograms();
         getHandledCourses();
+        getHandledProgramYear();
     }, []);
+
+
+
+    //Set ProgYear Dropdown
+    const [progYearArr, setProgYearArr] = useState<string[]>([]);
+    const blocks = ['A', 'B', 'C', 'D'];
+
+    useEffect(() => {
+        setProgYearArr([]);
+
+        let array = removeObjectDuplicate(programHandled);
+        
+        array.forEach(item => {
+            for (let i = 1; i <= 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    setProgYearArr(prev => [...prev, `${item.programCode}-${i}-${blocks[j]}`]);
+                }
+            }
+        });
+        
+        if(array.length > 0) setSelectedProgramYr(array[0].programCode);
+    }, [programHandled]);
+
+
+    //Handle Programs Edit
+    useEffect(() => {
+
+        //Programs
+        const setPrograms = () => {
+            setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
+        }
+        
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (target.closest(".selected")) {
+                setPrograms();
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [selectedProgram]);
     
-    //UPDATE ALL HANDLED
+    useEffect(() => {
+        //ProgramYear
+        const setProgramsYear = () => {
+            if(!programYearHandled.some(item => item.programYearBlock === selectedProgramYr))
+                setProgramYearHandled(prev => [...prev, { programYearBlock: selectedProgramYr, userId: user.id } ]);
+        }
+
+        
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (target.closest(".progYear")) {
+                setProgramsYear();
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [selectedProgramYr]);
+    
+
+    //Handle Edit Courses
+    const [courseInput, setCourseInput] = useState<string>('');
+
+    const handelAddCourse = () => {
+        if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
+            setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
+            setCourseInput('');
+        }
+    }
+
+
+    //DELETE Program
+    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
+        setProgramHandled(prev => {
+            return prev.filter(prog => prog.programCode !== item.programCode)
+        });
+    }
+    
+
+
+    
+    
 
 
     //Style
@@ -327,6 +426,8 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[10rem]">
                 {handledCourses.length > 0 ? handledCourses.map(item => item.courseCode).join(', ') : ''}
             </td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[10rem]">
+                {handledProgramYear.length > 0 ? handledProgramYear.map(item => item.programYearBlock).join(', ') : ''}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
                     {isOpen && 
@@ -430,13 +531,36 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                         flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
                                             {removeObjectDuplicate(programHandled).map((item, i) => {
                                                 return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                                                <span className="text-center">{item.programCode}</span>
-                                                <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                                icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                                                    <span className="text-center">{item.programCode}</span>
+                                                    <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                    icon={faClose} onClick={() => handleDeleteProgram(item)}/>
                                                 </div>
                                             })}
                                         </div>
                                     </div>
+
+                                    <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
+                                        <label className="font-semibold text-start">Year/Block Handled:</label>
+                                        <CustomSelect 
+                                            className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                                            option={progYearArr}
+                                            setValue={setSelectedProgramYr}
+                                            x="progYear"
+                                        />
+
+                                        {/* SELECTED */}
+                                        <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                        flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                            {programYearHandled.map((item, i) => {
+                                                return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                <span className="text-center">{item.programYearBlock}</span>
+                                                <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                icon={faClose} onClick={() => setProgramYearHandled(prev => prev.filter(progYr => progYr.programYearBlock !== item.programYearBlock))}/>
+                                                </div>
+                                            })}
+                                        </div>
+                                    </div>
+
                                     <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
                                         <label className="font-semibold text-start">Course Subjects Handled:</label>
                                         <Input

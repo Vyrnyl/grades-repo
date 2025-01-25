@@ -9,4 +9,7 @@ router.put('/update-handled', facultyController_1.updateHandled);
 router.post('/add-specialization', facultyController_1.addFacultySpecialization);
 router.post('/get-specialization', facultyController_1.getFacultySpecialization);
 router.put('/update-specialization', facultyController_1.updateFacultySpecialization);
+router.post('/add-program-year', facultyController_1.addFacultyProgramYear);
+router.post('/get-program-year', facultyController_1.getFacultyProgramYear);
+router.put('/update-program-year', facultyController_1.updateFacultyProgramYear);
 exports.default = router;

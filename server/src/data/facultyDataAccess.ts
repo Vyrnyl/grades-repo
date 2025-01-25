@@ -78,11 +78,55 @@ const getSpecialization = async (userId: number) => {
 const updateSpecialization = async (data: { programCode: string, userId: number }[], userId: number) => {
     try {
 
-        const deleted = await prisma.specialization.deleteMany({ where: { userId }});
+        await prisma.specialization.deleteMany({ where: { userId }});
 
         // if(!deleted) return null;
         // console.log(deleted)
         const result = await prisma.specialization.createMany({ data });
+        
+        return result;
+    } catch(error) {
+        console.log(`Update error: ${error}`);
+        return null;
+    }
+}
+
+
+//PROGRAM YEAR
+const addProgramYear = async (data: { programYearBlock: string, userId: number }[]) => {
+    try {
+
+        const result = await prisma.assignedProgramYearBlock.createMany({ data });
+        
+        if(data.length === 0) {
+            return true;
+        }
+
+        return result;
+    } catch(error) {
+        console.log(`Add error: ${error}`);
+        return null;
+    }
+}
+
+const getProgramYear = async (userId: number) => {
+    try {
+        const result = await prisma.assignedProgramYearBlock.findMany({
+            where: { userId }
+        });
+        return result;
+    } catch(error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+}
+
+const updateProgramYear = async (data: { programYearBlock: string, userId: number }[], userId: number) => {
+    try {
+
+        await prisma.assignedProgramYearBlock.deleteMany({ where: { userId }});
+
+        const result = await prisma.assignedProgramYearBlock.createMany({ data });
         
         return result;
     } catch(error) {
@@ -99,5 +143,9 @@ export {
     
     addSpecialization, 
     getSpecialization,
-    updateSpecialization
+    updateSpecialization,
+
+    addProgramYear,
+    getProgramYear,
+    updateProgramYear
 }

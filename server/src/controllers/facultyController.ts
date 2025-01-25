@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { addHandledCourse, addSpecialization, getHandledCourse, getSpecialization, updateHandledCourse, updateSpecialization } from "../data/facultyDataAccess";
+import { addHandledCourse, addProgramYear, addSpecialization, getHandledCourse, getProgramYear, getSpecialization, updateHandledCourse, updateProgramYear, updateSpecialization } from "../data/facultyDataAccess";
 
+
+//COURSES
 const addHandled = async (req: Request, res: Response) => {
 
     const addResult = await addHandledCourse(req.body.data);
@@ -32,7 +34,7 @@ const updateHandled = async (req: Request, res: Response) => {
 }
 
 
-
+//SPECIALIZATION
 const addFacultySpecialization = async (req: Request, res: Response) => {
 
     const addResult = await addSpecialization(req.body.data);
@@ -54,14 +56,48 @@ const getFacultySpecialization = async (req: Request, res: Response) => {
 }
 
 const updateFacultySpecialization = async (req: Request, res: Response) => {
-    console.log(req.body);
+    
     const { data, userId } = req.body;
     
     const programs = await updateSpecialization(data, userId)
 
-    if(!programs) return res.status(404).json({ error: 'Failed to retrieve' });
+    if(!programs) return res.status(404).json({ error: 'Failed to update' });
 
     res.status(200).json(programs);
+}
+
+
+//PROGRAM YEAR
+const addFacultyProgramYear = async (req: Request, res: Response) => {
+
+    const addResult = await addProgramYear(req.body.data);
+    
+    if(!addResult) {
+        return res.status(404).json({ error: 'Failed to add' });
+    }
+    
+    res.status(200).json(addResult);
+}
+
+const getFacultyProgramYear = async (req: Request, res: Response) => {
+
+    const programYear = await getProgramYear(req.body.userId);
+
+    if(!programYear) return res.status(404).json({ error: 'Failed to retrieve' });
+
+    res.status(200).json(programYear);
+}
+
+const updateFacultyProgramYear = async (req: Request, res: Response) => {
+
+    const { data, userId } = req.body;
+    
+    const programYear = await updateProgramYear(data, userId)
+
+    if(!programYear) return res.status(404).json({ error: 'Failed to update' });
+
+    res.status(200).json(programYear);
+
 }
 
 export { 
@@ -71,5 +107,9 @@ export {
     
     addFacultySpecialization, 
     getFacultySpecialization,
-    updateFacultySpecialization
+    updateFacultySpecialization,
+
+    addFacultyProgramYear,
+    getFacultyProgramYear,
+    updateFacultyProgramYear
 }

@@ -40,6 +40,7 @@ model User {
   specialization Specialization[]
   profilePic ProfilePic[]
   assignedCourse AssignedCourse[]
+  assignedYearLevel AssignedProgramYearBlock[]
 }
 
 model Program {
@@ -109,6 +110,12 @@ model AssignedCourse {
   id Int @id @default(autoincrement())
   userId Int
   courseCode String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model AssignedProgramYearBlock {
+  id Int @id @default(autoincrement())
+  userId Int
+  programYearBlock String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

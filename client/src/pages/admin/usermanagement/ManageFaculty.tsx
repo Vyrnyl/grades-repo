@@ -50,6 +50,7 @@ const ManageFaculty = () => {
     //FACULTY HANDLED
     const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
+    const [yearLevelHandled, setYearLevelHandled] = useState<{ programYear: string, userId: number }[]>([]);
     
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [courseInput, setCourseInput] = useState<string>('');
@@ -138,6 +139,8 @@ const ManageFaculty = () => {
             return {...item, userId: data.id}
           }));
           
+
+          //ASSIGNED
           //Add Programs
           const addSpecialization = async () => {
             
@@ -183,7 +186,7 @@ const ManageFaculty = () => {
         if(data.error) {
           setIsEmailExist(true);
         }
-
+        
       }
       addUser();
     }
@@ -231,6 +234,7 @@ const ManageFaculty = () => {
                     <th className="px-4 py-4 text-center min-w-[5rem]">Email</th>
                     <th className="px-4 py-4 text-center min-w-[5rem]">Area Of Specialization</th>
                     <th className="px-4 py-4 text-center min-w-[5rem]">Course Subjects Handled</th>
+                    <th className="px-4 py-4 text-center min-w-[5rem]">YearLevel Handled</th>
                     <th className="px-4 py-4 text-center border-r-2 border-blue-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>

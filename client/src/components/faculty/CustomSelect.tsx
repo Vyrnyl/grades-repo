@@ -7,10 +7,11 @@ type CustomSelectProps = {
     option: string[],
     setValue: (value: React.SetStateAction<string>) => void,
     selectedItem?: number,
-    isSlate?: boolean
+    isSlate?: boolean,
+    x?: string
 }
 
-const CustomSelect = ({ className, option, setValue, selectedItem, isSlate } : CustomSelectProps) => {
+const CustomSelect = ({ className, option, setValue, selectedItem, isSlate, x } : CustomSelectProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<string>(option[selectedItem || 0]);
@@ -43,7 +44,7 @@ const CustomSelect = ({ className, option, setValue, selectedItem, isSlate } : C
             <FontAwesomeIcon className="active:text-white scale-y-[70%]" icon={faChevronDown}/>
             {isOpen && 
                 <div className='bg-blu-300 absolute top-[1.5rem] right-0 z-50'>
-                    <ul className={`selected bg-white max-h-[25rem] overflow-y-auto flex flex-col`}>
+                    <ul className={`selected bg-white max-h-[10rem] overflow-y-auto flex flex-col ${x}`}>
                         {option.map((item, i) => <li key={i} onClick={getListValue} value={item}
                         className={`bg-gree-200 px-4 hover:bg-slate-200 ${(i === 0 && isSlate) && 'bg-slate-200'}
                         `}>{item}</li>)}
