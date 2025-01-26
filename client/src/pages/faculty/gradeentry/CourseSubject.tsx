@@ -13,6 +13,11 @@ type Program = {
   programCode: string,
   userId: number
 }
+type AssignedYearBlock = { 
+  id: number, 
+  programYearBlock: string, 
+  userId: number
+}
 
 type CourseSubject = {
   className?: string,
@@ -21,9 +26,10 @@ type CourseSubject = {
 
   courseCode: string
   programs: Program[]
+  assignedYearBlock: AssignedYearBlock[]
 }
 
-const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSubject) => {
+const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYearBlock } : CourseSubject) => {
 
 
   const token = localStorage.getItem('atoken');
@@ -46,7 +52,10 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   const [selectedBlock, setSelectedBlock] = useState<string>('A');
   const [selectedYearLevel, setSelectedYearLevel] = useState<string>('1st');
   const [selectedProgram, setSelectedProgram] = useState('BSIT');
-  
+
+  const [selectedProgramYearBlock, setSelectedProgramYearBlock] = useState('');
+
+
   //Set Record
   useEffect(() => {
 
@@ -77,23 +86,12 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
   }, [records.data, courses.data, courseList, userInfo]);
 
 
-
-
-  //ASSIGNED COURSES
-  //Get/Set assigned courses
-  // const assignedCourses = useFetch('program/get-assigned-courses', 'POST', JSON.stringify({ userId: user.id }));
-  // const [selectedCourses, setSelectedCourses] = useState<{ userId: number, courseCode: string }[]>([]);
-  
-  // useEffect(() => {
-  //   if(Array.isArray(assignedCourses.data)) {
-  //     if(assignedCourses.data.length > 0)
-  //       setSelectedCourses(assignedCourses.data.map(({ id, ...rest}) => rest));
-  //   }
-  // }, [assignedCourses.data]);
-
-
   //Set Course Title/Filter Students
   const [allBg, setAllBg] = useState(false);
+
+  useEffect(() => {
+    if(assignedYearBlock.length > 0) setSelectedCourseCode(assignedYearBlock[0].programYearBlock);
+  }, [assignedYearBlock]);
 
   useEffect(() => {
     let course = filteredCourses.find((course) => course.courseCode == selectedCourseCode);
@@ -103,12 +101,15 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
     }
     
     if(students.length > 0) {
+
+      let filter = selectedProgramYearBlock.split('-');
+
       let filteredList = allBg ? students.filter((student) => {
         return checkStudentCourse(student, courseCode)
       }).filter(student => programs.some(prog => prog.programCode === student.program.programCode)) : students.filter((student) => {
-        return student.block == selectedBlock && 
-          student.yearLevel == Number(selectedYearLevel.charAt(0)) && 
-          student.program.programCode == selectedProgram && 
+        return student.block == filter[2] && 
+          student.yearLevel == Number(filter[1]) && 
+          student.program.programCode == filter[0] && 
           checkStudentCourse(student, courseCode)
       });
       
@@ -123,9 +124,9 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
       selectedProgram,
       selectedBlock, 
       filteredCourses,
-      allBg
+      allBg,
+      selectedProgramYearBlock
     ]);
-    
     
     
     useEffect(() => {
@@ -134,12 +135,13 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
         selectedCourseCode, 
         selectedYearLevel, 
         selectedProgram,
+        selectedProgramYearBlock,
         selectedBlock, 
         filteredCourses
     ]);
 
     
-
+    
 
 
   //Set Default CourseCode
@@ -147,9 +149,9 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
     if(filteredCourses.length > 0) {
       setSelectedCourseCode(courseCode);
       setSelectedProgram(programs[0].programCode);
+      if(assignedYearBlock.length > 0) setSelectedProgramYearBlock(assignedYearBlock[0].programYearBlock);
     }
   }, [filteredCourses, courseCode, programs]);
-  
   
 
   //Style
@@ -189,6 +191,12 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
           </div>
           <div className='bg-slate-300 rounded-[.2rem] border-2 border-slate-500'>
             <CustomSelect 
+              className='h-[2rem] w-[8rem]' 
+              setValue={setSelectedProgramYearBlock}
+              option={assignedYearBlock.map(x => x.programYearBlock)}/>
+          </div>
+          {/* <div className='bg-slate-300 rounded-[.2rem] border-2 border-slate-500'>
+            <CustomSelect 
               className='h-[2rem] w-[6rem]' 
               setValue={setSelectedProgram}
               option={programs.map(x => x.programCode)}/>
@@ -204,7 +212,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs } : CourseSu
               className='h-[2rem] w-[6rem]' 
               setValue={setSelectedYearLevel} 
               option={['1st', '2nd', '3rd', '4th']}/>
-          </div>
+          </div> */}
           <div onClick={() => setAllBg(prev => !prev)} className={`${allBg ? 'bg-blue-500 border-blue-500 text-white' : 'bg-slate-300 border-slate-500'} 
           rounded-[.2rem] border-2  px-2 grid place-content-center`}>
             <button>All</button>

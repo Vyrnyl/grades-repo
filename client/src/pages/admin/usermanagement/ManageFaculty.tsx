@@ -50,7 +50,6 @@ const ManageFaculty = () => {
     //FACULTY HANDLED
     const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
-    const [yearLevelHandled, setYearLevelHandled] = useState<{ programYear: string, userId: number }[]>([]);
     
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [courseInput, setCourseInput] = useState<string>('');

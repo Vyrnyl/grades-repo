@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import randomColor from "../../../utils/randomColor";
 import CourseSubject from "./CourseSubject";
 import useUserStore from "../../../store/useUserStore";
+import useFetch from "../../../hooks/useFetch";
 
 type HandledCourse = {
   id: number;
@@ -60,6 +61,18 @@ const CourseCode = ({ data }: CourseCodeType) => {
     if (programs.length > 0) setHandledPrograms(programs);
   }, [programs]);
 
+
+
+  //ASSIGNED COURSES
+  //Get/Set assigned YearBlock
+  const yearBlocks = useFetch('faculty/get-program-year', 'POST', JSON.stringify({ userId: userInfo?.id }));
+  const [assignedYearBlock, setAssignedYearBlock] = useState<{ id: number, programYearBlock: string, userId: number}[]>([]);
+
+  //Set Assigned YearBlocks
+  useEffect(() => {
+    if(Array.isArray(yearBlocks.data)) setAssignedYearBlock(yearBlocks.data);
+  }, [yearBlocks.data]);
+
   //Style
   const color = randomColor();
 
@@ -88,6 +101,7 @@ const CourseCode = ({ data }: CourseCodeType) => {
           isOpen={isOpen}
           courseCode={data.courseCode}
           programs={handledPrograms}
+          assignedYearBlock={assignedYearBlock}
         />
       )}
     </>
