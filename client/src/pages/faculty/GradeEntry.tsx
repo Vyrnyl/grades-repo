@@ -62,8 +62,7 @@ const GradeEntry = () => {
       createdAt: handledCourse[i].createdAt
     }
   });
-  
-  console.log('karen mae qua')
+   
   //Style
 
   return (
