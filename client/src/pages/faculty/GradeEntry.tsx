@@ -63,7 +63,7 @@ const GradeEntry = () => {
     }
   });
   
-
+  console.log('karen')
   //Style
 
   return (
