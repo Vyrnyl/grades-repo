@@ -226,7 +226,8 @@ const ViewGrade = () => {
             <div className='mb-6 flex-1 mt-8 overflow-y-scroll'>
                 <table className="w-full font-semibold text-white">
                     <thead className="bg-blue-500 sticky top-0 z-10">
-                        <tr>                  
+                        <tr>     
+                            <th>Professor</th>             
                             <th className="px-4 py-4 text-center min-w-[8rem]">Course Title</th>
                             <th className="px-4 py-4 text-center w-[10rem]">Units</th>
                             <th className="px-4 py-4 text-center w-[10rem]">Semester</th>
@@ -240,9 +241,11 @@ const ViewGrade = () => {
                                 key={i}
                                 course={course}
                                 sem={semester}
+                                user={userInfo}
                             />)}
                         <tr>
                             <td className='border-b-2 border-l-2 border-slate-500'></td>
+                            <td className='border-b-2 border-slate-500'></td>
                             <td className='border-b-2 border-slate-500'></td>
                             <td className='border-b-2 border-slate-500'></td>
                             <td className='border-b-2 border-slate-500'></td>

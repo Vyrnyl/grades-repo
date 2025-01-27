@@ -216,6 +216,19 @@ const getStudentAssignedCourse = async (userId: number) => {
   }
 }
 
+const getStudentAssignedCourses = async () => {
+  try {
+
+    const assignedCourses = await prisma.assignedCourse.findMany();
+
+    return assignedCourses;
+
+  } catch(error) {
+    console.log(`Retrieval error: ${error}`);
+    return null;
+  }
+}
+
 const updateStudentAssignedCourse = async (userId: number, assignedCourses: {userId: number, courseCode: string}[]) => {
   try {
 
@@ -247,5 +260,6 @@ export {
 
   assignStudentCourse,
   getStudentAssignedCourse,
+  getStudentAssignedCourses,
   updateStudentAssignedCourse
 };

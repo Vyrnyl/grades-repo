@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudentCourses = exports.getStudentCourses = exports.assignCourses = exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
+exports.updateStudentCourses = exports.getAllStudentCourses = exports.getStudentCourses = exports.assignCourses = exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
 const programDataAccess_1 = require("../data/programDataAccess");
 const getPrograms = async (req, res) => {
     if (!req.user) {
@@ -85,6 +85,14 @@ const getStudentCourses = async (req, res) => {
     res.status(200).json(assignedCourses);
 };
 exports.getStudentCourses = getStudentCourses;
+const getAllStudentCourses = async (req, res) => {
+    const assignedCourses = await (0, programDataAccess_1.getStudentAssignedCourses)();
+    if (!assignedCourses) {
+        return res.status(500).json({ error: "Failed to retrieve" });
+    }
+    res.status(200).json(assignedCourses);
+};
+exports.getAllStudentCourses = getAllStudentCourses;
 const updateStudentCourses = async (req, res) => {
     const { userId, courses } = req.body;
     if (!courses) {

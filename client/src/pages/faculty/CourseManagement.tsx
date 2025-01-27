@@ -15,7 +15,7 @@ const CourseManagement = () => {
 
     const { data } = useFetch('class/get-classes', 'GET');
     const users = useFetch('user/get-users', 'GET');
-
+    
     const [students, setStudents] = useState<User[] | []>([]);
     const [classes, setClasses] = useState<CourseData[] | []>([]);
     const [addInfo, setAddInfo] = useState<CourseInfo>({

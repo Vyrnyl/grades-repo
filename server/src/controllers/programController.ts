@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addAddedCourse, assignNewUserCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, getStudentAssignedCourse, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
+import { addAddedCourse, assignNewUserCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -119,6 +119,17 @@ const getStudentCourses = async (req: Request, res: Response) => {
     res.status(200).json(assignedCourses);
 }
 
+const getAllStudentCourses = async (req: Request, res: Response) => {
+
+    const assignedCourses = await getStudentAssignedCourses();
+
+    if(!assignedCourses) {
+        return res.status(500).json({ error: "Failed to retrieve"});
+    }
+
+    res.status(200).json(assignedCourses);
+}
+
 const updateStudentCourses = async (req: Request, res: Response) => {
 
     const { userId, courses } = req.body;
@@ -146,5 +157,6 @@ export {
 
     assignCourses,
     getStudentCourses,
+    getAllStudentCourses,
     updateStudentCourses
 }

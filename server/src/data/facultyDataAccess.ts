@@ -25,6 +25,16 @@ const getHandledCourse = async (userId: number) => {
     }
 }
 
+const getHandledCourses = async () => {
+    try {
+        const result = await prisma.handledCourse.findMany();
+        return result;
+    } catch(error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+}
+
 const updateHandledCourse = async (data: { courseCode: string, userId: number }[], userId: number) => {
     try {
 
@@ -109,6 +119,16 @@ const addProgramYear = async (data: { programYearBlock: string, userId: number }
     }
 }
 
+const getProgramYears = async () => {
+    try {
+        const result = await prisma.assignedProgramYearBlock.findMany();
+        return result;
+    } catch(error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+};
+
 const getProgramYear = async (userId: number) => {
     try {
         const result = await prisma.assignedProgramYearBlock.findMany({
@@ -139,6 +159,7 @@ const updateProgramYear = async (data: { programYearBlock: string, userId: numbe
 export { 
     addHandledCourse, 
     getHandledCourse,
+    getHandledCourses,
     updateHandledCourse,
     
     addSpecialization, 
@@ -147,5 +168,6 @@ export {
 
     addProgramYear,
     getProgramYear,
+    getProgramYears,
     updateProgramYear
 }

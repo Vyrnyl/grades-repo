@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProgramYear = exports.getProgramYear = exports.addProgramYear = exports.updateSpecialization = exports.getSpecialization = exports.addSpecialization = exports.updateHandledCourse = exports.getHandledCourse = exports.addHandledCourse = void 0;
+exports.updateProgramYear = exports.getProgramYears = exports.getProgramYear = exports.addProgramYear = exports.updateSpecialization = exports.getSpecialization = exports.addSpecialization = exports.updateHandledCourse = exports.getHandledCourses = exports.getHandledCourse = exports.addHandledCourse = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 //COURSES
@@ -28,6 +28,17 @@ const getHandledCourse = async (userId) => {
     }
 };
 exports.getHandledCourse = getHandledCourse;
+const getHandledCourses = async () => {
+    try {
+        const result = await prisma.handledCourse.findMany();
+        return result;
+    }
+    catch (error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+};
+exports.getHandledCourses = getHandledCourses;
 const updateHandledCourse = async (data, userId) => {
     try {
         const deleted = await prisma.handledCourse.deleteMany({ where: { userId } });
@@ -101,6 +112,17 @@ const addProgramYear = async (data) => {
     }
 };
 exports.addProgramYear = addProgramYear;
+const getProgramYears = async () => {
+    try {
+        const result = await prisma.assignedProgramYearBlock.findMany();
+        return result;
+    }
+    catch (error) {
+        console.log(`Get error: ${error}`);
+        return null;
+    }
+};
+exports.getProgramYears = getProgramYears;
 const getProgramYear = async (userId) => {
     try {
         const result = await prisma.assignedProgramYearBlock.findMany({

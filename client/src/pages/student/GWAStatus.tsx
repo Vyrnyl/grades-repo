@@ -61,8 +61,6 @@ const GWAStatus = ({ className } : { className: string }) => {
     
     //Course List
     SetGwaList(courseGradeList, setGwaList, student);
-
-    console.log(gwaList);
     
     return (
         <PageContainer className={`${className} px-16`}>

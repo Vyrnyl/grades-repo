@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addHandledCourse, addProgramYear, addSpecialization, getHandledCourse, getProgramYear, getSpecialization, updateHandledCourse, updateProgramYear, updateSpecialization } from "../data/facultyDataAccess";
+import { addHandledCourse, addProgramYear, addSpecialization, getHandledCourse, getHandledCourses, getProgramYear, getProgramYears, getSpecialization, updateHandledCourse, updateProgramYear, updateSpecialization } from "../data/facultyDataAccess";
 
 
 //COURSES
@@ -23,8 +23,17 @@ const getHandled = async (req: Request, res: Response) => {
     res.status(200).json(courses);
 }
 
+const getAllHandled = async (req: Request, res: Response) => {
+
+    const courses = await getHandledCourses();
+    
+    if(!courses) return res.status(404).json({ error: 'Failed to retrieve' });
+
+    res.status(200).json(courses);
+}
+
 const updateHandled = async (req: Request, res: Response) => {
-    // console.log(req.body)
+    
     const { data, userId } = req.body;
     const courses = await updateHandledCourse(data, userId)
     
@@ -88,6 +97,15 @@ const getFacultyProgramYear = async (req: Request, res: Response) => {
     res.status(200).json(programYear);
 }
 
+const getFacultyProgramYears = async (req: Request, res: Response) => {
+
+    const programYears = await getProgramYears();
+
+    if(!programYears) return res.status(404).json({ error: 'Failed to retrieve' });
+
+    res.status(200).json(programYears);
+}
+
 const updateFacultyProgramYear = async (req: Request, res: Response) => {
 
     const { data, userId } = req.body;
@@ -103,6 +121,7 @@ const updateFacultyProgramYear = async (req: Request, res: Response) => {
 export { 
     addHandled, 
     getHandled,
+    getAllHandled,
     updateHandled,
     
     addFacultySpecialization, 
@@ -111,5 +130,6 @@ export {
 
     addFacultyProgramYear,
     getFacultyProgramYear,
+    getFacultyProgramYears,
     updateFacultyProgramYear
 }
