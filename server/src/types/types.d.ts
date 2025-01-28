@@ -96,10 +96,11 @@ type  ClassUpdatePayload = {
 
 //ADDED COURSE
 export type AddedCourseType = {
+    id? : number,
     courseCode: string,
     courseTitle: string,
     units: number,
     yearLevel: number,
     semester: number,
-    programId: number
+    programIds: number[]
 }

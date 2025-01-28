@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addAddedCourse, assignNewUserCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
+import { addAddedCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -58,9 +58,9 @@ const getAddedCourse = async (req: Request, res: Response) => {
 const updateCourse = async (req: Request, res: Response) => {
     
     const updateClassResult = await updateAddedCourse(req.body);
-
+    
     if(!updateClassResult) {
-        return res.status(500).json({ error: "Failed to update class schedule"});
+        return res.status(500).json({ error: "Failed to update"});
     }
     
     res.json({ message: "Update successful" });

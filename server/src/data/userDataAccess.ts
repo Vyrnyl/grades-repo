@@ -22,7 +22,7 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
                 const x = await prisma.bsitStudentRecord.createMany({
                     data: studentCourses
                 });
-                console.log(x)
+                
             } else if(newUser.programId === 2 && newUser.role === 'student') {
                 const bscs = await prisma.bscsCurriculum.findMany();
                 const studentCourses = bscs.map(course => {
@@ -32,7 +32,7 @@ const createUser = async (value: NewUserData): Promise<NewUserData | { error: st
                 const x = await prisma.bscsStudentRecord.createMany({
                     data: studentCourses
                 });
-                console.log(x)
+                
             } else if(newUser.programId === 3 && newUser.role === 'student') {
                 const bsis = await prisma.bsisCurriculum.findMany();
                 const studentCourses = bsis.map(course => {

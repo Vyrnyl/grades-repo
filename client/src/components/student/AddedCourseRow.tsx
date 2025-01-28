@@ -11,6 +11,8 @@ import CustomSelect from '../faculty/CustomSelect';
 import getProgramId from '../../utils/getProgramId';
 import optionArray from '../../utils/optionArray';
 import getProgramName from '../../utils/getProgramName';
+import getUppercaseLetters from '../../utils/getUpperCaseLetter';
+import removeObjectDuplicate from '../../utils/admin/removeObjectDuplicate';
 
 
 type AddedCourse = {
@@ -33,10 +35,8 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     const token = localStorage.getItem('atoken');
 
     const { id, courseCode, courseTitle, programId, units, yearLevel, semester } = addedCourse;
-    const [courseData, setCourseData] = useState<AddedCourse>
+    const [courseData, setCourseData] = useState<any>
     ({ id, courseCode, courseTitle, programId, units, yearLevel, semester });
-    
-    
     
 
 
@@ -76,16 +76,16 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
 
+        let progIds = programHandled.map(item => getProgramId(item.programCode)).filter((val, i, self) => self.indexOf(val) === i);
         const updatedData = {
             id,
             courseCode: updateData.courseCode,
             courseTitle: updateData.courseTitle,
-            programId: getProgramId(selectedProgram),
+            programIds: progIds,
             units: Number(selectedUnits),
             yearLevel: Number(selectedYearLevel.charAt(0)),
             semester:  Number(selectedSem.charAt(0))
         }
-        console.log(courseData);
 
         const updateUser = async () => {
             
@@ -103,7 +103,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                 const data = await res.json();
         
                 if(res.ok && data) {
-                    setCourseData(updatedData);
+                    setCourseData(updateData);
                     setIsOpen(false);
                 }
         
@@ -111,7 +111,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                 console.log("Fetch error" + error);
             }
         }
-        updateUser();
+        // updateUser();
     }
 
 
@@ -143,6 +143,41 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     }
 
 
+    //SET SELECTED PROGRAM
+    //SET Programs
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+
+    useEffect(() => {
+      const setPrograms = () => {
+        setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
+      }
+      
+      const handleClick = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        if (target.closest(".selected")) {
+          setPrograms();
+        }
+      };
+  
+      document.addEventListener("click", handleClick);
+  
+      return () => {
+        document.removeEventListener("click", handleClick);
+      };
+    }, [selectedProgram]);
+
+    //Remove selected program
+    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
+      setProgramHandled(prev => {
+        return prev.filter(prog => prog.programCode !== item.programCode)
+      });
+    }
+
+    useEffect(() => {
+      if(!isOpen) setProgramHandled([]);
+    }, [isOpen]);
+
+
     //Style
     const ref = useRef<HTMLFormElement>(null);
     HandleOutsideClick(ref, setIsOpen);
@@ -153,7 +188,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
         <tr className='bg-slate-100 hover:bg-slate-200'>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseCode}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseTitle}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(courseData.programId)}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(1)}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{courseData.units}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.yearLevel}${yearSuffix(courseData.yearLevel)}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.semester}${yearSuffix(courseData.semester)}`}</td>
@@ -206,6 +241,18 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                                         setValue={setSelectedProgram}
                                         isSlate={true}
                                     />
+
+                                    {/* SELECTED */}
+                                    <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                        flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                        {removeObjectDuplicate(programHandled).map((item, i) => {
+                                        return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                            <span className="text-center">{item.programCode}</span>
+                                            <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                            icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                                        </div>
+                                        })}
+                                    </div>
                                 </div>
                                 <div className="bg-gree-300 flex flex-col">
                                     <label className="font-semibold text-start">Units:</label>

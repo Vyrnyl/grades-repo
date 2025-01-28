@@ -43,7 +43,7 @@ exports.getAddedCourse = getAddedCourse;
 const updateCourse = async (req, res) => {
     const updateClassResult = await (0, programDataAccess_1.updateAddedCourse)(req.body);
     if (!updateClassResult) {
-        return res.status(500).json({ error: "Failed to update class schedule" });
+        return res.status(500).json({ error: "Failed to update" });
     }
     res.json({ message: "Update successful" });
 };

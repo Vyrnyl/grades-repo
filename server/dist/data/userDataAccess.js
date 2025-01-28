@@ -19,7 +19,6 @@ const createUser = async (value) => {
                 const x = await prisma.bsitStudentRecord.createMany({
                     data: studentCourses
                 });
-                console.log(x);
             }
             else if (newUser.programId === 2 && newUser.role === 'student') {
                 const bscs = await prisma.bscsCurriculum.findMany();
@@ -29,7 +28,6 @@ const createUser = async (value) => {
                 const x = await prisma.bscsStudentRecord.createMany({
                     data: studentCourses
                 });
-                console.log(x);
             }
             else if (newUser.programId === 3 && newUser.role === 'student') {
                 const bsis = await prisma.bsisCurriculum.findMany();

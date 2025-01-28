@@ -145,7 +145,9 @@ const EnrolledRow = ({ course, sem, user } : { course: CourseType, sem: number, 
   return (
     <tr className='bg-slate-100 hover:bg-slate-200'>
         <td className="px-2 py-2 text-start pl-8 border-2 border-slate-500">
-          {`${faculty?.firstName || ''} ${faculty?.lastName || ''}`}</td>
+          {faculty ? `${faculty?.firstName || ''} ${faculty?.lastName || ''}` : 
+          <span className="text-slate-500">No assigned faculty</span>}
+        </td>
         <td className='px-2 py-2 text-start pl-8 border-2 border-slate-500'>{enrolledCourse.courseTitle}</td>
         <td className='px-2 py-2 text-center border-2 border-slate-500'>{enrolledCourse.units}</td>
         <td className='px-2 py-2 text-center border-2 border-slate-500'>{sem == 1 ? '1st' : '2nd'}</td>

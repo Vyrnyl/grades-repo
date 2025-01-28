@@ -68,16 +68,35 @@ exports.getCoursesList = getCoursesList;
 //ADDED COURSES
 const addAddedCourse = async (data) => {
     try {
-        const addedCourse = await prisma.addedCourse.create({ data });
-        const users = await prisma.user.findMany({
-            where: {
-                programId: addedCourse.programId,
-                role: "student",
-            },
+        const addedCourse = await prisma.addedCourse.create({
+            data: {
+                courseCode: data.courseCode,
+                courseTitle: data.courseTitle,
+                units: data.units,
+                yearLevel: data.yearLevel,
+                semester: data.semester
+            }
         });
+        if (!addedCourse) {
+            return null;
+        }
+        let progIdArr = data.programIds.map(item => {
+            return { courseId: addedCourse.id, programId: item };
+        });
+        await prisma.programIds.createMany({ data: progIdArr });
+        let students = [];
+        for (const item of data.programIds) {
+            let users = await prisma.user.findMany({
+                where: {
+                    programId: item,
+                    role: 'student'
+                }
+            });
+            students = [...students, ...users];
+        }
         if (addedCourse) {
-            let record = users.map((u) => ({
-                userId: u.id,
+            let record = students.map((student) => ({
+                userId: student.id,
                 courseId: addedCourse.id,
             }));
             await prisma.addedCourseRecord.createMany({
@@ -94,7 +113,11 @@ const addAddedCourse = async (data) => {
 exports.addAddedCourse = addAddedCourse;
 const getAddedCourses = async () => {
     try {
-        const courses = await prisma.addedCourse.findMany();
+        const courses = await prisma.addedCourse.findMany({
+            include: {
+                programIds: true
+            }
+        });
         return courses;
     }
     catch (error) {
@@ -103,29 +126,49 @@ const getAddedCourses = async () => {
     }
 };
 exports.getAddedCourses = getAddedCourses;
-const updateAddedCourse = async (body) => {
+const updateAddedCourse = async (data) => {
     try {
-        const prev = await prisma.addedCourse.findUnique({ where: { id: body.id } });
+        // const prev = await prisma.addedCourse.findUnique({ where: { id: data.id }});
         const updated = await prisma.addedCourse.update({
-            where: { id: body.id },
-            data: body,
-        });
-        const users = await prisma.user.findMany({
-            where: {
-                programId: updated.programId,
-                role: "student",
+            where: { id: data.id },
+            data: {
+                courseCode: data.courseCode,
+                courseTitle: data.courseTitle,
+                units: data.units,
+                yearLevel: data.yearLevel,
+                semester: data.semester
             },
         });
-        if (prev?.programId !== updated.programId) {
-            await prisma.addedCourseRecord.deleteMany({ where: { courseId: updated.id } });
-            let record = users.map((u) => ({
-                userId: u.id,
-                courseId: updated.id,
-            }));
-            await prisma.addedCourseRecord.createMany({
-                data: record,
+        await prisma.programIds.deleteMany({ where: {
+                courseId: updated.id
+            } });
+        let progIdArr = data.programIds.map(item => {
+            return { courseId: updated.id, programId: item };
+        });
+        await prisma.programIds.createMany({ data: progIdArr });
+        let students = [];
+        for (const item of data.programIds) {
+            let users = await prisma.user.findMany({
+                where: {
+                    programId: item,
+                    role: 'student'
+                }
             });
+            students = [...students, ...users];
         }
+        for (const student of students) {
+            const record = await prisma.addedCourseRecord.findFirst({ where: { userId: student.id, courseId: updated.id } });
+            if (!record)
+                await prisma.addedCourseRecord.create({ data: { userId: student.id, courseId: updated.id } });
+        }
+        ;
+        // let record = students.map((u) => ({
+        //   userId: u.id,
+        //   courseId: updated.id,
+        // }));
+        // await prisma.addedCourseRecord.createMany({
+        //   data: record,
+        // });
         return updated;
     }
     catch (error) {
@@ -150,9 +193,7 @@ exports.deleteAddedCourse = deleteAddedCourse;
 //ASSIGN NEW USER
 const assignNewUserCourse = async (userId, programId) => {
     try {
-        const courses = await prisma.addedCourse.findMany({
-            where: { programId }
-        });
+        const courses = await prisma.addedCourse.findMany();
         const courseIds = courses.map(course => course.id);
         const record = await prisma.addedCourseRecord.findMany({ where: { userId, courseId: { in: courseIds } } });
         if (record.length === 0) {

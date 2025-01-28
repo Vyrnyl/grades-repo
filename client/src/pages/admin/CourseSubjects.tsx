@@ -7,6 +7,8 @@ import Input from '../../components/shared/components/Input';
 import { AddedCourseType } from '../../types/types';
 import AddedCourseRow from '../../components/student/AddedCourseRow';
 import getProgramId from '../../utils/getProgramId';
+import getUppercaseLetters from '../../utils/getUpperCaseLetter';
+import removeObjectDuplicate from '../../utils/admin/removeObjectDuplicate';
 // import fetchData from '../../utils/admin/fetchData';
 
 type AddData = {
@@ -53,9 +55,10 @@ const CourseSubjects = () => {
 
       setIsAdding(true);
 
+      let progIds = programHandled.map(item => getProgramId(item.programCode)).filter((val, i, self) => self.indexOf(val) === i);
       const body = {
         ...addData, 
-        programId: getProgramId(selectedProgram), 
+        programIds: progIds, 
         units: Number(selectedUnits), 
         yearLevel: Number(selectedYearLevel.charAt(0)), 
         semester: Number(selectedSem.charAt(0))
@@ -107,6 +110,41 @@ const CourseSubjects = () => {
     //   }
     //   getCourses();
     // }, [courses.data, reload]);
+
+
+    //SET SELECTED PROGRAM
+    //SET Programs
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+
+    useEffect(() => {
+      const setPrograms = () => {
+        setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
+      }
+      
+      const handleClick = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        if (target.closest(".selected")) {
+          setPrograms();
+        }
+      };
+  
+      document.addEventListener("click", handleClick);
+  
+      return () => {
+        document.removeEventListener("click", handleClick);
+      };
+    }, [selectedProgram]);
+
+    //Remove selected program
+    const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
+      setProgramHandled(prev => {
+        return prev.filter(prog => prog.programCode !== item.programCode)
+      });
+    }
+
+    useEffect(() => {
+      if(!isAddOpen) setProgramHandled([]);
+    }, [isAddOpen]);
     
 
     //Paginition
@@ -186,7 +224,10 @@ const CourseSubjects = () => {
             px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
         
               <FontAwesomeIcon className="absolute text-[1.5rem] right-4
-              top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => setIsAddOpen(false)}/>
+              top-2 font-bold hover:scale-110 active:scale-100" 
+              icon={faClose} 
+              onClick={() => setIsAddOpen(false)}/>
+
               <div className="bg-blu-200 ml-[-2rem] mb-4">
                 <p className="font-semibold">Add Course</p>
               </div>
@@ -229,6 +270,18 @@ const CourseSubjects = () => {
                           'BS Entertainment and Multimedia Computing'
                         ]} 
                         setValue={setSelectedProgram}/>
+
+                        {/* SELECTED */}
+                        <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                            flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                            {removeObjectDuplicate(programHandled).map((item, i) => {
+                              return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                <span className="text-center">{item.programCode}</span>
+                                <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                              </div>
+                            })}
+                        </div>
                   </div>
 
                   <div className="bg-gree-300 flex flex-col">

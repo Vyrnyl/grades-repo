@@ -75,6 +75,7 @@ const ManageFaculty = () => {
         document.removeEventListener("click", handleClick);
       };
     }, [selectedProgram]);
+    console.log(programHandled)
 
 
     //SET Courses
@@ -86,7 +87,7 @@ const ManageFaculty = () => {
     }
     
     
-    //DELETE program
+    //Remove selected program
     const handleDeleteProgram = (item: { programCode: string, userId?: number}) => {
       setProgramHandled(prev => {
         return prev.filter(prog => prog.programCode !== item.programCode)

@@ -95,9 +95,16 @@ model AddedCourse {
   units Int
   yearLevel Int
   semester Int
-  programId Int
+  programIds ProgramIds[]
   addedCourseRecord AddedCourseRecord[]
 }
+model ProgramIds {
+  id Int @id @default(autoincrement())
+  courseId Int
+  programId Int
+  addedCourse AddedCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
 model AddedCourseRecord {
   id Int @id @default(autoincrement())
   userId Int
