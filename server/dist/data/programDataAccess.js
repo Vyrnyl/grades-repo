@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStudentAssignedCourse = exports.getStudentAssignedCourses = exports.getStudentAssignedCourse = exports.assignStudentCourse = exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
+exports.getProgramIds = exports.updateStudentAssignedCourse = exports.getStudentAssignedCourses = exports.getStudentAssignedCourse = exports.assignStudentCourse = exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProgramList = async () => {
@@ -266,3 +266,15 @@ const updateStudentAssignedCourse = async (userId, assignedCourses) => {
     }
 };
 exports.updateStudentAssignedCourse = updateStudentAssignedCourse;
+//COURSE ASSIGNED PROGRAMS
+const getProgramIds = async (courseId) => {
+    try {
+        const assignedCourses = await prisma.programIds.findMany({ where: { courseId } });
+        return assignedCourses;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return null;
+    }
+};
+exports.getProgramIds = getProgramIds;

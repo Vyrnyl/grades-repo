@@ -307,7 +307,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                             icon={faTrashCan} onClick={() => setIsDelete(!isDelete)}/>
                         <button className="text-[.8rem] font-bold text-white bg-blue-500 px-2 rounded-[.2rem]"
                             onClick={() => setIsListOpen(true)}>View</button>
-
+                        
                         {isDelete && 
                             <div ref={delRef} className='bg-slate-300 absolute px-8 py-10 left-[50%] top-[50%] 
                                 translate-y-[-50%] translate-x-[-50%] flex flex-col gap-4 rounded-lg'>

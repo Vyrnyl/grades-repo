@@ -5,6 +5,7 @@ import {
     deleteCourse, 
     getAddedCourse, 
     getAllStudentCourses, 
+    getCoursePrograms, 
     getCourses, 
     getPrograms, 
     getStudentCourses, 
@@ -26,5 +27,7 @@ router.post('/add-assigned-courses', assignCourses);
 router.post('/get-assigned-courses', getStudentCourses);
 router.get('/get-all-assigned-courses', getAllStudentCourses);
 router.put('/update-assigned-courses', updateStudentCourses);
+
+router.post('/get-program-ids', getCoursePrograms);
 
 export default router;

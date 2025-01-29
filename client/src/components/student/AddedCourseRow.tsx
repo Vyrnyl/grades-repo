@@ -13,6 +13,7 @@ import optionArray from '../../utils/optionArray';
 import getProgramName from '../../utils/getProgramName';
 import getUppercaseLetters from '../../utils/getUpperCaseLetter';
 import removeObjectDuplicate from '../../utils/admin/removeObjectDuplicate';
+import useFetch from '../../hooks/useFetch';
 
 
 type AddedCourse = {
@@ -35,7 +36,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     const token = localStorage.getItem('atoken');
 
     const { id, courseCode, courseTitle, programId, units, yearLevel, semester } = addedCourse;
-    const [courseData, setCourseData] = useState<any>
+    const [courseData, setCourseData] = useState<AddedCourse>
     ({ id, courseCode, courseTitle, programId, units, yearLevel, semester });
     
 
@@ -86,7 +87,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
             yearLevel: Number(selectedYearLevel.charAt(0)),
             semester:  Number(selectedSem.charAt(0))
         }
-
+        
         const updateUser = async () => {
             
             
@@ -103,7 +104,16 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                 const data = await res.json();
         
                 if(res.ok && data) {
-                    setCourseData(updateData);
+                    setCourseData({
+                        id: updatedData.id,
+                        courseCode: updatedData.courseCode,
+                        courseTitle: updatedData.courseTitle,
+                        units: updatedData.units,
+                        yearLevel: updatedData.yearLevel,
+                        semester: updatedData.semester,
+                        programId: 2
+                    });
+                    setHandledPrograms(progIds.map(item => ({ programId: item })));
                     setIsOpen(false);
                 }
         
@@ -111,7 +121,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                 console.log("Fetch error" + error);
             }
         }
-        // updateUser();
+        updateUser();
     }
 
 
@@ -143,10 +153,24 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     }
 
 
-    //SET SELECTED PROGRAM
-    //SET Programs
-    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+    //SELECTED PROGRAMS
 
+    //SET Programs
+    const progIds = useFetch('program/get-program-ids', 'POST', JSON.stringify({ courseId: addedCourse.id }));
+
+    const [handledPrograms, setHandledPrograms] = useState<{ programId: number }[]>([]);
+    
+    useEffect(() => {
+        if(Array.isArray(progIds.data)) {
+            setHandledPrograms(progIds.data.map(item => ({ programId: item.programId })));
+            setProgramHandled(progIds.data.map(item => ({ programCode: getProgram(item.programId) })));
+        }
+    }, [progIds.data]);
+    
+
+    //SET SELECTED PROGRAM
+    const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
+    
     useEffect(() => {
       const setPrograms = () => {
         setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
@@ -173,10 +197,10 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
       });
     }
 
-    useEffect(() => {
-      if(!isOpen) setProgramHandled([]);
-    }, [isOpen]);
-
+    // useEffect(() => {
+    //   if(!isOpen) setProgramHandled([]);
+    // }, [isOpen]);
+    
 
     //Style
     const ref = useRef<HTMLFormElement>(null);
@@ -188,7 +212,9 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
         <tr className='bg-slate-100 hover:bg-slate-200'>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseCode}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{courseData.courseTitle}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(1)}</td>
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+                {handledPrograms.length > 0 ? handledPrograms.map(item => getProgram((item.programId))).join(', ') : ''}
+            </td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{courseData.units}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.yearLevel}${yearSuffix(courseData.yearLevel)}`}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.semester}${yearSuffix(courseData.semester)}`}</td>

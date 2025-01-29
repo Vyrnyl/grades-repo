@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { addAddedCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
+import { Request, response, Response } from "express";
+import { addAddedCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramIds, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -147,6 +147,24 @@ const updateStudentCourses = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Courses Updated!" })
 }
 
+
+//COURSE ASSIGNED PROGRAMS
+const getCoursePrograms = async (req: Request, res: Response) => {
+    
+    const { courseId } = req.body;
+    if(!courseId) {
+        return res.status(422).json({ message: "Req body error" });
+    }
+
+    const assignedProgs = await getProgramIds(courseId);
+
+    if(!assignedProgs) {
+        return res.status(500).json({ error: "Failed to retrieve"});
+    }
+
+    res.status(200).json(assignedProgs);
+}
+
 export { 
     getPrograms, 
     getCourses, 
@@ -158,5 +176,7 @@ export {
     assignCourses,
     getStudentCourses,
     getAllStudentCourses,
-    updateStudentCourses
+    updateStudentCourses,
+
+    getCoursePrograms
 }

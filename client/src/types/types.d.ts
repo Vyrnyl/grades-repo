@@ -74,7 +74,7 @@ type AddedCourseType = {
     units: number,
     yearLevel: number,
     semester: number,
-    programId: number
+    programIds: { id: number, courseId: number, programId: number }[]
 }
 
 

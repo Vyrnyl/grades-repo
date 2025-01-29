@@ -13,4 +13,5 @@ router.post('/add-assigned-courses', programController_1.assignCourses);
 router.post('/get-assigned-courses', programController_1.getStudentCourses);
 router.get('/get-all-assigned-courses', programController_1.getAllStudentCourses);
 router.put('/update-assigned-courses', programController_1.updateStudentCourses);
+router.post('/get-program-ids', programController_1.getCoursePrograms);
 exports.default = router;

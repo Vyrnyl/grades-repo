@@ -26,11 +26,12 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
   useEffect(() => {
     const getCourses = async () => {
       const data = await fetchData('program/get-added-courses');
-    
+      
       if(Array.isArray(data)) setAllCourse(data);
     }
     getCourses();
   }, []);
+  
 
 
   //ASSIGNED COURSES
@@ -87,8 +88,15 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
   }
   
 
+  //Filter All Course by student program
+  const [filteredCourse, setFilteredCourse] = useState<AddedCourseType[]>([]);
+
+  useEffect(() => {
+    setFilteredCourse(allCourse.filter(course => course.programIds.some(prog => prog.programId === user.programId)));
+  }, [allCourse]);
+
   //PAGINATION
-  const { handleNext, handlePrev, entries } = pagination(allCourse);
+  const { handleNext, handlePrev, entries } = pagination(filteredCourse);
   
 
   return <div className='bg-white w-[100%] h-[100%] flex flex-col gap-[4.6rem 
