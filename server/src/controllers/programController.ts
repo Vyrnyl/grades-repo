@@ -1,5 +1,5 @@
 import { Request, response, Response } from "express";
-import { addAddedCourse, assignStudentCourse, deleteAddedCourse, getAddedCourses, getCoursesList, getProgramIds, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
+import { addAddedCourse, assignStudentCourse, deleteAddedCourse, deleteStudentAssignedCourses, getAddedCourses, getCoursesList, getProgramIds, getProgramList, getStudentAssignedCourse, getStudentAssignedCourses, updateAddedCourse, updateStudentAssignedCourse } from "../data/programDataAccess";
 
 
 const getPrograms = async (req: Request, res: Response) => {
@@ -147,6 +147,19 @@ const updateStudentCourses = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Courses Updated!" })
 }
 
+const deleteStudentCourses = async (req: Request, res: Response) => {
+
+    const { courseCode } = req.body;
+
+    if(!courseCode) return res.status(404).json({ error: 'Req body error' });
+    
+    const deleted = await deleteStudentAssignedCourses(courseCode);
+
+    if(!deleted) return res.status(404).json({ error: 'Failed to delete' });
+
+    res.status(201).json({ message: 'Items Deleted'});
+}
+
 
 //COURSE ASSIGNED PROGRAMS
 const getCoursePrograms = async (req: Request, res: Response) => {
@@ -177,6 +190,7 @@ export {
     getStudentCourses,
     getAllStudentCourses,
     updateStudentCourses,
+    deleteStudentCourses,
 
     getCoursePrograms
 }

@@ -129,6 +129,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
     const [isDelete, setIsDelete] = useState(false);
 
     const deleteUser = async () => {
+
         setIsDelete(false);
         try {
             const res = await fetch(`${apiUrl}/program/delete-added-course`, {
@@ -145,7 +146,20 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
             if(res.ok && data) {
                 setCourseList(prev => prev.filter(u => u.id !== courseData.id));
                 setReload(prev => !prev);
+
+                //Delete all student assigned courses
+                const resDel = await fetch(`${apiUrl}/program/delete-assigned-courses`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ courseCode })
+                });
+                const delData = await resDel.json();
+                console.log(delData)
             }
+
             
         } catch(error) {
             console.log('Request Error');
@@ -216,8 +230,8 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                 {handledPrograms.length > 0 ? handledPrograms.map(item => getProgram((item.programId))).join(', ') : ''}
             </td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{courseData.units}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.yearLevel}${yearSuffix(courseData.yearLevel)}`}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.semester}${yearSuffix(courseData.semester)}`}</td>
+            {/* <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.yearLevel}${yearSuffix(courseData.yearLevel)}`}</td> */}
+            {/* <td className="px-4 py-4 text-center border-2 border-slate-500">{`${courseData.semester}${yearSuffix(courseData.semester)}`}</td> */}
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="flex gap-6 justify-center">
 
@@ -289,7 +303,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                                         isSlate={true}
                                     />
                                 </div>
-                                <div className="bg-gree-300 flex flex-col">
+                                {/* <div className="bg-gree-300 flex flex-col">
                                     <label className="font-semibold text-start">Year Level:</label>
                                     <CustomSelect
                                         className="cursor-pointer  border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
@@ -297,8 +311,8 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                                         setValue={setSelectedYearLevel}
                                         isSlate={true}
                                     />
-                                </div>
-                                <div className="bg-gree-300 flex flex-col">
+                                </div> */}
+                                {/* <div className="bg-gree-300 flex flex-col">
                                     <label className="font-semibold text-start">Semester:</label>
                                     <CustomSelect
                                         className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2"
@@ -306,7 +320,7 @@ const AddedCourseRow = ({ addedCourse, setCourseList, setReload }: {
                                         setValue={setSelectedSem}
                                         isSlate={true}
                                     />
-                                </div>
+                                </div> */}
 
                                 </div>
                             </div>

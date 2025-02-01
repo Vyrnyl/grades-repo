@@ -104,3 +104,12 @@ export type AddedCourseType = {
     semester: number,
     programIds: number[]
 }
+
+
+//ASSIGNED COURSE
+export type AssginedCourse = {
+    userId: number, 
+    courseCode: string, 
+    semester: number, 
+    yearLevel: number 
+}

@@ -186,8 +186,8 @@ const CourseSubjects = () => {
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Course Title</th>
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Program</th>
                         <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Units</th>
-                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year Level</th>
-                        <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Semester</th>
+                        {/* <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year Level</th> */}
+                        {/* <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Semester</th> */}
                         <th className="px-4 py-4 text-center border-2 border-blue-500 w-[5rem]">Action</th>
                     </tr>
                 </thead>
@@ -292,7 +292,7 @@ const CourseSubjects = () => {
                         setValue={setSelectedUnits}/>
                   </div>
 
-                  <div className="bg-gree-300 flex flex-col">
+                  {/* <div className="bg-gree-300 flex flex-col">
                     <label className="font-semibold">Year Level:</label>
                     <CustomSelect 
                         className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
@@ -305,7 +305,7 @@ const CourseSubjects = () => {
                         className="cursor-pointer border-slate-500 font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
                         option={['1st', '2nd']} 
                         setValue={setSelectedSem}/>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

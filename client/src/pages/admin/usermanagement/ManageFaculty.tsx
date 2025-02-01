@@ -75,7 +75,6 @@ const ManageFaculty = () => {
         document.removeEventListener("click", handleClick);
       };
     }, [selectedProgram]);
-    console.log(programHandled)
 
 
     //SET Courses

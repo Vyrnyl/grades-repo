@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgramIds = exports.updateStudentAssignedCourse = exports.getStudentAssignedCourses = exports.getStudentAssignedCourse = exports.assignStudentCourse = exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
+exports.getProgramIds = exports.deleteStudentAssignedCourses = exports.updateStudentAssignedCourse = exports.getStudentAssignedCourses = exports.getStudentAssignedCourse = exports.assignStudentCourse = exports.assignNewUserCourse = exports.deleteAddedCourse = exports.updateAddedCourse = exports.getAddedCourses = exports.addAddedCourse = exports.getCoursesList = exports.getProgramList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const getProgramList = async () => {
@@ -266,6 +266,19 @@ const updateStudentAssignedCourse = async (userId, assignedCourses) => {
     }
 };
 exports.updateStudentAssignedCourse = updateStudentAssignedCourse;
+const deleteStudentAssignedCourses = async (courseCode) => {
+    try {
+        const deleted = await prisma.assignedCourse.deleteMany({ where: { courseCode } });
+        if (!deleted)
+            return null;
+        return { mess: 'Deleted' };
+    }
+    catch (error) {
+        console.log(`Delete error: ${error}`);
+        return null;
+    }
+};
+exports.deleteStudentAssignedCourses = deleteStudentAssignedCourses;
 //COURSE ASSIGNED PROGRAMS
 const getProgramIds = async (courseId) => {
     try {

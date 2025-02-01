@@ -157,8 +157,8 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
         userData.firstName.slice(1) : userData.firstName} ${user.lastName}`}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.email}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.sex}</td>
-        <td className="px-4 py-4 text-center border-2 border-slate-500">
-            {`${userData.role.charAt(0).toUpperCase()}${userData.role.slice(1)}`}</td>
+        {/* <td className="px-4 py-4 text-center border-2 border-slate-500">
+            {`${userData.role.charAt(0).toUpperCase()}${userData.role.slice(1)}`}</td> */}
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.status}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{user.createdAt.split('T')[0]}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">

@@ -116,7 +116,7 @@ const ViewGrade = () => {
 
 
     //ASSIGNED COURSES
-    const [enrolledCourses, setEnrolledCourses] = useState<{ userId: number, courseCode: string }[]>([]);
+    const [enrolledCourses, setEnrolledCourses] = useState<{ id: number, userId: number, courseCode: string, semester: number, yearLevel: number }[]>([]);
     // const [assignedCourses, setAssignedCourse] = useState<(AddedCourseRecord)[]>([]);
     const { assignedCourses, setAssignedCourses } = useAssignedCourses();
     
@@ -135,7 +135,7 @@ const ViewGrade = () => {
                 
                 if(Array.isArray(data)) {
                     if(data.length > 0)
-                    setEnrolledCourses(data.map(({ id, ...rest }) => rest));
+                        setEnrolledCourses(data);
                 }
                 
 
@@ -149,22 +149,21 @@ const ViewGrade = () => {
 
     //Filter AddedRecord to Assigned Courses
     useEffect(() => {
-        let courses = enrolledCourses.map(element => {
+        let courses = enrolledCourses.filter(item => item.semester === semester).map(element => {
             // let course = addedRecord.find(course => course.addedCourse?.courseCode === element.courseCode);
             let course = addedRecord.find(course => course.addedCourse?.courseCode === element.courseCode);
             
             return course;
         });
-        
+
         const filteredRecords = courses.filter(
             (record): record is AddedCourseRecord => record !== undefined
           );
           
         setAssignedCourses(filteredRecords);
         // setAssignedCourses(enrolledCourses);
-    }, [enrolledCourses]);
+    }, [enrolledCourses, semester]);
     
-
     //GWA
     let gwa = 0;
     let totalUnits= 0;

@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { AddedCourseType } from "../types/types";
+import { AddedCourseType, AssginedCourse } from "../types/types";
 
 const prisma = new PrismaClient();
 
@@ -234,7 +234,7 @@ const assignNewUserCourse = async (userId: number, programId: number) => {
 
 
 //ASSIGN STUDENT COURSE
-const assignStudentCourse = async (assignedCourses: {userId: number, courseCode: string}[]) => {
+const assignStudentCourse = async (assignedCourses: AssginedCourse[]) => {
   try {
 
     const assign = await prisma.assignedCourse.createMany({
@@ -277,7 +277,7 @@ const getStudentAssignedCourses = async () => {
   }
 }
 
-const updateStudentAssignedCourse = async (userId: number, assignedCourses: {userId: number, courseCode: string}[]) => {
+const updateStudentAssignedCourse = async (userId: number, assignedCourses: AssginedCourse[]) => {
   try {
 
     // if(assignedCourses.length === 0) return null;
@@ -291,6 +291,20 @@ const updateStudentAssignedCourse = async (userId: number, assignedCourses: {use
     return assign;
   } catch(error) {
     console.log(`Update error: ${error}`);
+    return null;
+  }
+}
+
+const deleteStudentAssignedCourses = async (courseCode: string) => {
+  try {
+
+    const deleted = await prisma.assignedCourse.deleteMany({ where: { courseCode } });
+
+    if(!deleted) return null;
+
+    return { mess: 'Deleted' };
+  } catch(error) {
+    console.log(`Delete error: ${error}`);
     return null;
   }
 }
@@ -325,6 +339,7 @@ export {
   getStudentAssignedCourse,
   getStudentAssignedCourses,
   updateStudentAssignedCourse,
+  deleteStudentAssignedCourses,
 
   getProgramIds
 };

@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-
 type useSemType = {
     semester: number,
     setSemester: (semester: number) => void

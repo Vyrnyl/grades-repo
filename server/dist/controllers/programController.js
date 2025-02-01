@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCoursePrograms = exports.updateStudentCourses = exports.getAllStudentCourses = exports.getStudentCourses = exports.assignCourses = exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
+exports.getCoursePrograms = exports.deleteStudentCourses = exports.updateStudentCourses = exports.getAllStudentCourses = exports.getStudentCourses = exports.assignCourses = exports.deleteCourse = exports.updateCourse = exports.getAddedCourse = exports.addCourse = exports.getCourses = exports.getPrograms = void 0;
 const programDataAccess_1 = require("../data/programDataAccess");
 const getPrograms = async (req, res) => {
     if (!req.user) {
@@ -105,6 +105,16 @@ const updateStudentCourses = async (req, res) => {
     res.status(200).json({ message: "Courses Updated!" });
 };
 exports.updateStudentCourses = updateStudentCourses;
+const deleteStudentCourses = async (req, res) => {
+    const { courseCode } = req.body;
+    if (!courseCode)
+        return res.status(404).json({ error: 'Req body error' });
+    const deleted = await (0, programDataAccess_1.deleteStudentAssignedCourses)(courseCode);
+    if (!deleted)
+        return res.status(404).json({ error: 'Failed to delete' });
+    res.status(201).json({ message: 'Items Deleted' });
+};
+exports.deleteStudentCourses = deleteStudentCourses;
 //COURSE ASSIGNED PROGRAMS
 const getCoursePrograms = async (req, res) => {
     const { courseId } = req.body;

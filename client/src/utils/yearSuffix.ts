@@ -1,23 +1,23 @@
 
 const yearSuffix = (yearLevel: number | undefined) => {
-    let suffex: string = '';
+    let suffix: string = '';
     switch(yearLevel) {
       case 1:
-        suffex = 'st';
+        suffix = 'st';
         break;
       case 2:
-        suffex = 'nd';
+        suffix = 'nd';
         break;
       case 3:
-        suffex = 'rd';
+        suffix = 'rd';
         break;
       case 4:
-        suffex = 'th';
+        suffix = 'th';
         break;
-      default: suffex = '';
+      default: suffix = '';
         break;
     };
-    return suffex;
+    return suffix;
 }
 
 export default yearSuffix;
