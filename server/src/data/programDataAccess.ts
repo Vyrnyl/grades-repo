@@ -66,8 +66,8 @@ const getCoursesList = async () => {
   }
 };
 
-//ADDED COURSES
 
+//ADDED COURSES
 const addAddedCourse = async (data: AddedCourseType) => {
   try {
 
@@ -173,7 +173,7 @@ const updateAddedCourse = async (data: AddedCourseType) => {
     }
     
     for(const student of students) {
-      const record = await prisma.addedCourseRecord.findFirst({ where: { userId: student.id, courseId: updated.id }})
+      const record = await prisma.addedCourseRecord.findFirst({ where: { userId: student.id, courseId: updated.id }});
     
       if(!record) await prisma.addedCourseRecord.create({ data: { userId: student.id, courseId: updated.id } });
     };
@@ -287,6 +287,29 @@ const updateStudentAssignedCourse = async (userId: number, assignedCourses: Assg
     const assign = await prisma.assignedCourse.createMany({
       data: assignedCourses
     });
+    
+
+    //Assigned Sem/Year
+    const addedCourseRecords = await prisma.addedCourseRecord.findMany({
+      where: {
+        userId
+      },
+      include: {
+        addedCourse: true
+      }
+    });
+    
+    const assignedCourse = await prisma.assignedCourse.findMany({
+      where: {
+        userId
+      }
+    });
+    
+    const result = addedCourseRecords.filter(record => {
+      return assignedCourse.some(assigned => assigned.courseCode === record.addedCourse.courseCode)
+    }).map(item => item.courseId);
+    
+    // await prisma.addedCourseRecord.updateMany();
 
     return assign;
   } catch(error) {

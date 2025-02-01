@@ -75,9 +75,13 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
   //Update assigned courses
   const submitAssignedCourse = async () => {
 
+    setIsAllSemSelected(false);
+
     if(selectedCourses.every(course => 'semester' in course && 'yearLevel' in course)) 
       setIsAllSemSelected(false);
-    else setIsAllSemSelected(true);
+    else setTimeout(() => {
+      setIsAllSemSelected(true);
+    }, 200);
     
     console.log(selectedCourses)
     

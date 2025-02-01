@@ -19,7 +19,6 @@ const getStudentGrades = async (req: Request, res: Response) => {
 
 const getStudentRecords = async (req: Request, res: Response) => {
 
-    // const records = await getRecords();
     const records = await getStudents();
     
     if(!records) {
@@ -54,6 +53,7 @@ const updateStudentGrade = async (req: Request, res: Response) => {
 //ADDED COURSE GRADES
 const getAddedCourseGrade = async (req: Request, res: Response) => {
 
+    if(!req.body.userId) return res.status(400).json({ error: 'Invalid Request Body' });
     const records = await getAddedCourseRecord(req.body.userId);
 
     if(!records) {

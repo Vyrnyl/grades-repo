@@ -15,7 +15,6 @@ const getStudentGrades = async (req, res) => {
 };
 exports.getStudentGrades = getStudentGrades;
 const getStudentRecords = async (req, res) => {
-    // const records = await getRecords();
     const records = await (0, gradeDataAccess_1.getStudents)();
     if (!records) {
         return res.status(500).json({ error: 'Failed to retrieve user grades' });
@@ -38,6 +37,8 @@ const updateStudentGrade = async (req, res) => {
 exports.updateStudentGrade = updateStudentGrade;
 //ADDED COURSE GRADES
 const getAddedCourseGrade = async (req, res) => {
+    if (!req.body.userId)
+        return res.status(400).json({ error: 'Invalid Request Body' });
     const records = await (0, gradeDataAccess_1.getAddedCourseRecord)(req.body.userId);
     if (!records) {
         return res.status(500).json({ error: 'Failed to retrieve user grades' });

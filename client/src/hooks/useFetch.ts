@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type ErrorType<TError> = {
     error?: TError
@@ -18,6 +18,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
     const navigate = useNavigate();
     
     const token = localStorage.getItem('atoken');
+    const location = useLocation();
     
     useEffect(() => {
         const request = async () => {
@@ -55,7 +56,7 @@ const useFetch = <TError, TData>(path: string, method: string, body?: BodyInit) 
             }
         }
         request();
-    }, [bodyData]);
+    }, [bodyData, location]);
     
     if(data?.error === 'Token Expired' || data?.error === 'Access Denied') {
         navigate('/login');

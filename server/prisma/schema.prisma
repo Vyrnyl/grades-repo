@@ -110,6 +110,8 @@ model AddedCourseRecord {
   userId Int
   courseId Int
   grade Decimal? @db.Decimal(3, 1)
+  semester Int?
+  yearLevel Int?
   user User @relation(fields: [userId], references: [id],  onDelete: Cascade)
   addedCourse AddedCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }

@@ -8,6 +8,7 @@ import SetCourseList from '../../utils/student/SetCourseList';
 import useSemStore from '../../store/useSemStore';
 import useUserStore from '../../store/useUserStore';
 import useAssignedCourses from '../../store/useAssignedCourses';
+import { User } from '../../types/studentTypes';
 
 type Student = {
     studentId: string,
@@ -33,6 +34,12 @@ const ViewGrade = () => {
     const [filteredCourseList, setFilteredCourseList] = useState<CourseType[]>([]);
     // const [semester, setSemester] = useState(1);
     const { semester, setSemester } = useSemStore();
+    const [userYearLevel, setUserYearLevel] = useState<number>(0);
+
+    //Set YearLevel
+    useEffect(() => {
+        if(userInfo) setUserYearLevel(userInfo.yearLevel);
+    }, [userInfo]);
     
     //Set list
     useEffect(() => {
@@ -149,8 +156,7 @@ const ViewGrade = () => {
 
     //Filter AddedRecord to Assigned Courses
     useEffect(() => {
-        let courses = enrolledCourses.filter(item => item.semester === semester).map(element => {
-            // let course = addedRecord.find(course => course.addedCourse?.courseCode === element.courseCode);
+        let courses = enrolledCourses.filter(item => item.semester === semester && item.yearLevel === userYearLevel).map(element => {
             let course = addedRecord.find(course => course.addedCourse?.courseCode === element.courseCode);
             
             return course;
@@ -163,6 +169,7 @@ const ViewGrade = () => {
         setAssignedCourses(filteredRecords);
         // setAssignedCourses(enrolledCourses);
     }, [enrolledCourses, semester]);
+    
     
     //GWA
     let gwa = 0;
@@ -229,7 +236,7 @@ const ViewGrade = () => {
                     <thead className="bg-blue-500 sticky top-0 z-10">
                         <tr>     
                             <th>Professor</th>             
-                            <th className="px-4 py-4 text-center min-w-[8rem]">Course Title</th>
+                            <th className="px-4 py-4 text-center min-w-[14rem]">Course Title</th>
                             <th className="px-4 py-4 text-center w-[10rem]">Units</th>
                             <th className="px-4 py-4 text-center w-[10rem]">Semester</th>
                             <th className="px-4 py-4 text-center w-[10rem]">Grade</th>

@@ -258,6 +258,24 @@ const updateStudentAssignedCourse = async (userId, assignedCourses) => {
         const assign = await prisma.assignedCourse.createMany({
             data: assignedCourses
         });
+        //Assigned Sem/Year
+        const addedCourseRecords = await prisma.addedCourseRecord.findMany({
+            where: {
+                userId
+            },
+            include: {
+                addedCourse: true
+            }
+        });
+        const assignedCourse = await prisma.assignedCourse.findMany({
+            where: {
+                userId
+            }
+        });
+        const result = addedCourseRecords.filter(record => {
+            return assignedCourse.some(assigned => assigned.courseCode === record.addedCourse.courseCode);
+        }).map(item => item.courseId);
+        // await prisma.addedCourseRecord.updateMany();
         return assign;
     }
     catch (error) {
