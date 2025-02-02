@@ -1,90 +1,58 @@
-import { Fragment, useEffect, useState } from 'react'
-import useFetch from '../../hooks/useFetch'
+import { useEffect, useState } from 'react'
 
 import PageContainer from '../../components/shared/components/PageContainer'
-import { AddedCourseType, CourseType, StudentRecord } from '../../types/types'
+import { AddedCourseType } from '../../types/types'
 import GwaRow from '../../components/faculty/GwaRow'
-import SetGwaList from '../../utils/student/SetGwaList'
-import useGwaListStore from '../../store/useGwaListStore'
 import useUserStore from '../../store/useUserStore'
 import getProgram from '../../utils/getProgram'
-
-type Student = {
-    studentId: string,
-    firstName: string,
-    lastName: string,
-    yearLevel: number,
-    programCode: string
-};
+import getGwa from '../../utils/student/getGwa'
+import { gwaStatus } from '../../utils/gwaStatus'
 
 type Record = {
     id: number,
     userId: number,
     courseId: number,
     grade: string,
+    semester: number,
+    yearLevel: number,
     addedCourse: AddedCourseType
 }
 
 const GWAStatus = ({ className } : { className: string }) => {
-    
-    // const { data } = useFetch('grade/get-grades', 'GET');
-
-    // const [studentData, setStudentData] = useState<StudentRecord[]>([]);
-    // const [courseGradeList, setCourseGradeList] = useState<CourseType[]>([]);
-    // // const [gwaList, setGwaList] = useState<{ sem: string, gwa: number, status: string }[]>([]);
-    // const { gwaList, setGwaList } = useGwaListStore();
-    
-    
-    //Set list
-    // useEffect(() => {
-    //     if(Array.isArray(data)) {
-    //         setStudentData(data);
-    //         if (data[0].bsitStudentRecord.length > 0 && data[0].program.programCode === 'BSIT') {
-    //             setCourseGradeList(data[0].bsitStudentRecord);
-    //         } else if (data[0].bscsStudentRecord.length > 0 && data[0].program.programCode === 'BSCS') {
-    //             setCourseGradeList(data[0].bscsStudentRecord);
-    //         } else if (data[0].bsisStudentRecord.length > 0 && data[0].program.programCode === 'BSIS') {
-    //             setCourseGradeList(data[0].bsisStudentRecord);
-    //         } else if (data[0].blisStudentRecord.length > 0 && data[0].program.programCode === 'BLIS') {
-    //             setCourseGradeList(data[0].blisStudentRecord);
-    //         } else if (data[0].bsemcStudentRecord.length > 0 && data[0].program.programCode === 'BSEMC') {
-    //             setCourseGradeList(data[0].bsemcStudentRecord);
-    //         }
-    //     }
-    // }, [data]);
-
-    // //Student info
-    // let student: Student = {
-    //     studentId: '',
-    //     firstName: '',
-    //     lastName: '',
-    //     yearLevel: 0,
-    //     programCode: ''
-    // };
-    // if(studentData.length > 0) {
-    //     student.studentId = studentData[0].studentId;
-    //     student.firstName = studentData[0].firstName;
-    //     student.lastName = studentData[0].lastName;
-    //     student.yearLevel = studentData[0].yearLevel;
-    //     student.programCode = studentData[0].program.programCode;
-    // }
-    
-    //Course List
-    // SetGwaList(courseGradeList, setGwaList, student);
 
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
 
     const { userInfo } = useUserStore();
-
-    const record = useFetch('grade/get-added-record', 'POST', JSON.stringify({ userId: 7 }));
+    
     const [studentRecords, setStudentRecords] = useState<Record[]>([]);
 
-    //Set Records
     useEffect(() => {
-        if(Array.isArray(record.data)) setStudentRecords(record.data);
-    }, [record.data]);
-    
+        // if(Array.isArray(addedCourseRecord.data)) setAddedRecord(addedCourseRecord.data);
+
+        const getAddedRecord = async () => {
+            try {
+                const res = await fetch(`${apiUrl}/grade/get-added-record`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token ? token : '',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: userInfo?.id })
+                });
+                const data = await res.json();
+                
+                if(res.ok && data) {
+                    if(Array.isArray(data)) setStudentRecords(data);
+                }
+
+            } catch(e) {
+                console.log(`Fetch Error${e}`)
+            }
+        };
+        getAddedRecord();
+
+    }, [userInfo]);
     
     //ASSIGNED COURSES
     const [enrolledCourses, setEnrolledCourses] = useState<{ id: number, userId: number, courseCode: string, semester: number, yearLevel: number }[]>([]);
@@ -115,8 +83,127 @@ const GWAStatus = ({ className } : { className: string }) => {
     }, [userInfo]);
 
     
-    console.log(record.data)
+    
+    //GWA LIST
+    const [recordList, setRecordList] = useState<Record[]>([]);
+    
+    //Set record
+    useEffect(() => {
+        if(studentRecords.length > 0) {
+            setRecordList(studentRecords.filter(item => {
+                if(item.semester && item.yearLevel) return item
+            }));
+        }
+    }, [studentRecords]);
+    
+    // { semester: number, gwa: number, status: string }
+    const [gwaList, setGwaList] = useState<{ semester: number, gwa: number, status: string }[]>([]);
 
+    const [firstSemFirstYearRecord, setFirstSemFirstYearRecord] = useState<Record[]>([]);
+    const [secondSemFirstYearRecord, setSecondSemFirstYearRecord] = useState<Record[]>([]);
+
+    const [firstSemSecondYearRecord, setFirstSemSecondYearRecord] = useState<Record[]>([]);
+    const [secondSemSecondYearRecord, setSecondSemSecondYearRecord] = useState<Record[]>([]);
+
+    const [firstSemThirdYearRecord, setFirstSemThirdYearRecord] = useState<Record[]>([]);
+    const [secondSemThirdYearRecord, setSecondSemThirdYearRecord] = useState<Record[]>([]);
+
+    const [firstSemFourthYearRecord, setFirstSemFourthYearRecord] = useState<Record[]>([]);
+    const [secondSemFourthYearRecord, setSecondSemFourthYearRecord] = useState<Record[]>([]);
+
+    const [firstOne, setFirstOne] = useState<any>();
+    const [firstTwo, setFirstTwo] = useState<any>();
+
+    const [secondOne, setSecondOne] = useState<any>();
+    const [secondTwo, setSecondTwo] = useState<any>();
+
+    const [thirdOne, setThirdOne] = useState<any>();
+    const [thirdTwo, setThirdTwo] = useState<any>();
+
+    const [fourthOne, setFourthOne] = useState<any>();
+    const [fourthTwo, setFourthTwo] = useState<any>();
+
+    //Set list
+    useEffect(() => {
+        setFirstSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 1));
+        setSecondSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 2));
+
+        setFirstSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 1));
+        setSecondSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 2));
+
+        setFirstSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 1));
+        setSecondSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 2));
+
+        setFirstSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 1));
+        setSecondSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 2));
+    }, [recordList]);
+    
+    useEffect(() => {
+        if(firstSemFirstYearRecord.length > 0) {
+            let gwa = getGwa(firstSemFirstYearRecord);
+            setFirstOne({ semester: 1, gwa, status: gwaStatus(gwa) });
+        }
+        if(secondSemFirstYearRecord.length > 0) {
+            let gwa = getGwa(secondSemFirstYearRecord);
+            setFirstTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
+        }
+
+        if(firstSemSecondYearRecord.length > 0) {
+            let gwa = getGwa(firstSemSecondYearRecord);
+            setSecondOne({ semester: 1, gwa, status: gwaStatus(gwa) });
+        }
+        if(secondSemSecondYearRecord.length > 0) {
+            let gwa = getGwa(secondSemSecondYearRecord);
+            setSecondTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
+        }
+
+        if(firstSemThirdYearRecord.length > 0) {
+            let gwa = getGwa(firstSemThirdYearRecord);
+            setThirdOne({ semester: 1, gwa, status: gwaStatus(gwa) });
+        }
+        if(secondSemThirdYearRecord.length > 0) {
+            let gwa = getGwa(secondSemThirdYearRecord);
+            setThirdTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
+        }
+
+        if(firstSemFourthYearRecord.length > 0) {
+            let gwa = getGwa(firstSemFourthYearRecord);
+            setFourthOne({ semester: 1, gwa, status: gwaStatus(gwa) });
+        }
+        if(secondSemFourthYearRecord.length > 0) {
+            let gwa = getGwa(secondSemFourthYearRecord);
+            setFourthTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
+        }
+    }, [
+        firstSemFirstYearRecord,
+        secondSemFirstYearRecord,
+
+        firstSemSecondYearRecord,
+        secondSemSecondYearRecord,
+
+        firstSemThirdYearRecord,
+        secondSemThirdYearRecord,
+
+        firstSemFourthYearRecord,
+        secondSemFourthYearRecord
+    ]);
+
+    //Set GWA List
+    useEffect(() => {
+        setGwaList([
+            firstOne, firstTwo, 
+            secondOne, secondTwo, 
+            thirdOne, thirdTwo, 
+            fourthOne, fourthTwo
+        ]);
+    }, [
+        firstOne, firstTwo,
+        secondOne, secondTwo,
+        thirdOne, thirdTwo,
+        fourthOne, fourthTwo
+    ]);
+    
+    
 
     return (
         <PageContainer className={`${className} px-16`}>
@@ -141,9 +228,9 @@ const GWAStatus = ({ className } : { className: string }) => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">
-                        <GwaRow/>
-                        <GwaRow/>
-                        <GwaRow/>
+                        {gwaList.map((item, i) => {
+                            if(item && item.gwa !== 0) return <GwaRow key={i} gwa={item}/>
+                        })}
                     </tbody>
                 </table>
             </div>
