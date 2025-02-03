@@ -8,7 +8,6 @@ import SetCourseList from '../../utils/student/SetCourseList';
 import useSemStore from '../../store/useSemStore';
 import useUserStore from '../../store/useUserStore';
 import useAssignedCourses from '../../store/useAssignedCourses';
-import { User } from '../../types/studentTypes';
 
 type Student = {
     studentId: string,
@@ -184,27 +183,6 @@ const ViewGrade = () => {
     });
     
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
-    
-    //OLD GWA CALC
-    // const curriculumKeys = [
-    //     "bsitCurriculum",
-    //     "bscsCurriculum",
-    //     "bsisCurriculum",
-    //     "blisCurriculum",
-    //     "bsemcCurriculum",
-    //     "addedCourse"
-    // ] as (keyof CourseType)[];
-    
-    // filteredCourseList.forEach((course) => {
-    //     curriculumKeys.forEach((key) => {
-    //         const curriculum = course[key];
-    //         if (course.grade && typeof curriculum === "object" && curriculum?.units) {
-    //             weightedSum += curriculum.units * course.grade;
-    //             totalUnits += curriculum.units;
-    //         }
-    //     });
-    // });
-    
     
     return (
         <PageContainer className='px-12'>

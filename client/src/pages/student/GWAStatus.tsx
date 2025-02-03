@@ -7,6 +7,7 @@ import useUserStore from '../../store/useUserStore'
 import getProgram from '../../utils/getProgram'
 import getGwa from '../../utils/student/getGwa'
 import { gwaStatus } from '../../utils/gwaStatus'
+import useGwaListStore from '../../store/useGwaListStore'
 
 type Record = {
     id: number,
@@ -96,8 +97,9 @@ const GWAStatus = ({ className } : { className: string }) => {
         }
     }, [studentRecords]);
     
-    // { semester: number, gwa: number, status: string }
-    const [gwaList, setGwaList] = useState<{ semester: number, gwa: number, status: string }[]>([]);
+    
+    // const [gwaList, setGwaList] = useState<{ semester: number, gwa: number, status: string }[]>([]);
+    const { gwaList, setGwaList } = useGwaListStore();
 
     const [firstSemFirstYearRecord, setFirstSemFirstYearRecord] = useState<Record[]>([]);
     const [secondSemFirstYearRecord, setSecondSemFirstYearRecord] = useState<Record[]>([]);
@@ -141,39 +143,39 @@ const GWAStatus = ({ className } : { className: string }) => {
     useEffect(() => {
         if(firstSemFirstYearRecord.length > 0) {
             let gwa = getGwa(firstSemFirstYearRecord);
-            setFirstOne({ semester: 1, gwa, status: gwaStatus(gwa) });
-        }
+            setFirstOne({ semester: 1, yearLevel: 1, gwa, status: gwaStatus(gwa) });
+        } else setFirstOne({ semester: 1, yearLevel: 1, gwa: '', status: '' });
         if(secondSemFirstYearRecord.length > 0) {
             let gwa = getGwa(secondSemFirstYearRecord);
-            setFirstTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
-        }
+            setFirstTwo({ semester: 2, yearLevel: 1, gwa, status: gwaStatus(gwa) });
+        } else setFirstTwo({ semester: 2, yearLevel: 1, gwa: '', status: '' });
 
         if(firstSemSecondYearRecord.length > 0) {
             let gwa = getGwa(firstSemSecondYearRecord);
-            setSecondOne({ semester: 1, gwa, status: gwaStatus(gwa) });
-        }
+            setSecondOne({ semester: 1, yearLevel: 2, gwa, status: gwaStatus(gwa) });
+        } else setSecondOne({ semester: 1, yearLevel: 2, gwa: '', status: '' });
         if(secondSemSecondYearRecord.length > 0) {
             let gwa = getGwa(secondSemSecondYearRecord);
-            setSecondTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
-        }
+            setSecondTwo({ semester: 2, yearLevel: 2, gwa, status: gwaStatus(gwa) });
+        } else setSecondTwo({ semester: 2, yearLevel: 2, gwa: '', status: '' });
 
         if(firstSemThirdYearRecord.length > 0) {
             let gwa = getGwa(firstSemThirdYearRecord);
-            setThirdOne({ semester: 1, gwa, status: gwaStatus(gwa) });
-        }
+            setThirdOne({ semester: 1, yearLevel: 3, gwa, status: gwaStatus(gwa) });
+        } else setThirdOne({ semester: 1, yearLevel: 3, gwa: '', status: '' });
         if(secondSemThirdYearRecord.length > 0) {
             let gwa = getGwa(secondSemThirdYearRecord);
-            setThirdTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
-        }
+            setThirdTwo({ semester: 2, yearLevel: 3, gwa, status: gwaStatus(gwa) });
+        } else setThirdTwo({ semester: 2, yearLevel: 3, gwa: '', status: '' });
 
         if(firstSemFourthYearRecord.length > 0) {
             let gwa = getGwa(firstSemFourthYearRecord);
-            setFourthOne({ semester: 1, gwa, status: gwaStatus(gwa) });
-        }
+            setFourthOne({ semester: 1, yearLevel: 4, gwa, status: gwaStatus(gwa) });
+        } else setFourthOne({ semester: 1, yearLevel: 4, gwa: '', status: '' });
         if(secondSemFourthYearRecord.length > 0) {
             let gwa = getGwa(secondSemFourthYearRecord);
-            setFourthTwo({ semester: 2, gwa, status: gwaStatus(gwa) });
-        }
+            setFourthTwo({ semester: 2, yearLevel: 4, gwa, status: gwaStatus(gwa) });
+        } else setFourthTwo({ semester: 2, yearLevel: 4, gwa: '', status: '' });
     }, [
         firstSemFirstYearRecord,
         secondSemFirstYearRecord,
@@ -196,14 +198,19 @@ const GWAStatus = ({ className } : { className: string }) => {
             thirdOne, thirdTwo, 
             fourthOne, fourthTwo
         ]);
+
+        if(userInfo?.yearLevel) {
+            for(let i = 0; i < (4 - userInfo.yearLevel); i++) {
+                setGwaList(prev => prev.slice(0, -2));
+            };
+        }
     }, [
         firstOne, firstTwo,
         secondOne, secondTwo,
         thirdOne, thirdTwo,
-        fourthOne, fourthTwo
+        fourthOne, fourthTwo,
+        userInfo
     ]);
-    
-    
 
     return (
         <PageContainer className={`${className} px-16`}>
@@ -229,7 +236,7 @@ const GWAStatus = ({ className } : { className: string }) => {
                     </thead>
                     <tbody className="text-gray-700">
                         {gwaList.map((item, i) => {
-                            if(item && item.gwa !== 0) return <GwaRow key={i} gwa={item}/>
+                            return <GwaRow key={i} gwa={item}/>
                         })}
                     </tbody>
                 </table>

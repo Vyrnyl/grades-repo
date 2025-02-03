@@ -1,9 +1,10 @@
 import { create } from "zustand";
 
 type GwaList = { 
-    sem: string; 
-    gwa: number; 
-    status: string; 
+    semester: number, 
+    yearLevel: number,
+    gwa: number, 
+    status: string 
 };
 
 type useGwaListType = {
