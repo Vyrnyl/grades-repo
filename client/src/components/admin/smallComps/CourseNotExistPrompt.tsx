@@ -5,7 +5,7 @@ type CourseNotExistPromptProps = {
 }
 
 const CourseNotExistPrompt = ({ setIsNotExist, courseCode } : CourseNotExistPromptProps) => {
-
+    
 
     return <div className='bg-slate-300 z-10 absolute px-4 py-4 left-[50%] top-[50%] 
     translate-y-[-50%] translate-x-[-50%] flex flex-col gap-4 rounded-lg border-2 border-slate-400'>

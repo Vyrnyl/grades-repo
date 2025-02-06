@@ -81,8 +81,11 @@ const LoginPage = ({ setUserRole } : { setUserRole: (role: string) => void}) => 
             <div className='h-[35rem] w-[25rem] bg-white flex flex-col absolute 
             top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[2rem]'>
                 <div className='bg-cya-200 flex-[.4] px-4 flex flex-col items-center justify-between pt-4'>
-                    <h1 className='bg-blu-200 font-[700] text-[.9rem] text-center break-words'>
+                    {/* <h1 className='bg-blu-200 font-[700] text-[.9rem] text-center break-words'>
                         WEB-BASED GRADES REPOSITORY WITH GRADE VIEWING SUPPORT FOR CATSU
+                    </h1> */}
+                    <h1 className='bg-blu-200 font-[700] text-[1.5rem] text-center break-words'>
+                        WEB GRADE
                     </h1>
                     <img src={logo} alt="logo" className='h-[10rem] rounded-full' />
                 </div>

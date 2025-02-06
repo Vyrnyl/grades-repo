@@ -23,6 +23,7 @@ type Program = {
 };
 
 const CourseCode = ({ data }: CourseCodeType) => {
+
   const token = localStorage.getItem("atoken");
   const { userInfo } = useUserStore();
 
@@ -73,6 +74,12 @@ const CourseCode = ({ data }: CourseCodeType) => {
     if(Array.isArray(yearBlocks.data)) setAssignedYearBlock(yearBlocks.data);
   }, [yearBlocks.data]);
 
+    //Remove assigned duplicate
+    const [assigned, setAssigned] = useState<{ id: number, programYearBlock: string, userId: number}[]>([])
+    useEffect(() => {
+      if(assignedYearBlock.length > 0) setAssigned(assignedYearBlock.filter((item, index) => assignedYearBlock.indexOf(item) === index));
+    }, [assignedYearBlock]);
+
   //Style
   const color = randomColor();
 
@@ -101,7 +108,7 @@ const CourseCode = ({ data }: CourseCodeType) => {
           isOpen={isOpen}
           courseCode={data.courseCode}
           programs={handledPrograms}
-          assignedYearBlock={assignedYearBlock}
+          assignedYearBlock={assigned}
         />
       )}
     </>

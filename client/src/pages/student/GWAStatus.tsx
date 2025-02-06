@@ -231,7 +231,7 @@ const GWAStatus = ({ className } : { className: string }) => {
                         <tr>                  
                             <th className="px-4 py-4 text-center w-[10rem]">Semester</th>
                             <th className="px-4 py-4 text-center w-[10rem]">GWA</th>
-                            <th className="px-4 py-4 text-center w-[10rem]">Status</th>
+                            <th className="px-4 py-4 text-center w-[10rem]">Remarks</th>
                         </tr>
                     </thead>
                     <tbody className="text-gray-700">

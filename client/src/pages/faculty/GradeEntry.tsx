@@ -24,7 +24,8 @@ const GradeEntry = () => {
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   
   //Get Courses 
-  const courses = useFetch('program/get-courses', 'GET');
+  const courses = useFetch('program/get-added-courses', 'GET');
+  
   
   //Get Handled Courses
   useEffect(() => {
@@ -62,6 +63,8 @@ const GradeEntry = () => {
       createdAt: handledCourse[i].createdAt
     }
   });
+
+  
    
   //Style
 

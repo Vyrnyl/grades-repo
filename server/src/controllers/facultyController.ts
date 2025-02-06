@@ -90,6 +90,8 @@ const addFacultyProgramYear = async (req: Request, res: Response) => {
 
 const getFacultyProgramYear = async (req: Request, res: Response) => {
 
+    if(!req.body.userId) return res.status(400).json({ error: 'Invalid Request Body' });
+
     const programYear = await getProgramYear(req.body.userId);
 
     if(!programYear) return res.status(404).json({ error: 'Failed to retrieve' });

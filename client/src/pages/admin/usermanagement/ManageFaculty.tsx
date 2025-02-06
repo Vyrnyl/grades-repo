@@ -8,6 +8,8 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { User } from "../../../types/studentTypes";
 import getUppercaseLetters from "../../../utils/getUpperCaseLetter";
 import removeObjectDuplicate from "../../../utils/admin/removeObjectDuplicate";
+import { AddedCourseType } from "../../../types/types";
+import CourseNotExistPrompt from "../../../components/admin/smallComps/CourseNotExistPrompt";
 
 type AddData = {
   studentId: string,
@@ -78,11 +80,23 @@ const ManageFaculty = () => {
 
 
     //SET Courses
+    const [courseList, setCourseList] = useState<AddedCourseType[]>([]);
+    const courses = useFetch(`program/get-added-courses`, 'GET');
+    const [isNotExist, setIsNotExist] = useState(false);
+
+    //Set List
+    useEffect(() => {
+      if(courses.data) setCourseList(courses.data as AddedCourseType[]);
+    }, [courses.data]);
+
     const handelAddCourse = () => {
-      if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
-        setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
-        setCourseInput('');
-      }
+      if(courseList.some(item => item.courseCode === courseInput)) {
+        if(!courseHandled.some(item => item.courseCode === courseInput.trim()) && courseInput.trim() !== '') {
+            setCourseHandled(prev => [...prev, {courseCode: courseInput.trim()}]);
+            setCourseInput('');
+            setIsNotExist(false);
+        };
+      } else if(courseInput.trim() !== '') setIsNotExist(true);
     }
     
     
@@ -96,6 +110,7 @@ const ManageFaculty = () => {
     
     //SUBMIT
     const handleFormSubmit = (e: React.FormEvent) => {
+
       e.preventDefault();
       setIsEmailExist(false);
       
@@ -175,10 +190,30 @@ const ManageFaculty = () => {
             if(res.ok && data) setCourseHandled([]);
           }
 
+          //Add Handled YearBlock
+          const addProgYear = async () => {
+            let programYearBlockData = programYearHandled.map(({ id, ...rest }) => rest);
+            
+            const handleProgramYearRes = await fetch(`${apiUrl}/faculty/update-program-year`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': token ? token : '',
+                  'Content-Type': 'application/json'
+              },
+                body: JSON.stringify({ data: programYearBlockData.map(item => 
+                  ({ programYearBlock: item.programYearBlock, userId: data.id })), userId: data.id })
+              });
+              
+            const programYearData = await handleProgramYearRes.json();
+
+            if(programYearData) setProgramYearHandled([]);
+          }
+
           addSpecialization();
           addCourses();
+          addProgYear();
 
-          window.location.reload();
+          // window.location.reload();
         };
         
 
@@ -189,8 +224,79 @@ const ManageFaculty = () => {
       }
       addUser();
     }
-
+    
     const [reload, setReload] = useState(false);
+
+
+    //YearLevel/Block handled
+    const [selectedProgramYr, setSelectedProgramYr] = useState('BSIT-1-A');
+    const [programYearHandled, setProgramYearHandled] = useState<{ id?: Number, programYearBlock: string, userId?: number }[]>([]);
+
+    //Set ProgYear Dropdown
+    const [progYearArr, setProgYearArr] = useState<string[]>([]);
+    const blocks = ['A', 'B', 'C', 'D'];
+    
+    useEffect(() => {
+        setProgYearArr([]);
+
+        let array = removeObjectDuplicate(programHandled);
+        
+        array.forEach(item => {
+            for (let i = 1; i <= 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    setProgYearArr(prev => [...prev, `${item.programCode}-${i}-${blocks[j]}`]);
+                }
+            }
+        });
+        
+        if(array.length > 0) setSelectedProgramYr(array[0].programCode);
+    }, [programHandled]);
+
+
+    //Handle Programs Edit
+    useEffect(() => {
+
+      //Programs
+      const setPrograms = () => {
+          if(selectedProgramYr !== 'Select') 
+            setProgramHandled(prev => [...prev, { programCode: getUppercaseLetters(selectedProgram) }]);
+      }
+      
+      const handleClick = (event: MouseEvent) => {
+          const target = event.target as HTMLElement;
+          if (target.closest(".progName")) {
+              setPrograms();
+          }
+      };
+
+      document.addEventListener("click", handleClick);
+
+      return () => {
+          document.removeEventListener("click", handleClick);
+      };
+    }, [selectedProgram]);
+    
+
+    useEffect(() => {
+        //ProgramYear
+        const setProgramsYear = () => {
+            if(!programYearHandled.some(item => item.programYearBlock === selectedProgramYr))
+                setProgramYearHandled(prev => [...prev, { programYearBlock: selectedProgramYr } ]);
+        }
+        
+        const handleClick = (event: MouseEvent) => {
+            const target = event.target as HTMLElement;
+            if (target.closest(".progYear")) {
+                setProgramsYear();
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [selectedProgramYr]);
 
 
     //Paginition
@@ -266,22 +372,23 @@ const ManageFaculty = () => {
         {/* ADD FORM */}
         {isAddOpen && 
           <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
-          px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
-    
+          px-[3rem] top-[46%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
+            
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} 
             onClick={() => {
-              setIsAddOpen(false); 
+              setIsAddOpen(false);
               setProgramHandled([]);
               setCourseHandled([]);
               setIsEmailExist(false);
+              setProgramYearHandled([]);
             }}/>
 
             <div className="bg-blu-200 ml-[-2rem] mb-4">
               <p className="font-semibold">Add Faculty</p>
             </div>
             <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
-              <div className="bg-purpl-200 flex flex-col gap-4">
+              <div className="bg-purpl-200 flex flex-col gap-2">
     
                 <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">Faculty ID:</label>
@@ -336,6 +443,7 @@ const ManageFaculty = () => {
                       'BS Entertainment and Multimedia Computing'
                     ]}
                     setValue={setSelectedProgram}
+                    x="progName"
                   />
               
                     {/* SELECTED */}
@@ -349,6 +457,33 @@ const ManageFaculty = () => {
                         </div>
                       })}
                     </div>
+                </div>
+
+                <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
+                  <label className={`font-semibold text-start ${programHandled.length === 0 && 'text-slate-400'}`}>Year/Block Handled:</label>
+                  {programHandled.length > 0 ? 
+                    <CustomSelect 
+                      className="cursor-pointer border-slate-500 text-[.8rem] 
+                      font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                      option={progYearArr.length > 0 ? progYearArr : ['Select']}
+                      setValue={setSelectedProgramYr}
+                      x="progYear"
+                    /> : 
+                    <div className="border-slate-400 text-[1rem] text-slate-400 items-center flex px-[1rem]
+                      font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2">Select</div>
+                  }
+  
+                  {/* SELECTED */}
+                  <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                  flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                      {programYearHandled.map((item, i) => {
+                          return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                          <span className="text-center">{item.programYearBlock}</span>
+                          <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                          icon={faClose} onClick={() => setProgramYearHandled(prev => prev.filter(progYr => progYr.programYearBlock !== item.programYearBlock))}/>
+                          </div>
+                      })}
+                  </div>
                 </div>
                 
                 <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
@@ -365,7 +500,7 @@ const ManageFaculty = () => {
                     absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
 
                     {/* SELECTED */}
-                    <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                    <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                     flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
                       {courseHandled.map((item, i) => {
                         return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
@@ -388,6 +523,7 @@ const ManageFaculty = () => {
                   setIsAddOpen(false); 
                   setProgramHandled([]);
                   setCourseHandled([]);
+                  setProgramYearHandled([]);
                 }} type="button">Cancel</button>
 
                 <button className="bg-[#60e0cf] rounded-md font-semibold text-[1rem] px-4 py-[.5rem] 
@@ -396,6 +532,10 @@ const ManageFaculty = () => {
             </div>
           </form>
         }
+
+
+        {/* Error Prompt */}
+        {isNotExist && <CourseNotExistPrompt setIsNotExist={setIsNotExist} courseCode={courseInput}/>}
       </div>
     )
 }

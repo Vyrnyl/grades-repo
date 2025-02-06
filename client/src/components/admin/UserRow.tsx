@@ -185,7 +185,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
     const [programYearHandled, setProgramYearHandled] = useState<{ id?: Number, programYearBlock: string, userId?: number }[]>([]);
     
-
+    
     //GET/SET ALL HANDLED
     const [fetchedData, setFetchedData] = useState<Program[]>([]);
     const [fetchedCourses, setFetchedCourses] = useState<Course[]>([]);
@@ -294,7 +294,10 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             }
         });
         
-        if(array.length > 0) setSelectedProgramYr(array[0].programCode);
+        if(array.length > 0) {
+            setSelectedProgramYr(array[0].programCode);
+        }
+        
     }, [programHandled]);
 
 
@@ -526,13 +529,17 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
 
                                     <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
                                         <label className="font-semibold text-start">Year/Block Handled:</label>
-                                        <CustomSelect 
-                                            className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                                            option={progYearArr}
-                                            setValue={setSelectedProgramYr}
-                                            x="progYear"
-                                        />
+                                        {programHandled.length > 0 ? 
+                                            <CustomSelect 
+                                                className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                                                option={progYearArr}
+                                                setValue={setSelectedProgramYr}
+                                                x="progYear"
+                                            /> : <div className="border-slate-400 text-[1rem] text-slate-400 items-center flex px-[1rem]
+                                            font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2">Select</div>
 
+                                        }
+                                        
                                         {/* SELECTED */}
                                         <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                                         flex flex-wrap gap-2 gap-x-4 overflow-y-auto">

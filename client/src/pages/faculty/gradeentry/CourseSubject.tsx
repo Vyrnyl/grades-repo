@@ -31,11 +31,10 @@ type CourseSubject = {
 
 const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYearBlock } : CourseSubject) => {
 
-
+ 
   const token = localStorage.getItem('atoken');
   const { userInfo } = useUserStore();
   
-
   const [userId, setUserId] = useState(0);
 
   const records = useFetch('grade/get-records', 'GET');
@@ -140,7 +139,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
         filteredCourses
     ]);
 
-    
+    // console.log(filteredStudents)
     
 
 
@@ -152,7 +151,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
       if(assignedYearBlock.length > 0) setSelectedProgramYearBlock(assignedYearBlock[0].programYearBlock);
     }
   }, [filteredCourses, courseCode, programs]);
-  
+
 
   //Style
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -213,10 +212,10 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
               setValue={setSelectedYearLevel} 
               option={['1st', '2nd', '3rd', '4th']}/>
           </div> */}
-          <div onClick={() => setAllBg(prev => !prev)} className={`${allBg ? 'bg-blue-500 border-blue-500 text-white' : 'bg-slate-300 border-slate-500'} 
+          {/* <div onClick={() => setAllBg(prev => !prev)} className={`${allBg ? 'bg-blue-500 border-blue-500 text-white' : 'bg-slate-300 border-slate-500'} 
           rounded-[.2rem] border-2  px-2 grid place-content-center`}>
             <button>All</button>
-          </div>
+          </div> */}
       </div>
 
       <div className='bg-re-200 px-4 mt-8 mb-[1rem] overflow-y-scroll'>

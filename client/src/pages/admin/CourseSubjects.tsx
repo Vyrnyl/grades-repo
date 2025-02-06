@@ -272,7 +272,7 @@ const CourseSubjects = () => {
                         setValue={setSelectedProgram}/>
 
                         {/* SELECTED */}
-                        <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                        <div className="bg-blu-200 max-h-[5rem] w-[15rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                             flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
                             {removeObjectDuplicate(programHandled).map((item, i) => {
                               return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
