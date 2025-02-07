@@ -9,6 +9,7 @@ import SelectInput from './SelectInput';
 import SaveButton from '../shared/components/SaveButton';
 import handleSelectChange from '../../utils/handleSelectChange';
 import HandleOutsideClick from '../../utils/HandleOutsideClick';
+import isFacIDValid from '../../utils/isFacIDValid';
 
 type FacultyData = {
   id: number,
@@ -61,11 +62,13 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
 
   const [isEmailExist, setIsEmailExist] = useState(false);
   const [isUserIdExist, setIsUserIdExist] = useState(false);
+  const [isValidIDFormat, setIsValidIDFormat] = useState(false);
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     setIsEmailExist(false);
     setIsUserIdExist(false);
+    setIsValidIDFormat(false);
 
     const updateUser = async () => {
       const updatedData = {
@@ -104,7 +107,13 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
         console.log("Update error" + error);
       }
     }
-    updateUser();
+
+    if(isFacIDValid(updateData.studentId)) 
+      updateUser();
+    else setTimeout(() => {
+      setIsValidIDFormat(true);
+      setIsUserIdExist(false);  
+    }, 100);
 
   }
 
@@ -170,6 +179,9 @@ const FacultyRow = ({ faculty, setFaculties }: FacultyRowProps) => {
                     
                     {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
                       UserID already exist!</p>}
+                    {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
+                      Invalid format! (eg. 1234)
+                    </p>}
 
                   <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
                     placeholder='First Name'

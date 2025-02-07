@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Input from '../shared/components/Input'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import handleInputChange from '../../utils/handleInputChange'
@@ -15,11 +15,12 @@ type EditFormProps = {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     updateData: Record<string, any>,
     setUpdateData: React.Dispatch<React.SetStateAction<Record<string, any>>>,
-    isExist: boolean
+    isExist: boolean,
+    isValidID: boolean
 }
 
 
-const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData, isExist } : EditFormProps) => {
+const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData, isExist, isValidID } : EditFormProps) => {
 
   //Style
   const ref = useRef<HTMLDivElement>(null);
@@ -40,6 +41,9 @@ const EditForm = ({ handleUpdate, isOpen, setIsOpen, updateData, setUpdateData, 
             onChange={(e) => handleInputChange(e, setUpdateData)}/>
             {isExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
               UserID already exist!</p>}
+            {isValidID && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
+              Invalid format! (eg. 1234-12345)
+            </p>}
 
             <Input type='text' className='w-[15rem] h-[2rem] placeholder:text-[.8rem]' name='firstName' 
             placeholder='First Name'

@@ -62,15 +62,8 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
     }
   }, [assignedCourses.data]);
 
-
   //Check if all sem selected
   const [isAllSemSelected, setIsAllSemSelected] = useState(false);
-
-  // const setSem = () => {
-  //   if(selectedCourses.every(course => 'semester' in course)) 
-  //     setIsAllSemSelected(false);
-  //   else setIsAllSemSelected(true);
-  // }
   
   //Update assigned courses
   const submitAssignedCourse = async () => {
@@ -133,6 +126,7 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
     setSelectedCourses(prev => prev.map(item => item.courseCode === 
       courseSem.split(' ')[0] ? ({...item, semester: Number(courseSem.split(' ')[1])}) : item));
   }
+  
 
   //Selected Year
   const [x, setX] = useState('');
@@ -141,7 +135,6 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
     setSelectedCourses(prev => prev.map(item => item.courseCode === 
       yearLevel.split(' ')[0] ? ({...item, yearLevel: Number(yearLevel.split(' ')[1].charAt(0))}) : item));
   }
-  // console.log(x)
 
   //Filter All Course by student program
   const [filteredCourse, setFilteredCourse] = useState<AddedCourseType[]>([]);
@@ -152,6 +145,7 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
 
   //PAGINATION
   const { handleNext, handlePrev, entries } = pagination(filteredCourse);
+
   
   return <div className='bg-white w-[100%] h-[100%] flex flex-col gap-[4.6rem 
   rounded-lg px-10 py-6 shadow-pageComponentShadow absolute z-20 top-0 left-0'>
@@ -200,7 +194,7 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
             {entries.map((item, i) => {
               return <CourseSubjectRow key={i} value={item} 
               isChecked={selectedCourses.some(course => course.courseCode === item.courseCode)}
-              handleChange={() => handleChange(item.courseCode)} 
+              handleChange={handleChange} 
               handledSem={handleSem} 
               handledYear={handleYear}
               sem={selectedCourses.find(course => course.courseCode === item.courseCode)}

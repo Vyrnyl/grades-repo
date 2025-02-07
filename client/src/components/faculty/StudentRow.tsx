@@ -128,9 +128,13 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
               setIsOpen(false);
             }
 
-            if(res.status === 409) setIsUserIdExist(true);
+            if(res.status === 409) {
+                setTimeout(() => {
+                    setIsUserIdExist(true);
+                }, 100);
+            }
             if(data.error && res.status !== 409) setIsEmailExist(true);
-    
+            
           } catch(error) {
             console.log("Fetch error" + error);
           }
@@ -200,6 +204,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                     onClick={() => {
                                         setIsOpen(false);
                                         setIsEmailExist(false);
+                                        setIsUserIdExist(false);
                                     }}
                                 />
                                 

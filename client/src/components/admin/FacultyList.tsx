@@ -22,7 +22,7 @@ const FacultyList = React.forwardRef<HTMLDivElement, FacultyProps>(({ handleOpen
             setFaculties(list);
         }
     }, [data]);
-
+    
   return (
     <PageContainer ref={ref} className='bg-cya-300 absolute w-full top-4 flex flex-col px-[3rem]'>
         <div className="bg-gree-200 flex h-[20%] relative">

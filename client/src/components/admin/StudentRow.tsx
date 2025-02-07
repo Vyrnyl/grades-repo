@@ -8,6 +8,7 @@ import getProgramId from '../../utils/getProgramId';
 import getProgramName from '../../utils/getProgramName';
 import yearSuffix from '../../utils/yearSuffix';
 import HandleOutsideClick from '../../utils/HandleOutsideClick';
+import isValidFormat from '../../utils/admin/isValidFormat';
 
 type StudentData = {
   id: number,
@@ -79,6 +80,8 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
   
   
   const [isUserIdExist, setIsUserIdExist] = useState(false);
+  const [isValidIDFormat, setIsValidIDFormat] = useState(false);
+  
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -86,7 +89,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
     // let yearBlock = updateData.yearBlock.split('');
 
     const updateUser = async () => {
-      // setIsOpen(!isOpen);
+      setIsValidIDFormat(false);
       setIsUserIdExist(false);
       const updatedData = {
         id,
@@ -98,7 +101,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
         programId: getProgramId(updateData.programId),
         status: updateData.status
       }
-      // console.log(updatedData)
+      
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
           method: 'PUT',
@@ -115,6 +118,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
           setStudentData({...updatedData, program: getProgramName(data.programId)});
           setIsOpen(false);
           setIsUserIdExist(false);
+          setIsValidIDFormat(false);
         } else setIsUserIdExist(true);
 
       } catch(error) {
@@ -122,7 +126,12 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
       }
     }
 
-    updateUser();
+    if(isValidFormat(updateData.studentId)) 
+      updateUser();
+    else setTimeout(() => {
+      setIsValidIDFormat(true);
+      setIsUserIdExist(false);  
+    }, 100);
   }
 
   //Delete User
@@ -149,6 +158,7 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
                     updateData={updateData}
                     setUpdateData={setUpdateData}
                     isExist={isUserIdExist}
+                    isValidID={isValidIDFormat}
                   />
                 }
                 

@@ -102,7 +102,11 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
               setIsOpen(false);
             }
 
-            if(res.status === 409) setIsUserIdExist(true);
+            if(res.status === 409) {
+                setTimeout(() => {
+                    setIsUserIdExist(true);
+                }, 100);
+            }
             if(data.error && res.status !== 409) setIsEmailExist(true);
     
           } catch(error) {
@@ -195,6 +199,7 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                         onClick={() => {
                             setIsOpen(false);
                             setIsEmailExist(false);
+                            setIsUserIdExist(false);
                         }}
                     />
                     

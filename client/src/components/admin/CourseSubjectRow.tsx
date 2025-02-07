@@ -4,7 +4,7 @@ import yearSuffix from "../../utils/yearSuffix";
 
 type CourseSubjectRow = {
     value: AddedCourseType,
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    handleChange: (courseCode: string) => void,
     isChecked?: boolean,
     handledSem: (courseSem: string) => void,
     handledYear: (yearLevel: string) => void,
@@ -19,13 +19,19 @@ const CourseSubjectRow = ({ value, handleChange, isChecked, handledSem, handledY
 
     useEffect(() => {
         if(sem) setSemester(sem.semester);
-        if(year) setYearLevel(year.yearLevel ? `${year.yearLevel}${yearSuffix(year.yearLevel)}` : '');
+        if(year) setYearLevel(year.yearLevel && `${year.yearLevel}${yearSuffix(year.yearLevel)}`);
     }, [sem, year]);
     
         
     return <tr className="bg-slate-100 hover:bg-slate-200">
         <td className="px-4 py-4 text-center border-2 border-slate-500">
-            <input type="checkbox" value={value.courseCode} checked={isChecked} onChange={handleChange}/>
+            <input type="checkbox" value={value.courseCode} 
+            checked={isChecked} 
+            onChange={() => {
+                handleChange(value.courseCode);
+                setSemester('');
+                setYearLevel('');
+            }}/>
         </td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{value.courseCode}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{value.courseTitle}</td>
