@@ -10,6 +10,7 @@ import handleInputChange from "../../utils/handleInputChange";
 import handleSelectChange from "../../utils/handleSelectChange";
 import useFetch from "../../hooks/useFetch";
 import { User } from "../../types/studentTypes";
+import isFacIDValid from "../../utils/isFacIDValid";
 
 type AccountInfoType = {
   firstName: string;
@@ -53,6 +54,7 @@ const Account = () => {
   //SaveData
   const [isEmailExist, setIsEmailExist] = useState(false);
   const [isUserIdExist, setIsUserIdExist] = useState(false);
+  const [isValidIDFormat, setIsValidIDFormat] = useState(false);
   
   const [isSave, setIsSave] = useState(false);
   const [save, setSave] = useState("Saving");
@@ -62,18 +64,20 @@ const Account = () => {
     setIsSave(true);
     setIsEmailExist(false);
     setIsUserIdExist(false);
+    setIsValidIDFormat(false);
+
+    const updatedData = {
+      id: userInfo?.id,
+      studentId: accountInfo.studentId,
+      firstName: accountInfo.firstName,
+      lastName: accountInfo.lastName,
+      email: accountInfo.email,
+      phoneNumber: accountInfo.phoneNumber,
+      password: accountInfo.password,
+      sex: accountInfo.sex,
+    };
 
     const updateUser = async () => {
-      const updatedData = {
-        id: userInfo?.id,
-        studentId: accountInfo.studentId,
-        firstName: accountInfo.firstName,
-        lastName: accountInfo.lastName,
-        email: accountInfo.email,
-        phoneNumber: accountInfo.phoneNumber,
-        password: accountInfo.password,
-        sex: accountInfo.sex,
-      };
 
       try {
         const res = await fetch(`${apiUrl}/user/update-user`, {
@@ -110,7 +114,14 @@ const Account = () => {
         console.log("Fetch error" + error);
       }
     };
-    updateUser();
+    
+    if(isFacIDValid(updatedData.studentId)) 
+      updateUser();
+    else setTimeout(() => {
+        setIsValidIDFormat(true);
+        setIsUserIdExist(false);
+        setIsSave(false);
+    }, 100);
   };
 
   const { error, data } = useFetch("user/get-user", "GET");
@@ -167,6 +178,10 @@ const Account = () => {
               />
               {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
               ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">UserID already exist!</p>}
+              {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+              ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">
+                  Invalid format! (eg. 1234)
+              </p>}
             </InputFieldWrapper>
             
             <InputFieldWrapper label="Gender">
@@ -204,7 +219,7 @@ const Account = () => {
       </form>
       <div className="bg-gree-200 flex-[.2] ml-[5rem] w-[65%] flex justify-center">
         <SaveButton className="bg-slate-400" onClick={handleUpdate} />
-
+      
         {isSave && (
           <div
             className="bg-white h-[4rem] px-4 flex items-center absolute left-[50%] top-[50%] 

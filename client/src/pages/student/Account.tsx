@@ -10,6 +10,7 @@ import handleInputChange from "../../utils/handleInputChange"
 import handleSelectChange from "../../utils/handleSelectChange"
 import useFetch from "../../hooks/useFetch"
 import { User } from "../../types/studentTypes"
+import isValidFormat from "../../utils/admin/isValidFormat"
 
 type AccountInfoType = {
   firstName: string,
@@ -63,6 +64,7 @@ const Account = () => {
   //SaveData
   const [isEmailExist, setIsEmailExist] = useState(false);
   const [isUserIdExist, setIsUserIdExist] = useState(false);
+  const [isValidIDFormat, setIsValidIDFormat] = useState(false);
 
   const [isSave, setIsSave] = useState(false);
   const [save, setSave] = useState('Saving');
@@ -72,6 +74,7 @@ const Account = () => {
     setIsSave(true);
     setIsEmailExist(false);
     setIsUserIdExist(false);
+    setIsValidIDFormat(false);
 
     const updatedData = {
       id: userInfo?.id,
@@ -85,7 +88,6 @@ const Account = () => {
       password: accountInfo.password,
       sex: accountInfo.sex
     }
-    console.log(updatedData)
 
     const updateUser = async () => {
       try {
@@ -130,7 +132,14 @@ const Account = () => {
         console.log("Fetch error" + error);
       }
     }
-    updateUser();
+    
+    if(isValidFormat(updatedData.studentId)) 
+      updateUser();
+    else setTimeout(() => {
+        setIsValidIDFormat(true);
+        setIsUserIdExist(false);
+        setIsSave(false);
+    }, 100);
   }
 
   const { error, data } = useFetch("user/get-user", "GET");
@@ -165,7 +174,10 @@ const Account = () => {
               </InputFieldWrapper>
               {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
               ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">UserID already exist!</p>}
-
+              {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+              ml-2 text-start mt-[-1rem] absolute bottom-[-1.1rem]">
+                  Invalid format! (eg. 1234-12345)
+              </p>}
               <InputFieldWrapper label="Gender">
                 <SelectInput name='sex' value={accountInfo.sex} 
                 onChange={(e) => handleSelectChange(e, setAccountInfo)}/>

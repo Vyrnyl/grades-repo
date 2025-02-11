@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateLogin, validateSignup } from "../validators/authValidator";
 import { checkEmail, deleteRefreshToken, storeRefreshToken } from "../data/userUtils";
-import { createUser, getUserData } from "../data/userDataAccess";
+import { checkUserId, createUser, getUserData } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
@@ -24,6 +24,25 @@ const signup = async (req: Request, res: Response) => {
     
     if(emailExist) {
         return res.status(409).json({ error: 'Email already registered' });
+    }
+    
+    
+    //Check ID
+    const user = await getUserData(value.id);
+    const userIdExist = await checkUserId(value.studentId);
+    
+    if(user?.studentId !== value.studentId) {
+        if(userIdExist?.message) return res.status(409).json({ error: 'UserID already exist!' });
+    }
+    if(value.role === 'student') {
+        const format = /^\d{4}-\d{5}$/;
+
+        if(!format.test(value.studentId))
+            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234-1234)' });
+    } else {
+        const format = /^\d{4}$/;
+        if(!format.test(value.studentId))
+            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234)' });
     }
 
     

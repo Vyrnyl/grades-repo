@@ -24,6 +24,23 @@ const signup = async (req, res) => {
     if (emailExist) {
         return res.status(409).json({ error: 'Email already registered' });
     }
+    //Check ID
+    const user = await (0, userDataAccess_1.getUserData)(value.id);
+    const userIdExist = await (0, userDataAccess_1.checkUserId)(value.studentId);
+    if (user?.studentId !== value.studentId) {
+        if (userIdExist?.message)
+            return res.status(409).json({ error: 'UserID already exist!' });
+    }
+    if (value.role === 'student') {
+        const format = /^\d{4}-\d{5}$/;
+        if (!format.test(value.studentId))
+            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234-1234)' });
+    }
+    else {
+        const format = /^\d{4}$/;
+        if (!format.test(value.studentId))
+            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234)' });
+    }
     //PASSWORD HASHING
     value.password = await (0, passwordUtils_1.hashPassword)(value.password);
     delete value.confirmPassword;

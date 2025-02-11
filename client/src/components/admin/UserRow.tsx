@@ -12,6 +12,7 @@ import { Course, Program, ProgramYear, UserData } from "../../types/admin/manage
 import useFetch from "../../hooks/useFetch"
 import { AddedCourseType } from "../../types/types"
 import CourseNotExistPrompt from "./smallComps/CourseNotExistPrompt"
+import isFacIDValid from "../../utils/isFacIDValid"
 
 
 type UserRowProps = {
@@ -30,17 +31,22 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     const [userData, setUserData] = useState<UserData>({
         id, studentId, firstName, email, lastName, role, sex, status
     });
-
+    
     //Update
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
         id, studentId, firstName, lastName, email, role, sex, status
     });
 
-    const [isEmailExist, setIsEmailExist] = useState(false)
+    const [isEmailExist, setIsEmailExist] = useState(false);
+    const [isUserIdExist, setIsUserIdExist] = useState(false);
+    const [isValidIDFormat, setIsValidIDFormat] = useState(false);
+
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         setIsEmailExist(false);
+        setIsUserIdExist(false);
+        setIsValidIDFormat(false);
 
         const updatedData = {
             id,
@@ -65,16 +71,20 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             },
               body: JSON.stringify(updatedData)
             });
-    
+            
             const userData = await res.json();
     
             if(res.ok && userData) {
               setUserData(updatedData);
               setIsOpen(false);
             }
-            if(userData.error) {
-                setIsEmailExist(true);
+
+            if(res.status === 409) {
+                setTimeout(() => {
+                    setIsUserIdExist(true);
+                }, 100);
             }
+            if(userData.error && res.status !== 409) setIsEmailExist(true);
 
             //UPDATE PROGRAMS
             let programCodeData = removeObjectDuplicate(programHandled.map(item => {
@@ -103,14 +113,14 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             const handledCourseRes = await fetch(`${apiUrl}/faculty/update-handled`, {
                 method: 'PUT',
                 headers: {
-                  'Authorization': token ? token : '',
-                  'Content-Type': 'application/json'
-              },
+                    'Authorization': token ? token : '',
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({ data: courseData, userId: updatedData.id })
-              });
+            });
             
             const handledCourseData = await handledCourseRes.json();
-              
+            
             if(handledCourseRes.ok && handledCourseData) 
                 setHandledCourses(courseHandled as Course[]);
 
@@ -138,7 +148,12 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
           }
         }
         
-        updateUser();
+        if(isFacIDValid(updateData.studentId)) 
+            updateUser();
+        else setTimeout(() => {
+            setIsValidIDFormat(true);
+            setIsUserIdExist(false);  
+        }, 100);
     }
     
     
@@ -180,7 +195,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     //Edit Hanlded
     const [selectedProgram, setSelectedProgram] = useState('BS Information Technology');
     const [selectedProgramYr, setSelectedProgramYr] = useState('BSIT-1-A');
-
+    
     const [programHandled, setProgramHandled] = useState<{ programCode: string, userId?: number}[]>([]);
     const [courseHandled, setCourseHandled] = useState<{ courseCode: string, userId?: number }[]>([]);
     const [programYearHandled, setProgramYearHandled] = useState<{ id?: Number, programYearBlock: string, userId?: number }[]>([]);
@@ -462,6 +477,14 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                             name="studentId"
                                             />
                                     </div>
+                                    {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                                    ml-2 text-start mt-[-0.5rem]">UserID already exist!</p>}
+                                     {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                                     ml-2 text-start mt-[-0.5rem]">
+                                        Invalid format! (eg. 1234)
+                                    </p>}
+
+
                                     <div className="bg-gree-300 flex flex-col">
                                         <label className="font-semibold text-start">First Name:</label>
                                         <Input 
@@ -494,7 +517,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                             onChange={(e) => handleInputChange(e, setUpdateData)}
                                             name="email"
                                             />
-                                        {isEmailExist && <p className="text-[.8rem] text-red-500 ml-2 text-start">
+                                        {isEmailExist && <p className="text-[.8rem] text-red-500 ml-2 mb-2 text-start">
                                             Email already registered!
                                         </p>}
                                     </div>

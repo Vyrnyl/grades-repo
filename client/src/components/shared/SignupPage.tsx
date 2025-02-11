@@ -51,6 +51,9 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
 
     
     const [signingUp, setSigningUp] = useState(false);
+    // const [isUserIdExist, setIsUserIdExist] = useState(false);
+    // const [isValidIDFormat, setIsValidIDFormat] = useState(false);
+
     const registerUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSigningUp(true);
@@ -91,7 +94,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
                     <h1 className="text-[1.4rem] font-bold text-slate-800 text-center py-2">Create Account</h1>
                     
                     <form className='bg-cya-500 flex flex-col items-center' onSubmit={registerUser}>
-                    <span className={`bg-re-400 text-[.8rem] text-red-500 
+                        <span className={`bg-re-400 text-[.8rem] text-red-500 
                             ${infoError.error ? '' : 'invisible'}`}>{infoError.error || 'x'}</span>
                         <div className='bg-re-200 flex flex-col w-[100%] items-center gap-4 relative mb-2 pb-2'>
                             {textInputs.map((input, i) => {
@@ -133,7 +136,13 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
                                 name="studentId"
                                 onChange={(e) => handleInputChange(e, setSignupInfo)} 
                                 onFocus={handleInputFocus}/>
-
+                            {/* {isUserIdExist && <p className="bg-cya-200 text-[.8rem] text-red-500 
+                            ml-[4.7rem] self-start mt-[-1rem] mb-[-.9rem]">UserID already exist!</p>}
+                            {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] text-red-500 
+                            ml-[4.7rem] self-start mt-[-1rem] mb-[-.9rem]">
+                                {signupInfo.role === 'student' ? 'Invalid format! (eg. 1234-12345)' : 'Invalid format! (eg. 1234)'}
+                            </p>} */}
+                            
                             {passwordInputs.map((input, i) => {
 
                                 const error = inputError.find((error) => input.name === error.path);

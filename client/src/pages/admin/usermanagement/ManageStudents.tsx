@@ -7,6 +7,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { User } from "../../../types/studentTypes";
 import StudentRow from "../../../components/faculty/StudentRow";
 import getProgramId from "../../../utils/getProgramId";
+import isValidFormat from "../../../utils/admin/isValidFormat";
 
 type AddData = {
   studentId: string,
@@ -33,6 +34,9 @@ const ManageStudents = () => {
     
     //Add
     const [isEmailExist, setIsEmailExist] = useState(false);
+    const [isUserIdExist, setIsUserIdExist] = useState(false);
+    const [isValidIDFormat, setIsValidIDFormat] = useState(false);
+
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [addData, setAddData] = useState<AddData>({
       studentId: '',
@@ -53,6 +57,8 @@ const ManageStudents = () => {
     const handleFormSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       setIsEmailExist(false);
+      setIsUserIdExist(false);
+      setIsValidIDFormat(false);
 
       let programId = getProgramId(selectedProgram);
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
@@ -95,11 +101,21 @@ const ManageStudents = () => {
           setSelectedBlock('A');
           setIsEmailExist(false);
         };
-        if(data.error) setIsEmailExist(true);
-        // console.log(data)
+
+        if(res.status === 409 && data.error.split(' ')[0] === 'UserID') {
+          setTimeout(() => {
+              setIsUserIdExist(true);
+          }, 100);
+        }
+        if(data.error.split(' ')[0] === 'Email') setIsEmailExist(true);
+        
       }
-      addUser();
-      // console.log(body);
+      if(isValidFormat(body.studentId)) 
+        addUser();
+      else setTimeout(() => {
+          setIsValidIDFormat(true);
+          setIsUserIdExist(false);
+      }, 100);
     }
 
 
@@ -186,6 +202,8 @@ const ManageStudents = () => {
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => {
               setIsAddOpen(false);
               setIsEmailExist(false);
+              setIsUserIdExist(false);
+              setIsValidIDFormat(false);
             }}/>
             <div className="bg-blu-200 ml-[-2rem] mb-4">
               <p className="font-semibold">Add Student</p>
@@ -203,6 +221,13 @@ const ManageStudents = () => {
                       name="studentId"
                     />
                 </div>
+                {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                ml-2 text-start mt-[-1rem] mb-[-1rem]">UserID already exist!</p>}
+                  {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                  ml-2 text-start mt-[-1rem] mb-[-1rem]">
+                    Invalid format! (eg. 1234-1234)
+                </p>}
+
                 <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">First Name:</label>
                   <Input 

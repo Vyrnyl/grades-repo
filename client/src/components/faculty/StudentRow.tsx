@@ -11,6 +11,7 @@ import getProgramName from "../../utils/getProgramName"
 import getProgramId from "../../utils/getProgramId"
 import getProgram from "../../utils/getProgram"
 import StudentCoursePage from "../admin/StudentCoursePage"
+import isValidFormat from "../../utils/admin/isValidFormat"
 
 type UserData = {
     id: number,
@@ -90,11 +91,13 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     //SUBMIT UPDATE
     const [isEmailExist, setIsEmailExist] = useState(false);
     const [isUserIdExist, setIsUserIdExist] = useState(false);
+    const [isValidIDFormat, setIsValidIDFormat] = useState(false);
 
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         setIsEmailExist(false);
         setIsUserIdExist(false);
+        setIsValidIDFormat(false);
         
         const updatedData = {
             id,
@@ -127,7 +130,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
               setUserData(updatedData);
               setIsOpen(false);
             }
-
+            
             if(res.status === 409) {
                 setTimeout(() => {
                     setIsUserIdExist(true);
@@ -139,8 +142,12 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             console.log("Fetch error" + error);
           }
         }
-        updateUser();
-
+        if(isValidFormat(updateData.studentId)) 
+            updateUser();
+        else setTimeout(() => {
+            setIsValidIDFormat(true);
+            setIsUserIdExist(false);  
+        }, 100);
     }
 
 
@@ -228,6 +235,9 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                     </div>
                                     {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
                                     ml-2 text-start mt-[-1rem]">UserID already exist!</p>}
+                                    {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
+                                        Invalid format! (eg. 1234-12345)
+                                    </p>}
 
                                     <div className="bg-gree-300 flex flex-col">
                                         <label className="font-semibold text-start">First Name:</label>

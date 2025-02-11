@@ -7,6 +7,8 @@ import CustomSelect from '../faculty/CustomSelect'
 import handleInputChange from '../../utils/handleInputChange'
 import optionArray from '../../utils/optionArray'
 import HandleOutsideClick from '../../utils/HandleOutsideClick'
+import isValidFormat from '../../utils/admin/isValidFormat'
+import isFacIDValid from '../../utils/isFacIDValid'
 
 type UserData = {
     id: number,
@@ -65,11 +67,13 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     //SUBMIT UPDATE
     const [isEmailExist, setIsEmailExist] = useState(false);
     const [isUserIdExist, setIsUserIdExist] = useState(false);
+    const [isValidIDFormat, setIsValidIDFormat] = useState(false);
 
     const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
         setIsEmailExist(false);
         setIsUserIdExist(false);
+        setIsValidIDFormat(false);
         
         const updatedData = {
             id,
@@ -113,7 +117,12 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
             console.log("Fetch error" + error);
           }
         }
-        updateUser();
+        if(updatedData.role === 'student' ? isValidFormat(updateData.studentId) : isFacIDValid(updateData.studentId)) 
+            updateUser();
+        else setTimeout(() => {
+            setIsValidIDFormat(true);
+            setIsUserIdExist(false);  
+        }, 100);
     }
 
 
@@ -223,6 +232,9 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
                         </div>
                         {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
                         ml-2 text-start mt-[-1rem]">UserID already exist!</p>}
+                        {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 ml-2 text-start mt-[-1rem]">
+                            {role === 'student' ? 'Invalid format! (eg. 1234-12345)' : 'Invalid format! (eg. 1234)'}
+                        </p>}
 
                         <div className="bg-gree-300 flex flex-col">
                             <label className="font-semibold text-start">First Name:</label>

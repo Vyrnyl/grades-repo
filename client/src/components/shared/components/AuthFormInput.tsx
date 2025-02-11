@@ -18,7 +18,7 @@ const AuthFormInput = ({ type, label, name, value, onChange, onFocus, errorMessa
       <input type={type} name={name} value={value} onChange={onChange} onFocus={onFocus} placeholder={label} className='bg-transparent w-[100%] 
       h-[2.4rem] border-[.13rem] border-slate-500 rounded-lg focus:outline-slate-500 px-2 font-[400] focus:placeholder-transparent
       placeholder:text-slate-700 placeholder:text-start placeholder:text-[.8rem]'/>
-      <span className="text-[.8rem] text-red-500 ml-2">{errorMessage}</span>
+      <p className="text-[.8rem] text-red-500 ml-2">{errorMessage}</p>
     </div>
   )
 }

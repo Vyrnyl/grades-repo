@@ -10,6 +10,7 @@ import getUppercaseLetters from "../../../utils/getUpperCaseLetter";
 import removeObjectDuplicate from "../../../utils/admin/removeObjectDuplicate";
 import { AddedCourseType } from "../../../types/types";
 import CourseNotExistPrompt from "../../../components/admin/smallComps/CourseNotExistPrompt";
+import isFacIDValid from "../../../utils/isFacIDValid";
 
 type AddData = {
   studentId: string,
@@ -109,10 +110,15 @@ const ManageFaculty = () => {
 
     
     //SUBMIT
+    const [isUserIdExist, setIsUserIdExist] = useState(false);
+    const [isValidIDFormat, setIsValidIDFormat] = useState(false);
+
     const handleFormSubmit = (e: React.FormEvent) => {
 
       e.preventDefault();
       setIsEmailExist(false);
+      setIsUserIdExist(false);
+      setIsValidIDFormat(false);
       
       let pw = `${addData.firstName.charAt(0).toLocaleLowerCase()}${addData.firstName.slice(1)}123`;
       
@@ -217,12 +223,21 @@ const ManageFaculty = () => {
         };
         
 
-        if(data.error) {
-          setIsEmailExist(true);
+        if(res.status === 409 && data.error.split(' ')[0] === 'UserID') {
+          setTimeout(() => {
+              setIsUserIdExist(true);
+          }, 100);
         }
+        if(data.error.split(' ')[0] === 'Email') setIsEmailExist(true);
         
       }
-      addUser();
+      
+      if(isFacIDValid(body.studentId)) 
+        addUser();
+      else setTimeout(() => {
+          setIsValidIDFormat(true);
+          setIsUserIdExist(false);
+      }, 100);
     }
     
     const [reload, setReload] = useState(false);
@@ -382,6 +397,8 @@ const ManageFaculty = () => {
               setCourseHandled([]);
               setIsEmailExist(false);
               setProgramYearHandled([]);
+              setIsUserIdExist(false);
+              setIsValidIDFormat(false);
             }}/>
 
             <div className="bg-blu-200 ml-[-2rem] mb-4">
@@ -400,6 +417,13 @@ const ManageFaculty = () => {
                       name="studentId"
                     />
                 </div>
+                {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                ml-2 text-start mt-[-0.5rem]">UserID already exist!</p>}
+                  {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                  ml-2 text-start mt-[-0.5rem]">
+                    Invalid format! (eg. 1234)
+                </p>}
+
                 <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">First Name:</label>
                   <Input 
@@ -429,7 +453,7 @@ const ManageFaculty = () => {
                       onChange={handleAddData}
                       name="email"
                     />
-                  {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2">Email already registered!</p>}
+                  {isEmailExist && <p className="text-[.8rem] font-semibold text-red-500 ml-2 mb-2">Email already registered!</p>}
                 </div>
                 <div className={`bg-gree-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
                   <label className="font-semibold">Area of Specialization:</label>
