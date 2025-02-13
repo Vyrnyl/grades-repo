@@ -100,7 +100,7 @@ const GWAStatus = ({ className } : { className: string }) => {
     
     // const [gwaList, setGwaList] = useState<{ semester: number, gwa: number, status: string }[]>([]);
     const { gwaList, setGwaList } = useGwaListStore();
-
+    
     const [firstSemFirstYearRecord, setFirstSemFirstYearRecord] = useState<Record[]>([]);
     const [secondSemFirstYearRecord, setSecondSemFirstYearRecord] = useState<Record[]>([]);
 
