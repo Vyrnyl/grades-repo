@@ -60,8 +60,7 @@ const ActivityTracking = () => {
 
               return <tr key={i} className="bg-slate-100 hover:bg-slate-200">
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{activity.studentId}</td>
-                <td className="px-4 py-4 text-center border-2 border-slate-500">{activity.firstName.charAt(0) == '@' ? 
-                activity.firstName.slice(1) : activity.firstName}</td>
+                <td className="px-4 py-4 text-center border-2 border-slate-500">{`${activity.firstName} ${activity.lastName}`}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{activity.email}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{activity.role}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{timeFormat}</td>

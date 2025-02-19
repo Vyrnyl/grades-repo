@@ -102,6 +102,23 @@ const getUserData = async (userId: number) => {
     }
 }
 
+const getUserDataByEmail = async (email: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            },
+            include: {
+                program: true
+            }
+        });
+        return user;
+    } catch(error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+}
+
 const updateUserData = async (userId: number, value: UserUpdatePayload) => {
    
     try {
@@ -261,4 +278,12 @@ const checkUserId = async (studentId: string) => {
     }
 }
 
-export { createUser, getUsersData, getUserData, updateUserData, deleteUserData, checkUserId };
+export { 
+    createUser, 
+    getUsersData, 
+    getUserData, 
+    updateUserData, 
+    deleteUserData, 
+    checkUserId,
+    getUserDataByEmail
+};

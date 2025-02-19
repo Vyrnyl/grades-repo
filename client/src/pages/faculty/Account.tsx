@@ -14,6 +14,7 @@ import isFacIDValid from "../../utils/isFacIDValid";
 
 type AccountInfoType = {
   firstName: string;
+  middleName?: string;
   lastName: string;
   studentId: string;
   email: string;
@@ -30,6 +31,7 @@ const Account = () => {
 
   const [accountInfo, setAccountInfo] = useState<AccountInfoType>({
     firstName: "",
+    middleName: "",
     lastName: "",
     studentId: "",
     sex: "",
@@ -42,6 +44,7 @@ const Account = () => {
   useEffect(() => {
     setAccountInfo({
       firstName: userInfo?.firstName || "",
+      middleName: userInfo?.middleName || "",
       lastName: userInfo?.lastName || "",
       studentId: userInfo?.studentId || "",
       sex: userInfo?.sex || "",
@@ -138,25 +141,37 @@ const Account = () => {
       </div>
       <form className="bg-cya-200 w-[65%] flex-[.6] ml-[5rem] flex flex-col">
         <div className="bg-gree-300 flex-[.3] flex flex-wrap items-end gap-y-[3.5rem] gap-x-[2rem] pb-7">
-          <InputFieldWrapper label="First Name">
-            <Input
-              type="text"
-              name="firstName"
-              value={accountInfo.firstName}
-              onChange={(e) => handleInputChange(e, setAccountInfo)}
-              className="w-[20rem] border-[.1rem]"
-            />
-          </InputFieldWrapper>
+          <div className="flex gap-2">
+            <InputFieldWrapper label="First Name">
+              <Input
+                type="text"
+                name="firstName"
+                value={accountInfo.firstName}
+                onChange={(e) => handleInputChange(e, setAccountInfo)}
+                className="w-[15rem] border-[.1rem]"
+              />
+            </InputFieldWrapper>
 
-          <InputFieldWrapper label="Last Name">
-            <Input
-              type="text"
-              name="lastName"
-              value={accountInfo.lastName}
-              onChange={(e) => handleInputChange(e, setAccountInfo)}
-              className="w-[20rem] border-[.1rem]"
-            />
-          </InputFieldWrapper>
+            <InputFieldWrapper label="Middle Name">
+              <Input
+                type="text"
+                name="middleName"
+                value={accountInfo.middleName}
+                onChange={(e) => handleInputChange(e, setAccountInfo)}
+                className="w-[15rem] border-[.1rem]"
+              />
+            </InputFieldWrapper>
+
+            <InputFieldWrapper label="Last Name">
+              <Input
+                type="text"
+                name="lastName"
+                value={accountInfo.lastName}
+                onChange={(e) => handleInputChange(e, setAccountInfo)}
+                className="w-[15rem] border-[.1rem]"
+              />
+            </InputFieldWrapper>
+          </div>
 
           <InputFieldWrapper label="Phone Number">
             <Input

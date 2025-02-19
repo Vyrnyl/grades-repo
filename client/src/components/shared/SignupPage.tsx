@@ -27,6 +27,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
 
     const textInputs = [
         { label: 'FirstName', name: 'firstName' },
+        { label: 'MiddleName', name: 'middleName' },
         { label: 'LastName', name: 'lastName' },
         { label: 'email', name: 'email' }
     ];
@@ -34,12 +35,13 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
         { type: inputType, label: 'Password', name: 'password'},
         { type: confirmPasswordType, label: 'Confirm Password', name: 'confirmPassword'}
     ];
-
+    
 
     //Register User
     const navigate = useNavigate();
     const [signupInfo, setSignupInfo] = useState<SignupInfoType>({
         firstName: '',
+        middleName: '',
         lastName: '',
         email: '',
         role: '',
@@ -57,7 +59,7 @@ const SignupPage = ({ setUserRole } : { setUserRole: (role: string) => void}) =>
     const registerUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSigningUp(true);
-
+        
         const signup = await register(signupInfo);
 
         if(signup.error) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkUserId = exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
+exports.getUserDataByEmail = exports.checkUserId = exports.deleteUserData = exports.updateUserData = exports.getUserData = exports.getUsersData = exports.createUser = void 0;
 const client_1 = require("@prisma/client");
 const programDataAccess_1 = require("./programDataAccess");
 const prisma = new client_1.PrismaClient();
@@ -99,6 +99,24 @@ const getUserData = async (userId) => {
     }
 };
 exports.getUserData = getUserData;
+const getUserDataByEmail = async (email) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email
+            },
+            include: {
+                program: true
+            }
+        });
+        return user;
+    }
+    catch (error) {
+        console.log(`Retrieval error: ${error}`);
+        return undefined;
+    }
+};
+exports.getUserDataByEmail = getUserDataByEmail;
 const updateUserData = async (userId, value) => {
     try {
         const userUpdateDetails = await prisma.user.update({

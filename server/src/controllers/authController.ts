@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validateLogin, validateSignup } from "../validators/authValidator";
 import { checkEmail, deleteRefreshToken, storeRefreshToken } from "../data/userUtils";
-import { checkUserId, createUser, getUserData } from "../data/userDataAccess";
+import { checkUserId, createUser, getUserData, getUserDataByEmail } from "../data/userDataAccess";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../services/tokenService";
 import validationErrorHandler from "../utils/validationErrorHandler";
 import { hashPassword, comparePassword } from "../utils/passwordUtils";
@@ -28,7 +28,8 @@ const signup = async (req: Request, res: Response) => {
     
     
     //Check ID
-    const user = await getUserData(value.id);
+    // const user = await getUserData(value.id);
+    const user = await getUserDataByEmail(value.email);
     const userIdExist = await checkUserId(value.studentId);
     
     if(user?.studentId !== value.studentId) {

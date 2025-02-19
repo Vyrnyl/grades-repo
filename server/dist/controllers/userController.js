@@ -67,6 +67,8 @@ const updateUser = async (req, res) => {
     const setActivity = async () => {
         if (userDetails?.firstName !== userUpdateDetails.firstName)
             await (0, activityDataAccess_1.addFacultyActivity)(userId, `First name updated from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
+        if (userDetails?.middleName !== userUpdateDetails.middleName)
+            await (0, activityDataAccess_1.addFacultyActivity)(userId, `Middle name updated from ${userDetails?.middleName} to ${userUpdateDetails.middleName}.`);
         if (userDetails?.lastName !== userUpdateDetails.lastName)
             await (0, activityDataAccess_1.addFacultyActivity)(userId, `Last name updated from ${userDetails?.lastName} to ${userUpdateDetails.lastName}.`);
         if (userDetails?.studentId !== userUpdateDetails.studentId)

@@ -86,6 +86,10 @@ const updateUser = async (req: Request, res: Response) => {
         if(userDetails?.firstName !== userUpdateDetails.firstName)
             await addFacultyActivity(userId, 
                 `First name updated from ${userDetails?.firstName} to ${userUpdateDetails.firstName}.`);
+
+        if(userDetails?.middleName !== userUpdateDetails.middleName)
+            await addFacultyActivity(userId, 
+                `Middle name updated from ${userDetails?.middleName} to ${userUpdateDetails.middleName}.`);
                 
         if(userDetails?.lastName !== userUpdateDetails.lastName)
             await addFacultyActivity(userId, 

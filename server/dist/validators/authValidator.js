@@ -11,6 +11,11 @@ const signupSchema = joi_1.default.object({
         'string.base': 'First Name should be a type of text',
         'string.max': 'First name cannot exceed 50 characters'
     }),
+    middleName: joi_1.default.string().max(50).allow('', null).messages({
+        'string.empty': 'Middle Name cannot be empty',
+        'string.base': 'Middle Name should be a type of text',
+        'string.max': 'Middle Name cannot exceed 50 characters'
+    }),
     lastName: joi_1.default.string().max(50).required().messages({
         'string.empty': 'Last Name cannot be empty',
         'string.base': 'Last Name should be a type of text',

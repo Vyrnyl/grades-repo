@@ -12,6 +12,7 @@ import isValidFormat from "../../../utils/admin/isValidFormat";
 type AddData = {
   studentId: string,
   firstName: string,
+  middleName: string,
   lastName: string,
   email: string
 }
@@ -41,6 +42,7 @@ const ManageStudents = () => {
     const [addData, setAddData] = useState<AddData>({
       studentId: '',
       firstName: '',
+      middleName: '',
       lastName: '',
       email: ''
     });
@@ -107,15 +109,17 @@ const ManageStudents = () => {
               setIsUserIdExist(true);
           }, 100);
         }
-        if(data.error.split(' ')[0] === 'Email') setIsEmailExist(true);
+        if(data.error && data.error.split(' ')[0] === 'Email') setIsEmailExist(true);
         
       }
+
       if(isValidFormat(body.studentId)) 
         addUser();
       else setTimeout(() => {
           setIsValidIDFormat(true);
           setIsUserIdExist(false);
       }, 100);
+      
     }
 
 
@@ -169,7 +173,7 @@ const ManageStudents = () => {
                 </tr>
             </thead>
             <tbody className="text-gray-700">
-              {entries.sort((a, b) => b.id - a.id).map((user) => <StudentRow 
+              {entries.map((user) => <StudentRow 
                 key={user.id} 
                 user={user}
                 setUsers={setUsers}
@@ -195,8 +199,8 @@ const ManageStudents = () => {
         
         {/* ADD FORM */}
         {isAddOpen && 
-          <form onSubmit={handleFormSubmit} className="bg-slate-300  w-[33%] h-[70% absolute z-10 flex flex-col pt-[.8rem] 
-          px-[3rem] top-[52%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
+          <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[33%] absolute z-10 flex flex-col pt-[.8rem] 
+          px-[3rem] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
     
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => {
@@ -209,7 +213,7 @@ const ManageStudents = () => {
               <p className="font-semibold">Add Student</p>
             </div>
             <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
-              <div className="bg-purpl-200 flex flex-col gap-4">
+              <div className="bg-purpl-200 flex flex-col gap-2">
 
                 <div className="bg-gree-300 flex flex-col">
                   <label className="font-semibold">Student ID:</label>
@@ -236,6 +240,15 @@ const ManageStudents = () => {
                       required={true}
                       onChange={handleAddData}
                       name="firstName"
+                    />
+                </div>
+                <div className="bg-gree-300 flex flex-col">
+                  <label className="font-semibold">Middle Name:</label>
+                  <Input 
+                      type="text" 
+                      className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                      onChange={handleAddData}
+                      name="middleName"
                     />
                 </div>
                 <div className="bg-gree-300 flex flex-col">

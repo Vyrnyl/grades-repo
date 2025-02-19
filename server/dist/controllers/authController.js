@@ -25,7 +25,8 @@ const signup = async (req, res) => {
         return res.status(409).json({ error: 'Email already registered' });
     }
     //Check ID
-    const user = await (0, userDataAccess_1.getUserData)(value.id);
+    // const user = await getUserData(value.id);
+    const user = await (0, userDataAccess_1.getUserDataByEmail)(value.email);
     const userIdExist = await (0, userDataAccess_1.checkUserId)(value.studentId);
     if (user?.studentId !== value.studentId) {
         if (userIdExist?.message)

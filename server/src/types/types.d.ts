@@ -22,6 +22,7 @@ export type LoginPayload = {
 export type UserUpdatePayload = {
     id: number;
     firstName: string;
+    middleName?: string;
     lastName: string;
     email: string;
     password: string;

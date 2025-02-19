@@ -419,20 +419,21 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
         <tr className="bg-slate-100 hover:bg-slate-200 ">
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
+            {/* <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td> */}
             <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
             <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
                 {handledPrograms.length > 0 ? handledPrograms.map(item => item.programCode).join(', ') : ''}
             </td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[10rem]">
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
                 {handledCourses.length > 0 ? handledCourses.map(item => item.courseCode).join(', ') : ''}
             </td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[10rem]">
+            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[6rem]">
                 {handledProgramYear.length > 0 ? handledProgramYear.map(item => item.programYearBlock).join(', ') : ''}</td>
             <td className="px-4 py-4 text-center border-2 border-slate-500">
                 <div className="bg-cya-200 flex gap-6 justify-center">
                     {isOpen && 
-                        <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 w-[35%] absolute z-10 flex flex-col pt-[.8rem] 
+                        <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 absolute z-10 flex flex-col pt-[.8rem] 
                         px-[3rem] top-[51%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
                             
                             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
@@ -464,130 +465,133 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                             </div>
 
                             <div className="bg-re-200 flex-[.8] flex w-[100%] justify-center gap-[6rem]">
-                                <div className="bg-purpl-200 flex flex-col gap-2">
+                                <div className="bg-purpl-200 flex flex-co gap-x-10">
 
-                                    <div className="bg-gree-300 flex flex-col">
-                                        <label className="font-semibold text-start">Faculty ID:</label>
-                                        <Input 
-                                            type="text" 
-                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            required={true}
-                                            value={updateData.studentId}
-                                            onChange={(e) => handleInputChange(e, setUpdateData)}
-                                            name="studentId"
-                                            />
-                                    </div>
-                                    {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
-                                    ml-2 text-start mt-[-0.5rem]">UserID already exist!</p>}
-                                     {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
-                                     ml-2 text-start mt-[-0.5rem]">
-                                        Invalid format! (eg. 1234)
-                                    </p>}
-
-
-                                    <div className="bg-gree-300 flex flex-col">
-                                        <label className="font-semibold text-start">First Name:</label>
-                                        <Input 
-                                            type="text" 
-                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            required={true}
-                                            value={updateData.firstName}
-                                            onChange={(e) => handleInputChange(e, setUpdateData)}
-                                            name="firstName"
-                                            />
-                                    </div>
-                                    <div className="bg-gree-300 flex flex-col">
-                                        <label className="font-semibold text-start">Last Name:</label>
-                                        <Input 
-                                            type="text" 
-                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            required={true}
-                                            value={updateData.lastName}
-                                            onChange={(e) => handleInputChange(e, setUpdateData)}
-                                            name="lastName"
-                                            />
-                                    </div>
-                                    <div className="bg-gree-300 flex flex-col">
-                                        <label className="font-semibold text-start">Email:</label>
-                                        <Input 
-                                            type="email" 
-                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            required={true}
-                                            value={updateData.email}
-                                            onChange={(e) => handleInputChange(e, setUpdateData)}
-                                            name="email"
-                                            />
-                                        {isEmailExist && <p className="text-[.8rem] text-red-500 ml-2 mb-2 text-start">
-                                            Email already registered!
+                                    <div className="flex flex-col gap-4">
+                                        <div className="bg-gree-300 flex flex-col">
+                                            <label className="font-semibold text-start">Faculty ID:</label>
+                                            <Input 
+                                                type="text" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                required={true}
+                                                value={updateData.studentId}
+                                                onChange={(e) => handleInputChange(e, setUpdateData)}
+                                                name="studentId"
+                                                />
+                                        </div>
+                                        {isUserIdExist && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                                        ml-2 text-start mt-[-0.5rem]">UserID already exist!</p>}
+                                        {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
+                                        ml-2 text-start mt-[-0.5rem]">
+                                            Invalid format! (eg. 1234)
                                         </p>}
-                                    </div>
 
-                                    <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
-                                        <label className="font-semibold text-start">Area of Specialization:</label>
-                                        <CustomSelect 
-                                            className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                                            option={[
-                                                'BS Information Technology', 
-                                                'BS Computer Science', 
-                                                'BS Information Systems',
-                                                'BL Information Science',
-                                                'BS Entertainment and Multimedia Computing'
-                                            ]}
-                                            setValue={setSelectedProgram}
-                                            x="progName"
-                                        />
 
-                                        {/* SELECTED */}
-                                        <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
-                                        flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
-                                            {removeObjectDuplicate(programHandled).map((item, i) => {
-                                                return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                                                    <span className="text-center">{item.programCode}</span>
-                                                    <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                                    icon={faClose} onClick={() => handleDeleteProgram(item)}/>
-                                                </div>
-                                            })}
+                                        <div className="bg-gree-300 flex flex-col">
+                                            <label className="font-semibold text-start">First Name:</label>
+                                            <Input 
+                                                type="text" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                required={true}
+                                                value={updateData.firstName}
+                                                onChange={(e) => handleInputChange(e, setUpdateData)}
+                                                name="firstName"
+                                                />
+                                        </div>
+                                        <div className="bg-gree-300 flex flex-col">
+                                            <label className="font-semibold text-start">Last Name:</label>
+                                            <Input 
+                                                type="text" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                required={true}
+                                                value={updateData.lastName}
+                                                onChange={(e) => handleInputChange(e, setUpdateData)}
+                                                name="lastName"
+                                                />
+                                        </div>
+                                        <div className="bg-gree-300 flex flex-col">
+                                            <label className="font-semibold text-start">Email:</label>
+                                            <Input 
+                                                type="email" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                required={true}
+                                                value={updateData.email}
+                                                onChange={(e) => handleInputChange(e, setUpdateData)}
+                                                name="email"
+                                                />
+                                            {isEmailExist && <p className="text-[.8rem] text-red-500 ml-2 mb-2 text-start">
+                                                Email already registered!
+                                            </p>}
                                         </div>
                                     </div>
 
-                                    <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
-                                        <label className="font-semibold text-start">Year/Block Handled:</label>
-                                        {programHandled.length > 0 ? 
+                                    <div className="flex flex-col gap-4">
+                                        <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
+                                            <label className="font-semibold text-start">Area of Specialization:</label>
                                             <CustomSelect 
                                                 className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
-                                                option={progYearArr}
-                                                setValue={setSelectedProgramYr}
-                                                x="progYear"
-                                            /> : <div className="border-slate-400 text-[1rem] text-slate-400 items-center flex px-[1rem]
-                                            font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2">Select</div>
+                                                option={[
+                                                    'BS Information Technology', 
+                                                    'BS Computer Science', 
+                                                    'BS Information Systems',
+                                                    'BL Information Science',
+                                                    'BS Entertainment and Multimedia Computing'
+                                                ]}
+                                                setValue={setSelectedProgram}
+                                                x="progName"
+                                            />
 
-                                        }
-                                        
-                                        {/* SELECTED */}
-                                        <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
-                                        flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
-                                            {programYearHandled.map((item, i) => {
-                                                return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
-                                                <span className="text-center">{item.programYearBlock}</span>
-                                                <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
-                                                icon={faClose} onClick={() => setProgramYearHandled(prev => prev.filter(progYr => progYr.programYearBlock !== item.programYearBlock))}/>
-                                                </div>
-                                            })}
+                                            {/* SELECTED */}
+                                            <div className="bg-blu-200 max-h-[5rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                            flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                                {removeObjectDuplicate(programHandled).map((item, i) => {
+                                                    return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                        <span className="text-center">{item.programCode}</span>
+                                                        <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                        icon={faClose} onClick={() => handleDeleteProgram(item)}/>
+                                                    </div>
+                                                })}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
-                                        <label className="font-semibold text-start">Course Subjects Handled:</label>
-                                        <Input
-                                            type="text" 
-                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
-                                            onChange={(e) => setCourseInput(e.target.value)}
-                                            value={courseInput}
-                                            onFocus={() => setIsNotExist(false)}/>
-                                            <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
-                                            w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
-                                            absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
+                                        <div className={`bg-cya-300 flex flex-col max-w-[15rem] ${isEmailExist && 'mt-[-1rem]'}`}>
+                                            <label className="font-semibold text-start">Year/Block Handled:</label>
+                                            {programHandled.length > 0 ? 
+                                                <CustomSelect 
+                                                    className="cursor-pointer border-slate-500 text-[.8rem] font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2" 
+                                                    option={progYearArr}
+                                                    setValue={setSelectedProgramYr}
+                                                    x="progYear"
+                                                /> : <div className="border-slate-400 text-[1rem] text-slate-400 items-center flex px-[1rem]
+                                                font-semibold w-[14rem] h-[2rem] border-[.01rem] rounded-sm ml-2">Select</div>
+
+                                            }
                                             
+                                            {/* SELECTED */}
+                                            <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
+                                            flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
+                                                {programYearHandled.map((item, i) => {
+                                                    return <div key={i} className="bg-pin-200 flex gap-2 h-[1.5rem]">
+                                                    <span className="text-center">{item.programYearBlock}</span>
+                                                    <FontAwesomeIcon className="text-[.8rem] right-[-2rem] top-4 font-bold hover:scale-110 active:scale-100" 
+                                                    icon={faClose} onClick={() => setProgramYearHandled(prev => prev.filter(progYr => progYr.programYearBlock !== item.programYearBlock))}/>
+                                                    </div>
+                                                })}
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-gree-300 flex flex-col relative max-w-[15rem]">
+                                            <label className="font-semibold text-start">Course Subjects Handled:</label>
+                                            <Input
+                                                type="text" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                onChange={(e) => setCourseInput(e.target.value)}
+                                                value={courseInput}
+                                                onFocus={() => setIsNotExist(false)}/>
+                                                <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
+                                                w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
+                                                absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
+                                                
                                             {/* SELECTED */}
                                             <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 
                                             flex flex-wrap gap-2 gap-x-4 overflow-y-auto">
@@ -601,6 +605,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                                 })}
                                             </div>
                                         </div>
+                                    </div>
 
                                 </div>
                             </div>
