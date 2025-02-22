@@ -14,6 +14,7 @@ type UserData = {
     id: number,
     studentId: string,
     firstName: string,
+    middleName?: string,
     lastName: string,
     email: string,
     role: string,
@@ -33,13 +34,11 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     const token = localStorage.getItem('atoken');
 
 
-    const { id, studentId, firstName, lastName, email, sex, status, role } = user;
+    const { id, studentId, firstName, middleName, lastName, email, sex, status, role } = user;
 
     const [userData, setUserData] = useState<UserData>({
-        id, studentId, firstName, lastName, email, role, sex, status
+        id, studentId, firstName, middleName, lastName, email, role, sex, status
     });
-
-
 
     
 
@@ -167,7 +166,10 @@ const UserMngRow = ({ user, setUsers } : UserMngRow) => {
     <tr key={user.id} className="bg-slate-100 hover:bg-slate-200">
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName.charAt(0) == '@' ? 
-        userData.firstName.slice(1) : userData.firstName} ${user.lastName}`}</td>
+        userData.firstName.slice(1) : 
+        userData.firstName}  
+        ${userData.middleName && userData.middleName !== '' ? `${userData.middleName.charAt(0)}.` : ''}
+        ${user.lastName}`}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.email}</td>
         <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.sex}</td>
         {/* <td className="px-4 py-4 text-center border-2 border-slate-500">

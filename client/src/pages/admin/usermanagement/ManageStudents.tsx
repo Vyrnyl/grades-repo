@@ -147,7 +147,7 @@ const ManageStudents = () => {
 
     return (
       <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
-      rounded-lg px-10 py-6 shadow-pageComponentShadow relative z-0'>
+      rounded-lg px-4 py-6 shadow-pageComponentShadow relative z-0'>
         
         {/* {isListOpen && <StudentCoursePage setIsListOpen={setIsListOpen}/>} */}
 
@@ -159,13 +159,14 @@ const ManageStudents = () => {
         mb-4 text-white active:scale-[103%]" onClick={() => setIsAddOpen(prev => !prev)}>Add Student</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
-          <table className="w-full font-semibold text-white">
+          <table className="w-full font-semibold text-white text-[.9rem]">
             <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
                 <tr className="text-white">
                     <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Student ID</th>
                     <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">First Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Last Name</th>
-                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Email</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Middle Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[8rem]">Last Name</th>
+                    <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[14rem]">Email</th>
                     <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Program</th>
                     <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Year</th>
                     <th className="px-4 py-4 text-center border-2 border-blue-500 min-w-[5rem]">Block</th>
@@ -200,7 +201,7 @@ const ManageStudents = () => {
         {/* ADD FORM */}
         {isAddOpen && 
           <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[33%] absolute z-10 flex flex-col pt-[.8rem] 
-          px-[3rem] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] ">
+          px-[3rem] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] text-slate-800">
     
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} onClick={() => {

@@ -12,6 +12,7 @@ import useAssignedCourses from '../../store/useAssignedCourses';
 type Student = {
     studentId: string,
     firstName: string,
+    middleName?: string,
     lastName: string,
     yearLevel: number,
     block: string,
@@ -63,6 +64,7 @@ const ViewGrade = () => {
     let student: Student = {
         studentId: '',
         firstName: '',
+        middleName: '',
         lastName: '',
         yearLevel: 0,
         block: '',
@@ -75,6 +77,7 @@ const ViewGrade = () => {
     if(studentData.length > 0) {
         student.studentId = studentData[0].studentId;
         student.firstName = studentData[0].firstName;
+        student.middleName = studentData[0].middleName;
         student.lastName = studentData[0].lastName;
         student.yearLevel = studentData[0].yearLevel;
         student.block = studentData[0].block;
@@ -192,7 +195,8 @@ const ViewGrade = () => {
             <div className='bg-cya-200 font-[550] text-slate-700 flex gap-10 mt-2 relative'>
                 <div className='bg-blu-200 flex flex-col gap-2'>
                     <p>Student Name: {`${student?.firstName.charAt(0) == '@' ? 
-          student.firstName.slice(1).toUpperCase() : student?.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}`}</p>
+          student.firstName.slice(1).toUpperCase() : student?.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}
+          ${student.middleName && student.middleName !== '' ? `${student.middleName.charAt(0)}.` : ''}`}</p>
                     <p>ID No: {student.studentId}</p>
                 </div>
                 <div className='bg-pin-200 flex flex-col gap-2'>

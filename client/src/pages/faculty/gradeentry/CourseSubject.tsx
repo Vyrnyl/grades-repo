@@ -81,7 +81,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
     if(userInfo?.id) setUserId(userInfo.id);
     if(records.data) setStudents(records.data as StudentRecord[]);
     if(courses.data) setCourseList(courses.data as Course[]);
-
+    
   }, [records.data, courses.data, courseList, userInfo]);
 
 

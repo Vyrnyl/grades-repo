@@ -27,7 +27,7 @@ const DashBoard = () => {
   const { semester } = useSemStore();
 
   const [lastSemGwa, setLastSemGwa] = useState<GwaList | null>(null);
-  
+
   //Set program
   useEffect(() => {
     if(userInfo?.program) {
@@ -48,8 +48,6 @@ const DashBoard = () => {
     }
   }, [gwaList]);
 
-
-  console.log(lastSemGwa)
 
 
   //Style
@@ -88,7 +86,7 @@ const DashBoard = () => {
     }
     getProfilePic();
   }, [userInfo, isOpen]);
-
+  
 
   return (
     <div className='bg-slat-100 h-[100%] w-[80%] flex flex-col justify-center'>
@@ -99,11 +97,12 @@ const DashBoard = () => {
         <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome, {userInfo?.firstName}!</h1>
         <div className='bg-gree-200 h-[8rem] w-[50%] flex items-end justify-end relative'>
           <Profile onClick={() => setIsOpen(true)} 
-          className='bg-cya-200 mb-8' 
-          firstName={userInfo?.firstName} 
-          lastName={userInfo?.lastName} 
-          yearLevel={userInfo?.yearLevel}
-          imgSrc={imgSrc} isImageError={isImageError}/>
+            className='bg-cya-200 mb-8' 
+            firstName={userInfo?.firstName} 
+            middleName={userInfo?.middleName}
+            lastName={userInfo?.lastName} 
+            yearLevel={userInfo?.yearLevel}
+            imgSrc={imgSrc} isImageError={isImageError}/>
           
           {isOpen && <ProfilePic setIsOpen={setIsOpen} className='absolute bottom-[-15rem] right-[7rem]' hasPic={hasPic}/>}
         </div>
@@ -122,13 +121,14 @@ const DashBoard = () => {
             </div>
             <p className='font-sans text-[1.45rem] font-semibold text-slate-700'> 
               {`${userInfo?.lastName.toUpperCase() || ''}, ${userInfo?.firstName.charAt(0) == '@' ? 
-                userInfo.firstName.slice(1).toUpperCase() : userInfo?.firstName.toUpperCase() || ''}`}
+                userInfo.firstName.slice(1).toUpperCase() : userInfo?.firstName.toUpperCase() || ''} 
+                ${userInfo?.middleName ? `${userInfo.middleName.charAt(0)}.` : ''}`}
             </p>
             <p className='font-semibold text-slate-700 text-[1.1rem]'>{programCode}</p>
           </div>
         </div>
         
-        {(lastSemGwa && lastSemGwa.gwa <= 1.5) &&
+        {(lastSemGwa && typeof lastSemGwa.gwa !== 'string' && lastSemGwa.gwa <= 1.5) &&
           <div className='bg-purpl-200 flex-[.5]'>
             <div className='bg-cya-200 text-center mt-10'>
               <h1 className='font-bold text-[2.4rem] text-slate-800 italic'>Congratulations!</h1>

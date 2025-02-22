@@ -4,6 +4,7 @@ type UserData = {
     id: number,
     studentId: string,
     firstName: string,
+    middleName?: string,
     lastName: string,
     email: string,
     role: string,

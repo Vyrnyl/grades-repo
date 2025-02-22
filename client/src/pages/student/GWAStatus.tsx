@@ -211,12 +211,13 @@ const GWAStatus = ({ className } : { className: string }) => {
         fourthOne, fourthTwo,
         userInfo
     ]);
-
+    
     return (
         <PageContainer className={`${className} px-16`}>
             <div className='bg-cyn-200 font-[550] text-slate-700 flex flex-[.18] gap-10 mt-2'>
                 <div className='flex flex-col gap-2 self-end'>
-                    <p>Name: {`${userInfo?.firstName.toUpperCase() || ''}, ${userInfo?.lastName.toUpperCase() || ''}`}</p>
+                    <p>Name: {`${userInfo?.firstName.toUpperCase() || ''}, ${userInfo?.lastName.toUpperCase() || ''} 
+                    ${userInfo?.middleName && userInfo?.middleName !== '' ? `${userInfo?.middleName.charAt(0)}.` : ''}`}</p>
                     <p>ID No: {userInfo?.studentId}</p>
                 </div>
                 <div className='flex flex-col gap-2 self-end'>

@@ -13,6 +13,7 @@ import { Program, User } from "../../types/studentTypes"
 import PieChart from "../../components/admin/PieChart"
 import PercentageCircle from "../../components/admin/PercentageCircle"
 import ProfilePic from "../../components/shared/components/ProfilePic"
+import { useLocation } from "react-router-dom"
 
 const Dashboard = () => {
 
@@ -119,7 +120,7 @@ const Dashboard = () => {
      getProfilePic();
   }, [userInfo, isOpen]);
 
-  console.log()
+  
   
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>

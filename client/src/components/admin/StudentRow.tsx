@@ -2,7 +2,7 @@ import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { User } from '../../types/studentTypes';
 import { useRef, useState } from 'react';
-import { deleteUser } from './utils';
+// import { deleteUser } from './utils';
 import EditForm from './EditForm';
 import getProgramId from '../../utils/getProgramId';
 import getProgramName from '../../utils/getProgramName';
@@ -20,6 +20,13 @@ type StudentData = {
   program: string,
   status: string
 }
+
+type DeleteProps = {
+  setIsDelete: (isDelete: boolean) => void,
+  setStudents: React.Dispatch<React.SetStateAction<[] | User[]>>,
+  student: User
+}
+
 
 type StudentRowProps = {
   student: User,
@@ -136,6 +143,33 @@ const StudentRow = ({ student, setStudents }: StudentRowProps) => {
 
   //Delete User
   const [isDelete, setIsDelete] = useState(false);
+
+  
+  const deleteUser = async ({ setIsDelete, setStudents, student } : DeleteProps) => {
+      setIsDelete(false);
+      try {
+        const res = await fetch(`${apiUrl}/user/delete-user`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': token ? token : '',
+            'Content-Type': 'application/json'
+        },
+          body: JSON.stringify({ userId: student.id })
+        });
+  
+        const data = await res.json();
+  
+        if(res.ok && data) {
+          setStudents((prev) => {
+            return prev.filter((stud) => stud.id != student.id);
+          });
+        }
+        console.log(data)
+  
+      } catch(error) {
+        console.log('Request Error');
+      }
+  }
 
   const ref = useRef<HTMLDivElement>(null);
   HandleOutsideClick(ref, setIsDelete);

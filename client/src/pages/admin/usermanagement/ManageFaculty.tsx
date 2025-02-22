@@ -344,7 +344,7 @@ const ManageFaculty = () => {
 
     return (
       <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
-      rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
+      rounded-lg px-4 py-6 shadow-pageComponentShadow relative'>
         
         <div className="bg-gree-300 flex flex-[10%]">
           <h1 className="text-[2rem] font-semibold text-slate-800 self-center">Manage Faculty</h1>
@@ -354,18 +354,18 @@ const ManageFaculty = () => {
         mb-4 text-white active:scale-[103%]" onClick={() => setIsAddOpen(prev => !prev)}>Add Faculty</button>
   
         <div className="bg-re-300 flex-[90%] mb-[1rem] overflow-y-scroll">
-          <table className="w-full font-semibold text-white">
+          <table className="w-full font-semibold text-white text-[.9rem]">
             <thead className="bg-blue-500 sticky text-slate-800 top-0 z-10">
                 <tr className="text-white">
-                    <th className="px-4 py-4 text-center border-l-2 border-blue-500 min-w-[5rem]">Faculty ID</th>
-                    <th className="px-4 py-4 text-center min-w-[8rem]">First Name</th>
-                    {/* <th className="px-4 py-4 text-center min-w-[8rem]">Middle Name</th> */}
-                    <th className="px-4 py-4 text-center min-w-[8rem]">Last Name</th>
-                    <th className="px-4 py-4 text-center min-w-[5rem]">Email</th>
-                    <th className="px-4 py-4 text-center min-w-[5rem]">Area Of Specialization</th>
-                    <th className="px-4 py-4 text-center min-w-[5rem]">Course Subjects Handled</th>
-                    <th className="px-4 py-4 text-center min-w-[5rem]">YearLevel Handled</th>
-                    <th className="px-4 py-4 text-center border-r-2 border-blue-500 min-w-[5rem]">Action</th>
+                    <th className="px-4 py-2 text-center border-l-2 border-blue-500 min-w-[5rem]">Faculty ID</th>
+                    <th className="px-4 py-2 text-center min-w-[8rem]">First Name</th>
+                    <th className="px-4 py-2 text-center min-w-[8rem]">Middle Name</th>
+                    <th className="px-4 py-2 text-center min-w-[8rem]">Last Name</th>
+                    <th className="px-4 py-2 text-center min-w-[14rem]">Email</th>
+                    <th className="px-4 py-2 text-center min-w-[5rem]">Area Of Specialization</th>
+                    <th className="px-4 py-2 text-center min-w-[5rem]">Course Subjects Handled</th>
+                    <th className="px-4 py-2 text-center min-w-[5rem]">YearLevel Handled</th>
+                    <th className="px-4 py-2 text-center border-r-2 border-blue-500 min-w-[5rem]">Action</th>
                 </tr>
             </thead>
             <tbody className="text-gray-700">
@@ -397,7 +397,7 @@ const ManageFaculty = () => {
         {/* ADD FORM */}
         {isAddOpen && 
           <form onSubmit={handleFormSubmit} className="bg-slate-300 w-[35% absolute z-10 flex flex-col pt-[.8rem] 
-          px-[3rem] top-[46%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem]">
+          px-[3rem] top-[46%] left-[50%] translate-x-[-50%] translate-y-[-50%] rounded-[.4rem] text-slate-800">
             
             <FontAwesomeIcon className="absolute text-[1.5rem] right-4
             top-2 font-bold hover:scale-110 active:scale-100" icon={faClose} 

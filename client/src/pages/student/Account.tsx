@@ -83,6 +83,7 @@ const Account = () => {
       id: userInfo?.id,
       studentId: accountInfo.studentId,
       firstName: accountInfo?.firstName,
+      middleName: accountInfo?.middleName,
       lastName: accountInfo?.lastName,
       email: accountInfo.email,
       phoneNumber: accountInfo.phoneNumber,
@@ -192,7 +193,7 @@ const Account = () => {
                 <SelectInput name='sex' value={accountInfo.sex} 
                 onChange={(e) => handleSelectChange(e, setAccountInfo)}/>
               </InputFieldWrapper>
-
+                
               <InputFieldWrapper label="Year Level">
                 <select name="yearLevel" className='bg-re-300 h-[2.5rem] w-[10rem] focus:outline-slate-500
                 border-[.1rem] border-slate-300 rounded-lg px-2' value={accountInfo.yearLevel}
@@ -218,7 +219,7 @@ const Account = () => {
               </InputFieldWrapper>
             </div>
           </div>
-
+          
           <div className="bg-blu-500 flex-[.7] flex flex-wrap gap-x-[2rem]">
             <div className="bg-cya-200 flex flex-col gap-[2rem]">
               <InputFieldWrapper label="Email address" className="bg-cya-200 relative">

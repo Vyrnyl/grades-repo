@@ -168,7 +168,7 @@ const StudentGradeRow = ({
           student.firstName.charAt(0) === "@"
             ? student.firstName.slice(1)
             : student.firstName
-        } ${student.lastName}`}
+        } ${student.middleName && student.middleName !== '' ? `${student.middleName.charAt(0)}.` : ''} ${student.lastName} `}
       </td>
       <td className="px-4 py-4 text-center border-2 border-slate-500">{`${student.studentId}`}</td>
       <td className="px-2 py-4 text-center border-2 border-slate-500">{`${

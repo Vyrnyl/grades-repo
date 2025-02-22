@@ -53,6 +53,7 @@ type StudentRecord = {
     id: number,
     studentId: string,
     firstName: string,
+    middleName?: string,
     lastName: string,
     yearLevel: number,
     block: string

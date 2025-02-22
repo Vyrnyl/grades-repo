@@ -73,6 +73,7 @@ const Account = () => {
       id: userInfo?.id,
       studentId: accountInfo.studentId,
       firstName: accountInfo.firstName,
+      middleName: accountInfo.middleName,
       lastName: accountInfo.lastName,
       email: accountInfo.email,
       phoneNumber: accountInfo.phoneNumber,

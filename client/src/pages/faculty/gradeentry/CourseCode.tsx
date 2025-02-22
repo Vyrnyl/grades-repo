@@ -88,7 +88,7 @@ const CourseCode = ({ data }: CourseCodeType) => {
       <div
         onClick={() => setIsOpen(true)}
         className={`${color} cursor-pointer h-[14rem] w-[18rem] flex flex-col text-nowrap overflow-hidden 
-                px-[1rem] py-4 gap-2 rounded-md`}
+        px-[1rem] py-4 gap-2 rounded-md`}
       >
         <h1 className="font-bold text-wrap">{`${data.courseCode} - ${data.courseTitle}`}</h1>
         <hr className="bg-slate-500 h-[.1rem] w-[100%] border-none rounded-lg self-start" />

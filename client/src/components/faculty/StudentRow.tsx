@@ -17,6 +17,7 @@ type UserData = {
     id: number,
     studentId: string,
     firstName: string,
+    middleName?: string,
     lastName: string,
     email: string,
     role: string,
@@ -39,12 +40,12 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
 
-    const { id, studentId, firstName, lastName, email, yearLevel, block, role, sex, status, programId } = user;
+    const { id, studentId, firstName, middleName, lastName, email, yearLevel, block, role, sex, status, programId } = user;
     const [userData, setUserData] = useState<UserData>({
-        id, studentId, firstName, lastName, email, role,
+        id, studentId, firstName, middleName, lastName, email, role,
         yearLevel, block, sex, status, programId
     });
-
+    
 
     //Update
     const [blockArr, setBlockArr] = useState(['A', 'B', 'C','D']);
@@ -77,6 +78,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         id,
         studentId,
         firstName,
+        middleName,
         lastName,
         email,
         role,
@@ -103,6 +105,7 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
             id,
             studentId: updateData.studentId,
             firstName: updateData.firstName,
+            middleName: updateData.middleName,
             lastName: updateData.lastName,
             email: updateData.email,
             role: updateData.role,
@@ -192,9 +195,11 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
         <>
             <tr className="bg-slate-100 hover:bg-slate-200">
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
-                <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
-                <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
-                <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
+                <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">{`${userData.firstName}`}</td>
+                <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+                    {`${userData.middleName && userData.middleName !== '' ? userData.middleName : ''}`}</td>
+                <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">{userData.lastName}</td>
+                <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[14rem]">{userData.email}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{getProgram(userData.programId)}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.yearLevel || ''}</td>
                 <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.block}</td>
@@ -250,6 +255,18 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
                                             name="firstName"
                                             />
                                     </div>
+
+                                    <div className="bg-gree-300 flex flex-col">
+                                        <label className="font-semibold text-start">Middle Name:</label>
+                                        <Input 
+                                            type="text" 
+                                            className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                            value={updateData.middleName}
+                                            onChange={(e) => handleInputChange(e, setUpdateData)}
+                                            name="middleName"
+                                            />
+                                    </div>
+
                                     <div className="bg-gree-300 flex flex-col">
                                         <label className="font-semibold text-start">Last Name:</label>
                                         <Input 

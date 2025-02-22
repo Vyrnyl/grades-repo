@@ -27,15 +27,15 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = localStorage.getItem('atoken');
 
-    const { id, studentId, firstName, lastName, email, role, sex, status } = user;
+    const { id, studentId, firstName, middleName, lastName, email, role, sex, status } = user;
     const [userData, setUserData] = useState<UserData>({
-        id, studentId, firstName, email, lastName, role, sex, status
+        id, studentId, firstName, middleName, email, lastName, role, sex, status
     });
     
     //Update
     const [isOpen, setIsOpen] = useState(false);
     const [updateData, setUpdateData] = useState<Record<string, any>>({
-        id, studentId, firstName, lastName, email, role, sex, status
+        id, studentId, firstName, middleName, lastName, email, role, sex, status
     });
 
     const [isEmailExist, setIsEmailExist] = useState(false);
@@ -52,6 +52,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
             id,
             studentId: updateData.studentId,
             firstName: updateData.firstName,
+            middleName: updateData.middleName,
             lastName: updateData.lastName,
             email: updateData.email,
             role: updateData.role,
@@ -204,6 +205,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
     //GET/SET ALL HANDLED
     const [fetchedData, setFetchedData] = useState<Program[]>([]);
     const [fetchedCourses, setFetchedCourses] = useState<Course[]>([]);
+    const [fetchedProgamYear, setFetchedProgramYear] = useState<{ id?: Number, programYearBlock: string, userId?: number }[]>([]);
 
     useEffect(() => {
         const getHandledPrograms = async () => {
@@ -276,6 +278,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                 if(res.ok && data) {
                     setHandledProgramYear(data);
                     setProgramYearHandled(data);
+                    setFetchedProgramYear(data);
                     
                     // if(data.length === 0) setReload(prev => !prev);
                 }
@@ -417,20 +420,21 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
 
     return (
         <tr className="bg-slate-100 hover:bg-slate-200 ">
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td>
-            {/* <td className="px-4 py-4 text-center border-2 border-slate-500">{`${userData.firstName}`}</td> */}
-            <td className="px-4 py-4 text-center border-2 border-slate-500">{userData.lastName}</td>
-            <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.email}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+            <td className="px-2 py-4 text-center border-2 border-slate-500">{userData.studentId}</td>
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">{`${userData.firstName}`}</td>
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+                {`${userData.middleName && userData.middleName !== '' ? userData.middleName : ''}`}</td>
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">{userData.lastName}</td>
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[14rem]">{userData.email}</td>
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
                 {handledPrograms.length > 0 ? handledPrograms.map(item => item.programCode).join(', ') : ''}
             </td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[8rem]">
                 {handledCourses.length > 0 ? handledCourses.map(item => item.courseCode).join(', ') : ''}
             </td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500 truncate max-w-[6rem]">
+            <td className="px-2 py-4 text-center border-2 border-slate-500 truncate max-w-[6rem]">
                 {handledProgramYear.length > 0 ? handledProgramYear.map(item => item.programYearBlock).join(', ') : ''}</td>
-            <td className="px-4 py-4 text-center border-2 border-slate-500">
+            <td className="px-2 py-4 text-center border-2 border-slate-500">
                 <div className="bg-cya-200 flex gap-6 justify-center">
                     {isOpen && 
                         <form ref={ref} onSubmit={handleUpdate} className="bg-slate-300 absolute z-10 flex flex-col pt-[.8rem] 
@@ -453,6 +457,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                     });
                                     setProgramHandled(fetchedData);
                                     setCourseHandled(fetchedCourses);
+                                    setProgramYearHandled(fetchedProgamYear);
                                     setIsEmailExist(false);
                                     setIsNotExist(false);
                                 }
@@ -485,8 +490,8 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                         ml-2 text-start mt-[-0.5rem]">
                                             Invalid format! (eg. 1234)
                                         </p>}
-
-
+                                        
+                                        
                                         <div className="bg-gree-300 flex flex-col">
                                             <label className="font-semibold text-start">First Name:</label>
                                             <Input 
@@ -496,6 +501,16 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                                 value={updateData.firstName}
                                                 onChange={(e) => handleInputChange(e, setUpdateData)}
                                                 name="firstName"
+                                                />
+                                        </div>
+                                        <div className="bg-gree-300 flex flex-col">
+                                            <label className="font-semibold text-start">Middle Name:</label>
+                                            <Input 
+                                                type="text" 
+                                                className="bg-slate-300 border-slate-500 w-[14rem] h-[2rem] rounded-sm ml-2"
+                                                value={updateData.middleName}
+                                                onChange={(e) => handleInputChange(e, setUpdateData)}
+                                                name="middleName"
                                                 />
                                         </div>
                                         <div className="bg-gree-300 flex flex-col">
@@ -590,7 +605,7 @@ const UserRow = ({ user, setUsers, setReload } : UserRowProps) => {
                                                 onFocus={() => setIsNotExist(false)}/>
                                                 <button type="button" className="bg-[#60e0cf] rounded-r-md border-[.08rem] border-slate-700 
                                                 w-[3rem] h-[2rem] font-semibold text-[.8rem] px-2 py-[.5rem] active:text-white 
-                                                absolute top-[1.5rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
+                                                absolute top-[1.35rem] right-[-4%] grid place-content-center" onClick={handelAddCourse}>Add</button>
                                                 
                                             {/* SELECTED */}
                                             <div className="bg-blu-200 max-h-[3rem] text-[.9rem] text-slate-700 font-semibold mt-2 

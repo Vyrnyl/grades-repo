@@ -3,6 +3,7 @@ import yearSuffix from "../../../utils/yearSuffix";
 
 type ProfileType = {
   firstName: string | undefined,
+  middleName: string | undefined,
   lastName: string | undefined,
   yearLevel: number | undefined,
   className?: string,
@@ -11,7 +12,7 @@ type ProfileType = {
   isImageError?: boolean
 }
 
-const Profile = ({ firstName, lastName, yearLevel, className, onClick, imgSrc, isImageError }: ProfileType) => {
+const Profile = ({ firstName, middleName, lastName, yearLevel, className, onClick, imgSrc, isImageError }: ProfileType) => {
 
   const suff = yearSuffix(yearLevel);
   const acronym = nameAcronym(firstName + ' ' + lastName);
@@ -26,7 +27,7 @@ const Profile = ({ firstName, lastName, yearLevel, className, onClick, imgSrc, i
             
         </div>
         <div>
-            <h5 className='font-bold'>{firstName} {lastName}</h5>
+            <h5 className='font-bold'>{firstName} {middleName && middleName !== '' ? `${middleName.charAt(0)}.` : ''} {lastName}</h5>
             {yearLevel !== 0 && <p className=''>{(yearLevel || '') + suff} {yearLevel && 'Year'}</p>}
         </div>
     </div>
