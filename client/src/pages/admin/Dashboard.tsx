@@ -125,7 +125,7 @@ const Dashboard = () => {
   return (
     <div className='bg-cya-100 h-[100%] flex-[80%] relative'>
       <div className="bg-gree-300 h-[100%] flex flex-col justify-center">
-
+        
         <div className='bg-cya-200 flex-[.2] flex justify-between'>
           <h1 className="text-[2rem] font-mono font-semibold text-slate-800 pt-[3rem]">Welcome {userInfo?.firstName}!</h1>
           <div className="bg-gree-200 pt-[1rem] flex gap-2 relative">
