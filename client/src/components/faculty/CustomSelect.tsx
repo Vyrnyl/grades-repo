@@ -40,14 +40,15 @@ const CustomSelect = ({ className, option, setValue, selectedItem, isSlate, x } 
     return (
         <div onClick={() => setIsOpen(!isOpen)} ref={selectRef} className={`${className} bg-re-200
         flex items-center justify-between relative px-4`}>
-            <p className='text-[.95rem] font-semibold text-slate-700 text-ellipsis overflow-hidden whitespace-nowrap'>{selected}</p>
+            <p className='text-[.95rem] font-semibold text-slate-700 text-ellipsis overflow-hidden whitespace-nowrap'>
+                {selected !== "null" ? selected : ''}</p>
             <FontAwesomeIcon className="active:text-white scale-y-[70%]" icon={faChevronDown}/>
             {isOpen && 
                 <div className='bg-blu-300 absolute top-[1.5rem] right-0 z-50'>
                     <ul className={`selected bg-white max-h-[10rem] overflow-y-auto flex flex-col ${x}`}>
                         {option.map((item, i) => <li key={i} onClick={getListValue} value={item}
                         className={`bg-gree-200 px-4 hover:bg-slate-200 ${(i === 0 && isSlate) && 'bg-slate-200'}
-                        `}>{item}</li>)}
+                        `}>{item !== "null" ? item : ''}</li>)}
                     </ul>
                 </div>
             }

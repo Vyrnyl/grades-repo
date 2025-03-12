@@ -37,9 +37,19 @@ const ViewGrade = () => {
     const [userYearLevel, setUserYearLevel] = useState<number>(0);
 
     //Set YearLevel
+    const [yearLevel, setYearLevel] = useState(1);
     useEffect(() => {
-        if(userInfo) setUserYearLevel(userInfo.yearLevel);
+        if(userInfo) {
+            setUserYearLevel(userInfo.yearLevel);
+            setYearLevel(userInfo.yearLevel);
+        }
     }, [userInfo]);
+
+    useEffect(() => {
+        setUserYearLevel(yearLevel);
+    }, [yearLevel]);
+
+    console.log(yearLevel)
     
     //Set list
     useEffect(() => {
@@ -74,6 +84,7 @@ const ViewGrade = () => {
 
     const date = new Date();
     let currentYear = date.getFullYear();
+    
     if(studentData.length > 0) {
         student.studentId = studentData[0].studentId;
         student.firstName = studentData[0].firstName;
@@ -166,11 +177,11 @@ const ViewGrade = () => {
 
         const filteredRecords = courses.filter(
             (record): record is AddedCourseRecord => record !== undefined
-          );
+        );
           
         setAssignedCourses(filteredRecords);
         // setAssignedCourses(enrolledCourses);
-    }, [enrolledCourses, semester]);
+    }, [enrolledCourses, semester, yearLevel, userYearLevel]);
     
     
     //GWA
@@ -196,7 +207,7 @@ const ViewGrade = () => {
                 <div className='bg-blu-200 flex flex-col gap-2'>
                     <p>Student Name: {`${student?.firstName.charAt(0) == '@' ? 
           student.firstName.slice(1).toUpperCase() : student?.firstName.toUpperCase()}, ${student.lastName.toUpperCase()}
-          ${student.middleName && student.middleName !== '' ? `${student.middleName.charAt(0)}.` : ''}`}</p>
+          ${student.middleName && student.middleName !== '' ? `${student.middleName.toUpperCase()}` : ''}`}</p>
                     <p>ID No: {student.studentId}</p>
                 </div>
                 <div className='bg-pin-200 flex flex-col gap-2'>
@@ -207,11 +218,21 @@ const ViewGrade = () => {
                     <p>Period: {student.period}</p>
                 </div>
 
+                <select value={yearLevel} onChange={(e) => setYearLevel(Number(e.target.value))}
+                className='h-[1.5rem] px-2 text-[.8rem] text-slate-600 font-semibold rounded-sm border-2
+                 border-slate-700 absolute bottom-0 right-[6rem]'>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'1'}>1st Year</option>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'2'}>2nd Year</option>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'3'}>3rd Year</option>
+                    <option className='text-[.8rem] text-slate-600 font-semibold' value={'4'}>4th Year</option>
+                </select>
+                
                 <select value={semester} onChange={(e) => setSemester(Number(e.target.value))} className='h-[1.5rem] text-[.8rem] text-slate-600 font-semibold rounded-sm border-2
                  border-slate-700 absolute bottom-0 right-0'>
                     <option className='text-[.8rem] text-slate-600 font-semibold' value={'1'}>1st Sem</option>
                     <option className='text-[.8rem] text-slate-600 font-semibold' value={'2'}>2nd Sem</option>
                 </select>
+                
             </div>
             <div className='mb-6 flex-1 mt-8 overflow-y-scroll'>
                 <table className="w-full font-semibold text-white">

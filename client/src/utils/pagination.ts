@@ -14,7 +14,7 @@ const pagination = (courses: any[]) => {
         }
     }
     const handlePrev = () => {
-        if(start >= 7){
+        if(start >= 6){
         setStart(prev => prev - 7);
         setEnd(prev => prev - 7);
         }

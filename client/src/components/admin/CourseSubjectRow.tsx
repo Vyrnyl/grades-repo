@@ -22,7 +22,7 @@ const CourseSubjectRow = ({ value, handleChange, isChecked, handledSem, handledY
         if(year) setYearLevel(year.yearLevel && `${year.yearLevel}${yearSuffix(year.yearLevel)}`);
     }, [sem, year]);
     
-        
+    
     return <tr className="bg-slate-100 hover:bg-slate-200">
         <td className="px-4 py-4 text-center border-2 border-slate-500">
             <input type="checkbox" value={value.courseCode} 
@@ -39,7 +39,7 @@ const CourseSubjectRow = ({ value, handleChange, isChecked, handledSem, handledY
         <td className="px-2 py-4 text-center border-2 border-slate-500">
             <select className={`h-[1.5rem] text-[.8rem] text-slate-600 font-semibold rounded-sm border-2
              px-2 mr-2 ${!isChecked ? 'pointer-events-none border-slate-300' : 'border-slate-700'}`} 
-                value={semester} onChange={(e) => {
+                value={isChecked ? semester : ''} onChange={(e) => {
                 handledSem(`${value.courseCode} ${e.target.value}`);
                 setSemester(e.target.value);
             }}>
@@ -51,7 +51,7 @@ const CourseSubjectRow = ({ value, handleChange, isChecked, handledSem, handledY
         <td className="px-2 py-4 text-center border-2 border-slate-500">
             <select className={`h-[1.5rem] text-[.8rem] text-slate-600 font-semibold rounded-sm border-2
              px-2 mr-2 ${!isChecked ? 'pointer-events-none border-slate-300' : 'border-slate-700'}`}
-                value={yearLevel}
+                value={isChecked ? yearLevel : ''}
                 onChange={(e) => {
                     setYearLevel(e.target.value);
                     handledYear(`${value.courseCode} ${e.target.value}`);

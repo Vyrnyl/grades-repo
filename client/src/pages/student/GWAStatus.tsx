@@ -217,7 +217,7 @@ const GWAStatus = ({ className } : { className: string }) => {
             <div className='bg-cyn-200 font-[550] text-slate-700 flex flex-[.18] gap-10 mt-2'>
                 <div className='flex flex-col gap-2 self-end'>
                     <p>Name: {`${userInfo?.firstName.toUpperCase() || ''}, ${userInfo?.lastName.toUpperCase() || ''} 
-                    ${userInfo?.middleName && userInfo?.middleName !== '' ? `${userInfo?.middleName.charAt(0)}.` : ''}`}</p>
+                    ${userInfo?.middleName && userInfo?.middleName !== '' ? `${userInfo?.middleName.toUpperCase()}` : ''}`}</p>
                     <p>ID No: {userInfo?.studentId}</p>
                 </div>
                 <div className='flex flex-col gap-2 self-end'>
@@ -235,11 +235,13 @@ const GWAStatus = ({ className } : { className: string }) => {
                             <th className="px-4 py-4 text-center w-[10rem]">Remarks</th>
                         </tr>
                     </thead>
-                    <tbody className="text-gray-700">
-                        {gwaList.map((item, i) => {
-                            return <GwaRow key={i} gwa={item}/>
-                        })}
-                    </tbody>
+                    {userInfo?.yearLevel && 
+                        <tbody className="text-gray-700">
+                            {gwaList.map((item, i) => {
+                                return <GwaRow key={i} gwa={item}/>
+                            })}
+                        </tbody>
+                    }
                 </table>
             </div>
         </PageContainer>

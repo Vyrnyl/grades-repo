@@ -54,7 +54,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
 
   const [selectedProgramYearBlock, setSelectedProgramYearBlock] = useState('');
 
-
+  console.log(filteredStudents)
   //Set Record
   useEffect(() => {
 
@@ -190,7 +190,7 @@ const CourseSubject = ({ className, setIsOpen, courseCode, programs, assignedYea
           </div>
           <div className='bg-slate-300 rounded-[.2rem] border-2 border-slate-500'>
             <CustomSelect 
-              className='h-[2rem] w-[8rem]' 
+              className='h-[2rem] w-[8rem] cursor-pointer' 
               setValue={setSelectedProgramYearBlock}
               option={assignedYearBlock.map(x => x.programYearBlock)}/>
           </div>

@@ -49,7 +49,6 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
     getCourses();
   }, []);
   
-  
 
   //ASSIGNED COURSES
   //Get/Set assigned courses
@@ -76,7 +75,7 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
       setIsAllSemSelected(true);
     }, 200);
     
-    console.log(selectedCourses)
+    
     
     if(selectedCourses.every(course => 'semester' in course && 'yearLevel' in course)) {
       
@@ -109,8 +108,7 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
     }
   }
   
-  
-
+    
   //Set Selected Courses
   const handleChange = (courseCode: string) => {
 
@@ -145,7 +143,34 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
 
   //PAGINATION
   const { handleNext, handlePrev, entries } = pagination(filteredCourse);
+  
 
+  //Handle Next
+  const handleNextPage = () => {
+    setIsAllSemSelected(false);
+
+    if(selectedCourses.every(course => 'semester' in course && 'yearLevel' in course)) {
+      setIsAllSemSelected(false);
+      handleNext();
+    }
+    else setTimeout(() => {
+      setIsAllSemSelected(true);
+    }, 0);
+    
+  }
+  const handlePrevPage = () => {
+    setIsAllSemSelected(false);
+
+    if(selectedCourses.every(course => 'semester' in course && 'yearLevel' in course)) {
+      setIsAllSemSelected(false);
+      handlePrev();
+    }
+    else setTimeout(() => {
+      setIsAllSemSelected(true);
+    }, 0);
+    
+    
+  }
   
   return <div className='bg-white w-[100%] h-[100%] flex flex-col gap-[4.6rem 
   rounded-lg px-10 py-6 shadow-pageComponentShadow absolute z-20 top-0 left-0'>
@@ -207,9 +232,9 @@ const StudentCoursePage = ({ setIsListOpen, user } : CourseSubjectPage) => {
             <span className="font-semibold text-[.9rem] self-center">Showing {entries.length} entries</span>
             <div className="bg-blu-200">
               <button className="text-[1rem] active:scale-[98%] text-slate-700 font-semibold 
-              border-2 border-slate-700 px-10 py-2" onClick={handlePrev}>Previous</button>
+              border-2 border-slate-700 px-10 py-2" onClick={handlePrevPage}>Previous</button>
               <button className="text-[1rem] active:scale-[98%] text-slate-700 font-semibold 
-              border-r-2 border-y-2 border-slate-700 px-12 py-2" onClick={handleNext}>Next</button>
+              border-r-2 border-y-2 border-slate-700 px-12 py-2" onClick={handleNextPage}>Next</button>
             </div>
           </div>
       </div>

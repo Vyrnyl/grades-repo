@@ -230,7 +230,7 @@ const ManageStudents = () => {
                 ml-2 text-start mt-[-1rem] mb-[-1rem]">UserID already exist!</p>}
                   {isValidIDFormat && <p className="bg-cya-200 text-[.8rem] font-semibold text-red-500 
                   ml-2 text-start mt-[-1rem] mb-[-1rem]">
-                    Invalid format! (eg. 1234-1234)
+                    Invalid format! (eg. 1234-12345)
                 </p>}
 
                 <div className="bg-gree-300 flex flex-col">

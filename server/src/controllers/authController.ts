@@ -39,7 +39,7 @@ const signup = async (req: Request, res: Response) => {
         const format = /^\d{4}-\d{5}$/;
 
         if(!format.test(value.studentId))
-            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234-1234)' });
+            return res.status(409).json({ error: 'Invalid ID format! (eg. 1234-12345)' });
     } else {
         const format = /^\d{4}$/;
         if(!format.test(value.studentId))

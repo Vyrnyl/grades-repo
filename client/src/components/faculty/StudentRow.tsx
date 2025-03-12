@@ -173,7 +173,6 @@ const UserRow = ({ user, setUsers } : UserRowProps) => {
 
             if(res.ok && data) {
                 setUsers(prev => prev.filter(u => u.id !== user.id));
-                console.log(user)
             }
             
         } catch(error) {

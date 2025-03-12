@@ -151,8 +151,8 @@ const CourseSubjects = () => {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(7);
     
-    let x = courseList.reverse();
-    let entries = x.slice(start, end);
+    // let x = courseList.reverse();
+    let entries = courseList.slice(start, end);
     
     const handleNext = () => {
       if(entries.length % 7 === 0) {
@@ -167,6 +167,9 @@ const CourseSubjects = () => {
       }
     }
     
+
+    //REVERSE
+    //sort((a, b) => b.id - a.id).
     return (
         <div className='bg-cya-100 h-[98%] flex flex-col gap-2 flex-[80%] 
         rounded-lg px-10 py-6 shadow-pageComponentShadow relative'>
@@ -192,7 +195,7 @@ const CourseSubjects = () => {
                     </tr>
                 </thead>
                 <tbody className="text-gray-700 overflow-y-scroll">
-                    {entries.sort((a, b) => b.id - a.id).map(course => {
+                    {entries.map(course => {
                       return <AddedCourseRow 
                         key={course.courseCode} 
                         addedCourse={course} 
