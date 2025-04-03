@@ -27,7 +27,7 @@ const GWAStatus = ({ className } : { className: string }) => {
     const { userInfo } = useUserStore();
     
     const [studentRecords, setStudentRecords] = useState<Record[]>([]);
-
+    
     useEffect(() => {
         // if(Array.isArray(addedCourseRecord.data)) setAddedRecord(addedCourseRecord.data);
 
@@ -112,7 +112,7 @@ const GWAStatus = ({ className } : { className: string }) => {
 
     const [firstSemFourthYearRecord, setFirstSemFourthYearRecord] = useState<Record[]>([]);
     const [secondSemFourthYearRecord, setSecondSemFourthYearRecord] = useState<Record[]>([]);
-
+    
     const [firstOne, setFirstOne] = useState<any>();
     const [firstTwo, setFirstTwo] = useState<any>();
 
@@ -198,7 +198,7 @@ const GWAStatus = ({ className } : { className: string }) => {
             thirdOne, thirdTwo, 
             fourthOne, fourthTwo
         ]);
-
+        
         if(userInfo?.yearLevel) {
             for(let i = 0; i < (4 - userInfo.yearLevel); i++) {
                 setGwaList(prev => prev.slice(0, -2));
@@ -211,6 +211,28 @@ const GWAStatus = ({ className } : { className: string }) => {
         fourthOne, fourthTwo,
         userInfo
     ]);
+
+
+
+    //FINAL GWA
+    const [courseGrades, setCourseGrades] = useState<Record[]>([]);
+    const [finalGwa, setFinalGwa] = useState<number>(0);
+
+    //SET COURSEGRADES
+    useEffect(() => {
+        if(studentRecords.length > 0) 
+            setCourseGrades(studentRecords.filter(item => {
+                if(item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId))
+                    return item
+            }))
+    }, [studentRecords, userInfo]);
+
+    //SET FINAL GWA
+    useEffect(() => {
+        if(courseGrades.length > 0) setFinalGwa(getGwa(courseGrades));
+    }, [courseGrades]);
+
+    
     
     return (
         <PageContainer className={`${className} px-16`}>
@@ -226,7 +248,7 @@ const GWAStatus = ({ className } : { className: string }) => {
                 </div>
             </div>
 
-            <div className='mb-6 flex-1 mt-8 overflow-y-scroll'>
+            <div className='bg-cya-200 mb-6 flex-1 mt-8 overflow-y-scroll'>
                 <table className="w-[45rem] font-semibold text-white">
                     <thead className="bg-blue-500 sticky top-0 z-10">
                         <tr>                  
@@ -243,6 +265,10 @@ const GWAStatus = ({ className } : { className: string }) => {
                         </tbody>
                     }
                 </table>
+
+                <div className='bg-re-200 w-[45rem] py-2'>
+                    <h3 className='font-semibold text-end'>Eligible for: <b className='text-[.9rem]'>CUM LAUDE</b></h3>
+                </div>
             </div>
         </PageContainer>
     )

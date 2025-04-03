@@ -320,7 +320,11 @@ const getAddedCourseRecord = async (userId: number) => {
 
         const addedRecord = await prisma.addedCourseRecord.findMany({
             where: { userId },
-            include: { addedCourse: true }
+            include: { addedCourse: {
+                include: {
+                    programIds: true
+                }
+            } }
         });
         
         return addedRecord;
