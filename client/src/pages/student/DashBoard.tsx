@@ -7,6 +7,9 @@ import GWAStatus from './GWAStatus';
 import ProfilePic from '../../components/shared/components/ProfilePic';
 import useSemStore from '../../store/useSemStore';
 import useGwaListStore from '../../store/useGwaListStore';
+import useFinalGwaStore from '../../store/student/useFinalGwaStore';
+import useIsPassed from '../../store/student/useIsPassedStore';
+import getLatinHonor from '../../utils/student/getLatinHonor';
 
 type GwaList = { 
   semester: number, 
@@ -27,7 +30,11 @@ const DashBoard = () => {
   const { semester } = useSemStore();
 
   const [lastSemGwa, setLastSemGwa] = useState<GwaList | null>(null);
-
+  const { finalGwa } = useFinalGwaStore();
+  const { isPassed } = useIsPassed();
+  
+  console.log(finalGwa, isPassed)
+  
   //Set program
   useEffect(() => {
     if(userInfo?.program) {
@@ -135,8 +142,10 @@ const DashBoard = () => {
               <span className='text-[1.4rem] text-slate-800 font-semibold'>Last Semester</span>
             </div>
             
-            <h3 className='text-[1.4rem] text-center font-semibold mt-4'>
-              You're eligible for <span className='font-bold'>CUM LAUDE</span>!</h3>
+            {(userInfo?.yearLevel === 1 && isPassed) && 
+              <h3 className='text-[1.4rem] text-center font-semibold mt-4'>
+                You're eligible for <span className='font-bold'>{getLatinHonor(finalGwa)}</span>!</h3>
+            }
           </div>
         }
       </div>

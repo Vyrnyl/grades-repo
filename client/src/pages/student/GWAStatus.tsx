@@ -8,6 +8,8 @@ import getProgram from '../../utils/getProgram'
 import getGwa from '../../utils/student/getGwa'
 import { gwaStatus } from '../../utils/gwaStatus'
 import useGwaListStore from '../../store/useGwaListStore'
+import useFinalGwaStore from '../../store/student/useFinalGwaStore'
+import useIsPassed from '../../store/student/useIsPassedStore'
 
 type Record = {
     id: number,
@@ -97,6 +99,7 @@ const GWAStatus = ({ className } : { className: string }) => {
         }
     }, [studentRecords]);
     
+    // console.log(studentRecords)
     
     // const [gwaList, setGwaList] = useState<{ semester: number, gwa: number, status: string }[]>([]);
     const { gwaList, setGwaList } = useGwaListStore();
@@ -124,20 +127,36 @@ const GWAStatus = ({ className } : { className: string }) => {
 
     const [fourthOne, setFourthOne] = useState<any>();
     const [fourthTwo, setFourthTwo] = useState<any>();
-
+    
     //Set list
     useEffect(() => {
-        setFirstSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 1));
-        setSecondSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 2));
+        setFirstSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 1 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
+        setSecondSemFirstYearRecord(studentRecords.filter(item => item.yearLevel === 1 && item.semester === 2 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
 
-        setFirstSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 1));
-        setSecondSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 2));
+        setFirstSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 1 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
+        setSecondSemSecondYearRecord(studentRecords.filter(item => item.yearLevel === 2 && item.semester === 2 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
 
-        setFirstSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 1));
-        setSecondSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 2));
+        setFirstSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 1 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
+        setSecondSemThirdYearRecord(studentRecords.filter(item => item.yearLevel === 3 && item.semester === 2 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
 
-        setFirstSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 1));
-        setSecondSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 2));
+        setFirstSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 1
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
+        setSecondSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 2 
+            && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
+        ));
     }, [recordList]);
     
     useEffect(() => {
@@ -212,11 +231,10 @@ const GWAStatus = ({ className } : { className: string }) => {
         userInfo
     ]);
 
-
-
     //FINAL GWA
     const [courseGrades, setCourseGrades] = useState<Record[]>([]);
-    const [finalGwa, setFinalGwa] = useState<number>(0);
+    const { finalGwa, setFinalGwa } = useFinalGwaStore();
+    const { setIsPassed } = useIsPassed();
 
     //SET COURSEGRADES
     useEffect(() => {
@@ -229,10 +247,18 @@ const GWAStatus = ({ className } : { className: string }) => {
 
     //SET FINAL GWA
     useEffect(() => {
-        if(courseGrades.length > 0) setFinalGwa(getGwa(courseGrades));
+        if(courseGrades.length > 0 && !courseGrades.some(item => (item.grade == null || item.grade == "0"))) 
+            setFinalGwa(getGwa(courseGrades));
     }, [courseGrades]);
-
     
+    //SET GRADE ISPASSED
+    useEffect(() => {
+        if(courseGrades.length > 0 && courseGrades.every(item => Number(item.grade) <= 2.3))
+            setIsPassed(true);
+        else setIsPassed(false);
+    }, [courseGrades]);
+    
+    // console.log(finalGwa)
     
     return (
         <PageContainer className={`${className} px-16`}>

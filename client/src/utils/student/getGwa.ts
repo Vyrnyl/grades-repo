@@ -22,7 +22,7 @@ const getGwa = (record: Record[]) => {
         }
     });
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
-
+    
     return gwa;
 }
 

@@ -194,7 +194,7 @@ const ViewGrade = () => {
             totalUnits += course.addedCourse?.units;
             weightedSum += Number(course.grade) * course.addedCourse?.units;
         }
-    });
+    }); 
     
     gwa = parseFloat((weightedSum / totalUnits).toFixed(1)) || 0;
     
