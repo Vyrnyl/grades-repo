@@ -33,7 +33,8 @@ const DashBoard = () => {
   const { finalGwa } = useFinalGwaStore();
   const { isPassed } = useIsPassed();
   
-  console.log(finalGwa, isPassed)
+  // console.log(finalGwa, isPassed)
+  // console.log(gwaList)
   
   //Set program
   useEffect(() => {
@@ -54,7 +55,7 @@ const DashBoard = () => {
       setLastSemGwa(lastSem[0]);
     }
   }, [gwaList]);
-
+  
 
   //Style
   const [isOpen, setIsOpen] = useState(false);
@@ -134,20 +135,25 @@ const DashBoard = () => {
           </div>
         </div>
         
-        {(lastSemGwa && typeof lastSemGwa.gwa !== 'string' && lastSemGwa.gwa <= 1.5) &&
           <div className='bg-purpl-200 flex-[.5]'>
+            {(lastSemGwa && typeof lastSemGwa.gwa !== 'string' && lastSemGwa.gwa <= 1.5 && lastSemGwa.gwa != 0) && 
             <div className='bg-cya-200 text-center mt-10'>
               <h1 className='font-bold text-[2.4rem] text-slate-800 italic'>Congratulations!</h1>
               <p className='font-semibold text-[1.7rem] text-slate-800'>You Made the {lastSemGwa.status}</p>
               <span className='text-[1.4rem] text-slate-800 font-semibold'>Last Semester</span>
-            </div>
+            </div>}
             
-            {(userInfo?.yearLevel === 1 && isPassed) && 
-              <h3 className='text-[1.4rem] text-center font-semibold mt-4'>
-                You're eligible for <span className='font-bold'>{getLatinHonor(finalGwa)}</span>!</h3>
+            {/* (userInfo?.yearLevel === 4 && isPassed && semester === 2) */}
+            {(userInfo?.yearLevel === 4 && isPassed && semester === 2 && String(gwaList[gwaList.length - 1].gwa) != "" && finalGwa <= 1.6) && 
+              <>
+                {(lastSemGwa && lastSemGwa?.gwa > 1.5 && gwaList[gwaList.length - 1].gwa != null && gwaList[gwaList.length - 1].gwa != 0) && 
+                  <h1 className='font-bold text-[2.4rem] text-center text-slate-800 italic'>Congratulations!</h1>}
+                <h3 className='text-[1.4rem] text-center font-semibold mt-4'>
+                  You're eligible for <span className='font-bold'>{getLatinHonor(finalGwa)}</span>!</h3>
+              </>
             }
           </div>
-        }
+        
       </div>
     </div>
   )

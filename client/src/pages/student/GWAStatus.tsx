@@ -10,6 +10,8 @@ import { gwaStatus } from '../../utils/gwaStatus'
 import useGwaListStore from '../../store/useGwaListStore'
 import useFinalGwaStore from '../../store/student/useFinalGwaStore'
 import useIsPassed from '../../store/student/useIsPassedStore'
+import useSemStore from '../../store/useSemStore'
+import getLatinHonor from '../../utils/student/getLatinHonor'
 
 type Record = {
     id: number,
@@ -234,8 +236,9 @@ const GWAStatus = ({ className } : { className: string }) => {
     //FINAL GWA
     const [courseGrades, setCourseGrades] = useState<Record[]>([]);
     const { finalGwa, setFinalGwa } = useFinalGwaStore();
-    const { setIsPassed } = useIsPassed();
-
+    const { isPassed, setIsPassed } = useIsPassed();
+    const { semester } = useSemStore();
+    
     //SET COURSEGRADES
     useEffect(() => {
         if(studentRecords.length > 0) 
@@ -253,11 +256,13 @@ const GWAStatus = ({ className } : { className: string }) => {
     
     //SET GRADE ISPASSED
     useEffect(() => {
-        if(courseGrades.length > 0 && courseGrades.every(item => Number(item.grade) <= 2.3))
+        let isValid = courseGrades.every(item => (Number(item.grade) <= 2.3) && (Number(item.grade) !== 0 && item.grade != null));
+        if(courseGrades.length > 0 && isValid)
             setIsPassed(true);
         else setIsPassed(false);
     }, [courseGrades]);
     
+    // console.log(courseGrades)
     // console.log(finalGwa)
     
     return (
@@ -293,7 +298,12 @@ const GWAStatus = ({ className } : { className: string }) => {
                 </table>
 
                 <div className='bg-re-200 w-[45rem] py-2'>
-                    <h3 className='font-semibold text-end'>Eligible for: <b className='text-[.9rem]'>CUM LAUDE</b></h3>
+                    {(userInfo?.yearLevel === 4 && isPassed && semester === 2 && 
+                        String(gwaList[gwaList.length - 1].gwa) != "" 
+                        && finalGwa <= 1.6) && 
+                        <h3 className='font-semibold text-end'>Eligible for: <b className='text-[.9rem]'>{getLatinHonor(finalGwa)}</b></h3>
+                    }
+                    
                 </div>
             </div>
         </PageContainer>
