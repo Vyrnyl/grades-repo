@@ -156,10 +156,15 @@ const GWAStatus = ({ className } : { className: string }) => {
         setFirstSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 1
             && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
         ));
-        setSecondSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 2 
+        setSecondSemFourthYearRecord(studentRecords.filter(item => item.yearLevel === 4 && item.semester === 2
             && item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId)
         ));
     }, [recordList]);
+    // setCourseGrades(studentRecords.filter(item => {
+    //     if(enrolledCourses.some(enrolledCourse => enrolledCourse.courseCode === item.addedCourse.courseCode))
+    //         return item
+    // }));
+    // console.log(studentRecords)
     
     useEffect(() => {
         if(firstSemFirstYearRecord.length > 0) {
@@ -232,6 +237,7 @@ const GWAStatus = ({ className } : { className: string }) => {
         fourthOne, fourthTwo,
         userInfo
     ]);
+    
 
     //FINAL GWA
     const [courseGrades, setCourseGrades] = useState<Record[]>([]);
@@ -242,10 +248,15 @@ const GWAStatus = ({ className } : { className: string }) => {
     //SET COURSEGRADES
     useEffect(() => {
         if(studentRecords.length > 0) 
+            // setCourseGrades(studentRecords.filter(item => {
+            //     if(item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId) && 
+            //     (item.grade != null))
+            //         return item
+            // }))
             setCourseGrades(studentRecords.filter(item => {
-                if(item.addedCourse.programIds.some(prog => prog.programId === userInfo?.programId))
+                if(enrolledCourses.some(enrolledCourse => enrolledCourse.courseCode === item.addedCourse.courseCode))
                     return item
-            }))
+            }));
     }, [studentRecords, userInfo]);
 
     //SET FINAL GWA
@@ -261,8 +272,11 @@ const GWAStatus = ({ className } : { className: string }) => {
             setIsPassed(true);
         else setIsPassed(false);
     }, [courseGrades]);
-    
-    // console.log(courseGrades)
+
+
+    //TEST
+    // console.log(enrolledCourses)
+    // console.log(courseGrades);
     // console.log(finalGwa)
     
     return (

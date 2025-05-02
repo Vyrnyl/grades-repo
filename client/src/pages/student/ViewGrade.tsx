@@ -36,6 +36,7 @@ const ViewGrade = () => {
     const { semester, setSemester } = useSemStore();
     const [userYearLevel, setUserYearLevel] = useState<number>(0);
 
+
     //Set YearLevel
     const [yearLevel, setYearLevel] = useState(1);
     useEffect(() => {
@@ -138,7 +139,7 @@ const ViewGrade = () => {
     // const [assignedCourses, setAssignedCourse] = useState<(AddedCourseRecord)[]>([]);
     const { assignedCourses, setAssignedCourses } = useAssignedCourses();
     
-    // console.log(enrolledCourses)
+    // console.log(assignedCourses)
 
     useEffect(() => {
         const getAssignedCourses = async () => {
